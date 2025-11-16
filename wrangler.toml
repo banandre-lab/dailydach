@@ -4,7 +4,7 @@ compatibility_date = "2025-03-25"
 compatibility_flags = ["nodejs_compat"]
 
 [[routes]]
-pattern = "tribitat.com"
+pattern = "www.tribitat.com"
 custom_domain = true
 
 [assets]
