@@ -3,16 +3,16 @@ import { ArrowRight } from "lucide-react";
 import { getAllCategories } from "@/lib/wordpress";
 import type { Category } from "@/lib/wordpress.d";
 
-// Color palette for categories
+// Color palette for categories using theme colors
 const colorPalette = [
-  "from-blue-500 to-blue-600",
-  "from-red-500 to-red-600",
-  "from-green-500 to-green-600",
-  "from-yellow-500 to-yellow-600",
-  "from-purple-500 to-purple-600",
-  "from-pink-500 to-pink-600",
-  "from-indigo-500 to-indigo-600",
-  "from-teal-500 to-teal-600",
+  "from-chart-1 to-chart-1/80",
+  "from-chart-2 to-chart-2/80",
+  "from-chart-3 to-chart-3/80",
+  "from-chart-4 to-chart-4/80",
+  "from-chart-5 to-chart-5/80",
+  "from-primary to-primary/80",
+  "from-accent to-accent/80",
+  "from-secondary to-secondary/80",
 ];
 
 export async function CountrySelector() {
@@ -47,7 +47,7 @@ export async function CountrySelector() {
               />
 
               {/* Content */}
-              <div className="absolute inset-0 flex flex-col justify-between p-6 text-white">
+              <div className="absolute inset-0 flex flex-col justify-between p-6 text-primary-foreground">
                 <div>
                   <h3 className="text-2xl md:text-3xl font-bold text-balance group-hover:translate-x-1 transition-transform duration-300">
                     {category.name}
@@ -67,7 +67,7 @@ export async function CountrySelector() {
               </div>
 
               {/* Hover border effect */}
-              <div className="absolute inset-0 border-2 border-white opacity-0 group-hover:opacity-20 rounded-2xl transition-opacity duration-300" />
+              <div className="absolute inset-0 border-2 border-primary-foreground opacity-0 group-hover:opacity-20 rounded-2xl transition-opacity duration-300" />
             </Link>
           );
         })}

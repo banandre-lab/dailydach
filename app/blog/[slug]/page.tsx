@@ -176,7 +176,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </header>
 
         {/* Main Content */}
-        <div className="prose prose-invert max-w-none text-foreground leading-relaxed mb-12 prose-headings:text-foreground prose-a:text-accent prose-a:hover:underline prose-code:bg-muted prose-code:text-accent prose-code:rounded">
+        <div className="blog-post-content prose prose-invert max-w-none text-foreground leading-relaxed mb-12 prose-headings:text-foreground prose-a:text-accent prose-a:hover:underline prose-code:bg-muted prose-code:text-accent prose-code:rounded">
           {/* Render WordPress content directly */}
           {post.content.rendered && (
             <div

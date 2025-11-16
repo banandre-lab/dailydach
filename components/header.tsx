@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+import { useTheme } from "next-themes";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -17,22 +19,45 @@ import { cn } from "@/lib/utils";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme } = useTheme();
+
+  // Prevent hydration mismatch by only rendering after mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-4 md:py-6">
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-accent flex items-center justify-center">
-              <span className="text-accent-foreground font-bold text-lg">
-                T
-              </span>
+          <Link href="/" className="flex items-center">
+            <div className="relative h-8 w-auto">
+              {!mounted ? (
+                // Render a placeholder during SSR to prevent layout shift
+                <div className="h-8 w-[120px]" />
+              ) : resolvedTheme === "dark" ? (
+                <Image
+                  src="/logo-dark.svg"
+                  alt="TRIBITAT"
+                  width={120}
+                  height={32}
+                  className="h-8 w-auto object-contain"
+                  priority
+                />
+              ) : (
+                <Image
+                  src="/logo-light.svg"
+                  alt="TRIBITAT"
+                  width={120}
+                  height={32}
+                  className="h-8 w-auto object-contain"
+                  priority
+                />
+              )}
             </div>
-            <span className="text-xl font-bold text-foreground hidden sm:inline">
-              TRIBITAT
-            </span>
-          </div>
+          </Link>
 
           {/* Navigation - Desktop */}
           <NavigationMenu className="hidden md:flex">
@@ -50,7 +75,7 @@ export function Header() {
                   </Link>
                 </NavigationMenuLink>
               </NavigationMenuItem>
-              <NavigationMenuItem>
+              {/* <NavigationMenuItem>
                 <NavigationMenuLink asChild>
                   <Link
                     href="#featured"
@@ -62,7 +87,7 @@ export function Header() {
                     Featured
                   </Link>
                 </NavigationMenuLink>
-              </NavigationMenuItem>
+              </NavigationMenuItem> */}
               <NavigationMenuItem>
                 <NavigationMenuLink asChild>
                   <Link

@@ -17,7 +17,7 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
   );
 
   return (
-    <Link href={`/blog/${post.slug}`}>
+    <Link href={`/blog/${post.slug}`} className="no-underline">
       <Card
         className={`group rounded-2xl overflow-hidden border-border hover:border-accent transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer flex flex-col h-full gap-0 py-0 shadow-none ${
           featured ? "md:col-span-2 md:row-span-1" : ""
@@ -56,7 +56,7 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
 
           {/* Title */}
           <h3
-            className={`mt-2 font-bold text-foreground line-clamp-2 group-hover:text-accent transition-colors ${
+            className={`mt-2 font-bold text-foreground line-clamp-2 group-hover:text-accent-foreground transition-colors ${
               featured ? "text-xl md:text-2xl" : "text-lg"
             }`}
           >
