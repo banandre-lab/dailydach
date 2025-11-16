@@ -27,8 +27,8 @@ persist = true
 head_sampling_rate = 1
 
 [vars]
-WORDPRESS_HOSTNAME = "tribitat.com"
+WORDPRESS_HOSTNAME = "cms.tribitat.com"
 WORDPRESS_PATH_NAME = "/wp-content/uploads/**"
 WORDPRESS_PORT = ""
 WORDPRESS_PROTOCOL = "https"
-WORDPRESS_URL = "https://tribitat.com"
+WORDPRESS_URL = "https://cms.tribitat.com"
