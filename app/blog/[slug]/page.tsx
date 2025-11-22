@@ -25,6 +25,8 @@ import {
 } from "@/lib/wordpress";
 import type { Post } from "@/lib/wordpress.d";
 import type { Metadata } from "next";
+import { FluidBackground } from "@/components/ui/fluid-background";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -98,109 +100,127 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     .slice(0, 3);
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background relative overflow-hidden">
+      <FluidBackground />
       <Header />
 
       {/* Hero Section */}
-      <div className="relative w-full group">
-        {/* Hero Image */}
-        <div className="relative h-64 sm:h-96 md:h-[500px] overflow-hidden rounded-2xl mx-4 sm:mx-6 lg:mx-8 mt-4 sm:mt-6">
-          <img
-            src={featuredMedia?.source_url || "/placeholder.svg"}
-            alt={post.title.rendered}
-            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 animate-zoom-in"
-          />
+      <ScrollReveal direction="down">
+        <div className="relative w-full group mb-12">
+          {/* Hero Image */}
+          <div className="relative h-[50vh] min-h-[400px] md:h-[600px] overflow-hidden rounded-b-[3rem] shadow-2xl">
+            <img
+              src={featuredMedia?.source_url || "/placeholder.svg"}
+              alt={post.title.rendered}
+              className="absolute inset-0 w-full h-full object-cover animate-zoom-in"
+            />
 
-          {/* Overlay Gradient */}
-          <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent"></div>
+            {/* Overlay Gradient */}
+            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent"></div>
 
-          {/* Content Overlay */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 text-white">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="inline-block px-3 py-1 bg-accent text-accent-foreground text-xs font-semibold rounded-full">
-                {category.name}
-              </span>
+            {/* Content Overlay */}
+            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12 lg:p-16 text-white max-w-7xl mx-auto w-full">
+              <div className="flex items-center gap-3 mb-6">
+                <span className="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-md border border-white/30 text-white text-sm font-bold rounded-full shadow-lg">
+                  {category.name}
+                </span>
+                <span className="text-white/80 text-sm font-medium backdrop-blur-sm px-2 py-1 rounded-md">
+                  {date}
+                </span>
+              </div>
+              <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-balance drop-shadow-lg">
+                <span dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
+              </h1>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-lg font-bold border border-white/30">
+                    {author.name.charAt(0)}
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-semibold text-white">
+                      {author.name}
+                    </span>
+                    <span className="text-xs text-white/70">Author</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-2 md:mb-3 line-clamp-3 text-balance">
-              <span dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
-            </h1>
-            <p className="text-sm sm:text-base md:text-lg opacity-90 line-clamp-2">
-              {post.excerpt.rendered.replace(/<[^>]*>/g, "")}
-            </p>
           </div>
         </div>
-      </div>
+      </ScrollReveal>
 
       {/* Article Content */}
-      <article className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <article className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12 relative z-10">
         {/* Breadcrumb & Meta */}
-        <Breadcrumb className="mb-6">
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link href="/">Home</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link href={`/category/${category.slug}`}>{category.name}</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{post.title.rendered}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <ScrollReveal delay={0.2}>
+          <Breadcrumb className="mb-8 flex justify-center">
+            <BreadcrumbList className="bg-white/50 dark:bg-black/50 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 dark:border-white/10 shadow-sm">
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href="/">Home</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href={`/category/${category.slug}`}>{category.name}</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage className="max-w-[200px] truncate">
+                  {post.title.rendered}
+                </BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </ScrollReveal>
 
-        {/* Title & Description */}
-        <header className="mb-8 border-b border-border pb-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <time>{date}</time>
-              <span>by</span>
-              <a
-                href={`/posts/?author=${author.id}`}
-                className="hover:text-accent"
-              >
-                {author.name}
-              </a>
-            </div>
-
-            <ShareButtons
+        <ScrollReveal delay={0.3}>
+          <div className="flex justify-end mb-8">
+             <ShareButtons
               title={post.title.rendered}
               url={`/blog/${post.slug}`}
             />
           </div>
-        </header>
+        </ScrollReveal>
 
         {/* Main Content */}
-        <div className="blog-post-content prose prose-invert max-w-none text-foreground leading-relaxed mb-12 prose-headings:text-foreground prose-a:text-accent prose-a:hover:underline prose-code:bg-muted prose-code:text-accent prose-code:rounded">
-          {/* Render WordPress content directly */}
-          {post.content.rendered && (
-            <div
-              dangerouslySetInnerHTML={{
-                __html: post.content.rendered,
-              }}
-            />
-          )}
-        </div>
+        <ScrollReveal delay={0.4}>
+          <div className="blog-post-content prose prose-lg prose-stone dark:prose-invert max-w-none text-foreground leading-relaxed mb-16 prose-headings:font-bold prose-headings:tracking-tight prose-p:text-lg prose-p:leading-8 prose-img:rounded-2xl prose-img:shadow-xl">
+            {/* Render WordPress content directly */}
+            {post.content.rendered && (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: post.content.rendered,
+                }}
+              />
+            )}
+          </div>
+        </ScrollReveal>
 
         {/* Tags */}
         {tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-8 pt-8 border-t border-border">
-            {tags.map((tag) => (
-              <Badge key={tag.id} variant="secondary" className="text-xs">
-                {tag.name}
-              </Badge>
-            ))}
-          </div>
+          <ScrollReveal delay={0.5}>
+            <div className="flex flex-wrap gap-2 mt-8 pt-8 border-t border-border">
+              {tags.map((tag) => (
+                <Badge key={tag.id} variant="secondary" className="text-sm px-3 py-1 hover:bg-primary/20 hover:text-primary transition-colors cursor-pointer">
+                  #{tag.name}
+                </Badge>
+              ))}
+            </div>
+          </ScrollReveal>
         )}
       </article>
 
       {/* Related Posts */}
-      <RelatedPosts posts={relatedPostsList} currentSlug={post.slug} />
+      <div className="relative z-10 bg-muted/30 py-16 mt-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ScrollReveal direction="up">
+             <RelatedPosts posts={relatedPostsList} currentSlug={post.slug} />
+          </ScrollReveal>
+        </div>
+      </div>
 
       {/* Scroll to Top Button */}
       <ScrollToTop />
@@ -209,3 +229,4 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     </main>
   );
 }
+
