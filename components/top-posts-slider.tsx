@@ -75,7 +75,7 @@ export function TopPostsSlider({ posts }: TopPostsSliderProps) {
 
               return (
                 <CarouselItem key={post.id}>
-                  <Link href={`/blog/${post.slug}`}>
+                  <Link href={`/${primaryCategory?.slug || "uncategorized"}/${post.slug}`}>
                     <div className="relative h-96 md:h-[500px] rounded-2xl overflow-hidden bg-muted cursor-pointer">
                       {/* Image */}
                       <img

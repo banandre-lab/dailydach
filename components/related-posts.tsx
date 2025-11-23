@@ -31,7 +31,7 @@ export function RelatedPosts({ posts, currentSlug }: RelatedPostsProps) {
             return (
               <Link
                 key={post.id}
-                href={`/blog/${post.slug}`}
+                href={`/${primaryCategory?.slug || "uncategorized"}/${post.slug}`}
                 className="group rounded-xl overflow-hidden bg-card border border-border hover:border-accent transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
               >
                 {/* Image */}

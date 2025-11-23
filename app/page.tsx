@@ -27,7 +27,7 @@ export default async function Home() {
       <FluidBackground />
       <Header />
       <ScrollReveal delay={0.2}>
-        <section className="relative z-10 py-20">
+        <section className="relative z-10 py-10">
           <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center mb-12">
             <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4 tracking-tight">
               Discover Stories by Country
@@ -36,7 +36,7 @@ export default async function Home() {
               Real people share how they live. Explore the world through their eyes.
             </p>
           </div>
-          <div className="w-full min-h-[600px] relative">
+          <div className="w-full relative">
              {/* Background Glow */}
              <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
              <EuropeMap />

@@ -36,7 +36,7 @@ export function CategoriesLiquidBridge({ categories }: CategoriesLiquidBridgePro
 
         {topCategories.map((category, index) => (
           <ScrollReveal key={category.id} delay={index * 0.1} direction={index % 2 === 0 ? "left" : "right"}>
-            <Link href={`/category/${category.slug}`} className="block group h-full">
+            <Link href={`/${category.slug}`} className="block group h-full">
               <div className={`
                 relative overflow-hidden rounded-3xl p-8 h-full min-h-[240px] flex flex-col justify-between
                 glass-card border-white/20 dark:border-white/10

@@ -20,7 +20,7 @@ export function BlogCard({ post, featured = false, index = 0 }: BlogCardProps) {
 
   return (
     <ScrollReveal delay={index * 0.1}>
-      <Link href={`/blog/${post.slug}`} className="no-underline block h-full">
+      <Link href={`/${primaryCategory?.slug || "uncategorized"}/${post.slug}`} className="no-underline block h-full">
         <Card
           className={`group glass-card rounded-2xl overflow-hidden border-white/20 dark:border-white/10 hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 cursor-pointer flex flex-col h-full gap-0 py-0 shadow-none ${
             featured ? "md:col-span-2 md:row-span-1" : ""

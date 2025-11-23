@@ -42,36 +42,33 @@ export function Header() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="relative h-10 w-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300 overflow-hidden">
+            <div className="flex items-center">
                {mounted && (
                   resolvedTheme === "dark" ? (
                     <Image
                       src="/logo-dark.svg"
-                      alt="T"
-                      width={24}
-                      height={24}
-                      className="object-contain"
+                      alt="Tribitat"
+                      width={120}
+                      height={40}
+                      className="object-contain h-10 w-auto"
                     />
                   ) : (
                     <Image
                       src="/logo-light.svg"
-                      alt="T"
-                      width={24}
-                      height={24}
-                      className="object-contain"
+                      alt="Tribitat"
+                      width={120}
+                      height={40}
+                      className="object-contain h-10 w-auto"
                     />
                   )
                )}
-               {/* Fallback if no image or while loading */}
-               <span className="absolute inset-0 flex items-center justify-center text-primary font-bold text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">T</span>
             </div>
-            <span className="text-xl font-bold tracking-tight hidden sm:block">TRIBITAT</span>
           </Link>
 
           {/* Navigation - Desktop */}
           <nav className="hidden md:flex items-center gap-1 bg-white/5 backdrop-blur-sm px-2 py-1 rounded-full border border-white/10">
             <NavLink href="/">Home</NavLink>
-            <NavLink href="/category">Stories</NavLink>
+            <NavLink href="/stories">Stories</NavLink>
             <NavLink href="/categories">Topics</NavLink>
             <NavLink href="/tags">Tags</NavLink>
             <NavLink href="/map">Map</NavLink>

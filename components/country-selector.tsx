@@ -38,7 +38,7 @@ export async function CountrySelector() {
           return (
             <Link
               key={category.id}
-              href={`/category/${category.slug}`}
+              href={`/${category.slug}`}
               className="group relative overflow-hidden rounded-2xl h-48 md:h-56 cursor-pointer"
             >
               {/* Background image with gradient overlay */}

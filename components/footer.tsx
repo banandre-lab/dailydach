@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Facebook, Twitter, Instagram, Linkedin, Github } from "lucide-react";
@@ -17,10 +18,13 @@ export function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-4 space-y-6">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300">
-                <span className="text-primary font-bold text-xl">T</span>
-              </div>
-              <span className="text-2xl font-bold text-white tracking-tight">TRIBITAT</span>
+              <Image
+                src="/logo-dark.svg"
+                alt="Tribitat"
+                width={160}
+                height={53}
+                className="object-contain h-14 w-auto"
+              />
             </Link>
             <p className="text-zinc-400 leading-relaxed max-w-sm">
               Discover curated stories, insightful articles, and fresh perspectives on technology, design, and culture.
@@ -37,7 +41,7 @@ export function Footer() {
           <div className="lg:col-span-2 md:col-span-4 col-span-6">
             <h4 className="font-bold text-white mb-6">Explore</h4>
             <ul className="space-y-4">
-              <FooterLink href="/category">All Stories</FooterLink>
+              <FooterLink href="/stories">All Stories</FooterLink>
               <FooterLink href="/categories">Topics</FooterLink>
               <FooterLink href="/tags">Tags</FooterLink>
               <FooterLink href="/authors">Authors</FooterLink>

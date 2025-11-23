@@ -354,8 +354,8 @@ export async function searchAuthors(query: string): Promise<Author[]> {
 }
 
 // Function specifically for generateStaticParams - fetches ALL posts
-export async function getAllPostSlugs(): Promise<{ slug: string }[]> {
-  const allSlugs: { slug: string }[] = [];
+export async function getAllPostSlugs(): Promise<{ slug: string; category: string }[]> {
+  const allSlugs: { slug: string; category: string }[] = [];
   let page = 1;
   let hasMore = true;
 
@@ -365,12 +365,24 @@ export async function getAllPostSlugs(): Promise<{ slug: string }[]> {
       {
         per_page: 100,
         page,
-        _fields: "slug", // Only fetch slug field for performance
+        _fields: "slug,categories", // Fetch slug and categories
       }
     );
 
     const posts = response.data;
-    allSlugs.push(...posts.map((post) => ({ slug: post.slug })));
+    
+    // We need to fetch categories to map IDs to slugs
+    // This might be expensive if we do it one by one. 
+    // Better to fetch all categories once and create a map.
+    const allCategories = await getAllCategories();
+    const categoryMap = new Map(allCategories.map(c => [c.id, c.slug]));
+
+    allSlugs.push(...posts.map((post) => {
+      const categorySlug = post.categories && post.categories.length > 0 
+        ? categoryMap.get(post.categories[0]) || "uncategorized" 
+        : "uncategorized";
+      return { slug: post.slug, category: categorySlug };
+    }));
 
     hasMore = page < response.headers.totalPages;
     page++;

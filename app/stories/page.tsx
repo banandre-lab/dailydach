@@ -49,7 +49,7 @@ export default async function AllPostsPage({
           buildHref={(p) => {
             const sp = new URLSearchParams();
             if (p > 1) sp.set("page", String(p));
-            return `/category${sp.toString() ? `?${sp.toString()}` : ""}`;
+            return `/stories${sp.toString() ? `?${sp.toString()}` : ""}`;
           }}
         />
       </ScrollReveal>
@@ -58,4 +58,3 @@ export default async function AllPostsPage({
     </main>
   );
 }
-
