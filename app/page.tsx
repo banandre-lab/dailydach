@@ -30,10 +30,10 @@ export default async function Home() {
         <section className="relative z-10 py-10">
           <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center mb-12">
             <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4 tracking-tight">
-              Discover Stories by Country
+              Real Stories in Plain English
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Real people share how they live. Explore the world through their eyes.
+              Language is not a barrier. Your story is heard.
             </p>
           </div>
           <div className="w-full relative">

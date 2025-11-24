@@ -8,10 +8,12 @@ import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/mode-toggle";
+import { SearchToolbar } from "@/components/search-toolbar";
 import { cn } from "@/lib/utils";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { resolvedTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
@@ -77,7 +79,12 @@ export function Header() {
 
           {/* Actions */}
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" className="rounded-full hover:bg-primary/10 hover:text-primary transition-colors">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
+              onClick={() => setIsSearchOpen(true)}
+            >
               <Search className="w-5 h-5" />
             </Button>
             
@@ -128,6 +135,8 @@ export function Header() {
           )}
         </AnimatePresence>
       </div>
+      
+      <SearchToolbar isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </motion.header>
   );
 }

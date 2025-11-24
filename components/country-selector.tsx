@@ -5,14 +5,7 @@ import type { Category } from "@/lib/wordpress.d";
 
 // Color palette for categories using theme colors
 const colorPalette = [
-  "from-chart-1 to-chart-1/80",
-  "from-chart-2 to-chart-2/80",
-  "from-chart-3 to-chart-3/80",
-  "from-chart-4 to-chart-4/80",
-  "from-chart-5 to-chart-5/80",
   "from-primary to-primary/80",
-  "from-accent to-accent/80",
-  "from-secondary to-secondary/80",
 ];
 
 export async function CountrySelector() {
@@ -23,10 +16,10 @@ export async function CountrySelector() {
       {/* Section Title */}
       <div className="mb-12">
         <h2 className="text-3xl md:text-4xl font-bold text-foreground text-balance">
-          Explore by Category
+          Explore by Country
         </h2>
         <p className="mt-2 text-muted-foreground text-lg">
-          Discover stories from different topics
+          Discover stories from different countries
         </p>
       </div>
 

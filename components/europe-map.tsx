@@ -2,11 +2,13 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { europeMapData } from "./europe-map-data";
 
 export function EuropeMap() {
   const [hoveredCountry, setHoveredCountry] = useState<string | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const router = useRouter();
 
   // Configuration for enabled countries
   const enabledCountries = ["DE", "AT"];
@@ -18,6 +20,11 @@ export function EuropeMap() {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
     });
+  };
+
+  const handleCountryClick = (countryName: string) => {
+    const slug = countryName.toLowerCase().replace(/\s+/g, "-");
+    router.push(`/${slug}`);
   };
 
   return (
@@ -41,9 +48,6 @@ export function EuropeMap() {
               <feGaussianBlur stdDeviation="3" result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
-            <filter id="blur-inactive" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="1" />
-            </filter>
             <linearGradient id="mapGradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="var(--map-gradient-start)" />
               <stop offset="100%" stopColor="var(--map-gradient-end)" />
@@ -59,22 +63,23 @@ export function EuropeMap() {
                 key={country.id}
                 onHoverStart={() => isEnabled && setHoveredCountry(country.name)}
                 onHoverEnd={() => isEnabled && setHoveredCountry(null)}
+                onClick={() => isEnabled && handleCountryClick(country.name)}
                 whileHover={isEnabled ? {
                   scale: 1.02,
-                  translateY: -2,
                   zIndex: 50,
                 } : {}}
+                whileTap={isEnabled ? { scale: 0.98 } : {}}
                 style={{ 
                   originX: "50%", 
                   originY: "50%",
                   transformBox: "fill-box",
                   opacity: isEnabled ? 1 : 0.3, // Fade out inactive countries
-                  pointerEvents: isEnabled ? "auto" : "none", // Disable interaction for inactive
+                  cursor: isEnabled ? "pointer" : "default",
+                  pointerEvents: isEnabled ? "auto" : "none",
                 }}
               >
                 <motion.path
                   d={country.path}
-                  // Use CSS variables for colors to support light/dark mode
                   fill="url(#mapGradient)"
                   stroke="currentColor"
                   strokeWidth={isEnabled ? "1" : "0.5"}
@@ -86,7 +91,7 @@ export function EuropeMap() {
                     filter: isHovered ? "url(#glow)" : "none",
                   }}
                   transition={{ duration: 0.3 }}
-                  className={`transition-colors duration-300 ${isEnabled ? "cursor-pointer" : ""} text-foreground/20`}
+                  className={`transition-colors duration-300 text-foreground/20`}
                 />
               </motion.g>
             );

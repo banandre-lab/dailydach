@@ -13,10 +13,10 @@ import type {
   FeaturedMedia,
 } from "./wordpress.d";
 
-const baseUrl = process.env.WORDPRESS_URL;
+const baseUrl = process.env.NEXT_PUBLIC_WORDPRESS_URL || process.env.WORDPRESS_URL;
 
 if (!baseUrl) {
-  throw new Error("WORDPRESS_URL environment variable is not defined");
+  throw new Error("WORDPRESS_URL or NEXT_PUBLIC_WORDPRESS_URL environment variable is not defined");
 }
 
 class WordPressAPIError extends Error {
@@ -435,6 +435,144 @@ export async function getPostsByAuthorPaginated(
   };
 
   return wordpressFetchWithPagination<Post[]>("/wp-json/wp/v2/posts", query);
+}
+
+// ... existing code ...
+
+export async function searchPosts(query: string, perPage: number = 10): Promise<Post[]> {
+  const cacheKey = `search:${query}:${perPage}`;
+
+  // Check if running in browser
+  if (typeof window !== "undefined") {
+    const { clientCache } = await import("./client-cache");
+    return clientCache.get(
+      cacheKey,
+      async () => {
+        const url = `${baseUrl}/wp-json/wp/v2/posts?search=${encodeURIComponent(query)}&per_page=${perPage}&_embed=true`;
+        const response = await fetch(url, {
+          headers: {
+            "User-Agent": "Next.js WordPress Client",
+          },
+        });
+
+        if (!response.ok) {
+          throw new WordPressAPIError(
+            `WordPress API request failed: ${response.statusText}`,
+            response.status,
+            url
+          );
+        }
+
+        return response.json();
+      },
+      2 * 60 * 1000 // 2 minutes cache for search results
+    );
+  }
+
+  // Server-side: no caching
+  const url = `${baseUrl}/wp-json/wp/v2/posts?search=${encodeURIComponent(query)}&per_page=${perPage}&_embed=true`;
+  const response = await fetch(url, {
+    headers: {
+      "User-Agent": "Next.js WordPress Client",
+    },
+  });
+
+  if (!response.ok) {
+    throw new WordPressAPIError(
+      `WordPress API request failed: ${response.statusText}`,
+      response.status,
+      url
+    );
+  }
+
+  return response.json();
+}
+
+/**
+ * Client-safe function to fetch posts by category directly from WordPress
+ * Works in both server and client components
+ * Includes 5-minute client-side cache for category posts
+ */
+export async function getPostsByCategoryClient(
+  categoryId: number,
+  perPage: number = 4,
+  excludePostId?: number
+): Promise<Post[]> {
+  const cacheKey = `category:${categoryId}:${perPage}:${excludePostId || "all"}`;
+
+  // Check if running in browser
+  if (typeof window !== "undefined") {
+    const { clientCache } = await import("./client-cache");
+    return clientCache.get(cacheKey, async () => {
+      const url = `${baseUrl}/wp-json/wp/v2/posts?categories=${categoryId}&per_page=${perPage}&_embed=true`;
+      const response = await fetch(url, {
+        headers: {
+          "User-Agent": "Next.js WordPress Client",
+        },
+      });
+
+      if (!response.ok) {
+        throw new WordPressAPIError(
+          `WordPress API request failed: ${response.statusText}`,
+          response.status,
+          url
+        );
+      }
+
+      const posts = await response.json();
+
+      // Filter out the current post if excludePostId is provided
+      if (excludePostId) {
+        return posts.filter((post: Post) => post.id !== excludePostId);
+      }
+
+      return posts;
+    });
+  }
+
+  // Server-side: no caching
+  const url = `${baseUrl}/wp-json/wp/v2/posts?categories=${categoryId}&per_page=${perPage}&_embed=true`;
+  const response = await fetch(url, {
+    headers: {
+      "User-Agent": "Next.js WordPress Client",
+    },
+  });
+
+  if (!response.ok) {
+    throw new WordPressAPIError(
+      `WordPress API request failed: ${response.statusText}`,
+      response.status,
+      url
+    );
+  }
+
+  const posts = await response.json();
+
+  // Filter out the current post if excludePostId is provided
+  if (excludePostId) {
+    return posts.filter((post: Post) => post.id !== excludePostId);
+  }
+
+  return posts;
+}
+
+export async function getCategoriesClient(): Promise<Category[]> {
+  const cacheKey = "categories:all";
+
+  if (typeof window !== "undefined") {
+    const { clientCache } = await import("./client-cache");
+    return clientCache.get(cacheKey, async () => {
+      const url = `${baseUrl}/wp-json/wp/v2/categories?per_page=100&_fields=id,name,slug,count`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Failed to fetch categories");
+      return response.json();
+    }, 24 * 60 * 60 * 1000); // 24 hours cache
+  }
+
+  const url = `${baseUrl}/wp-json/wp/v2/categories?per_page=100&_fields=id,name,slug,count`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Failed to fetch categories");
+  return response.json();
 }
 
 export { WordPressAPIError };
