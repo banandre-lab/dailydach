@@ -8,6 +8,7 @@ import Image from "next/image";
 import { searchPosts, getCategoriesClient } from "@/lib/wordpress";
 import { cn } from "@/lib/utils";
 import type { Post, Category } from "@/lib/wordpress.d";
+import { decode } from "html-entities";
 
 interface SearchToolbarProps {
   isOpen: boolean;
@@ -193,7 +194,7 @@ export function SearchToolbar({ isOpen, onClose }: SearchToolbarProps) {
                               {post._embedded?.["wp:featuredmedia"]?.[0]?.source_url ? (
                                 <Image
                                   src={post._embedded["wp:featuredmedia"][0].source_url}
-                                  alt={post.title.rendered}
+                                  alt={decode(post.title.rendered)}
                                   fill
                                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                                 />
@@ -206,12 +207,14 @@ export function SearchToolbar({ isOpen, onClose }: SearchToolbarProps) {
                             <div className="flex-1 min-w-0">
                               <h3 
                                 className="font-semibold text-foreground truncate group-hover:text-primary transition-colors"
-                                dangerouslySetInnerHTML={{ __html: post.title.rendered }}
-                              />
+                              >
+                                {decode(post.title.rendered)}
+                              </h3>
                               <div 
                                 className="text-sm text-muted-foreground line-clamp-2 mt-1"
-                                dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
-                              />
+                              >
+                                {decode(post.excerpt.rendered.replace(/<[^>]*>/g, ""))}
+                              </div>
                             </div>
                             <ArrowRight className="w-5 h-5 text-muted-foreground opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all" />
                           </button>

@@ -7,6 +7,7 @@ import { BlogCard } from "./blog-card";
 interface BlogGridProps {
   posts: Post[];
   categoryId?: number;
+  tagId?: number;
   totalPages?: number;
   enableInfinite?: boolean;
 }
@@ -14,6 +15,7 @@ interface BlogGridProps {
 export function BlogGrid({
   posts: initialPosts,
   categoryId,
+  tagId,
   totalPages,
   enableInfinite = true,
 }: BlogGridProps) {
@@ -32,7 +34,9 @@ export function BlogGrid({
       "loadMorePosts called, current page:",
       page,
       "categoryId:",
-      categoryId
+      categoryId,
+      "tagId:",
+      tagId
     );
     setIsLoading(true);
     try {
@@ -43,6 +47,9 @@ export function BlogGrid({
       const filterParams: Record<string, any> = {};
       if (categoryId) {
         filterParams.category = categoryId.toString();
+      }
+      if (tagId) {
+        filterParams.tag = tagId.toString();
       }
       console.log("Filter params:", filterParams);
       const response = await getPostsPaginated(newPage, 9, filterParams); // Load 9 more posts
@@ -58,7 +65,7 @@ export function BlogGrid({
     } finally {
       setIsLoading(false);
     }
-  }, [page, categoryId]);
+  }, [page, categoryId, tagId]);
 
   useEffect(() => {
     if (!enableInfinite) {

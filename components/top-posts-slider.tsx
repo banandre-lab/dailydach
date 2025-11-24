@@ -12,6 +12,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import { decode } from "html-entities";
 
 interface TopPostsSliderProps {
   posts: Post[];
@@ -80,7 +81,7 @@ export function TopPostsSlider({ posts }: TopPostsSliderProps) {
                       {/* Image */}
                       <img
                         src={featuredImage || "/placeholder.svg"}
-                        alt={post.title.rendered}
+                        alt={decode(post.title.rendered)}
                         className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
 
@@ -98,10 +99,10 @@ export function TopPostsSlider({ posts }: TopPostsSliderProps) {
                           </span>
                         </div>
                         <h3 className="text-2xl md:text-4xl font-bold mb-2 line-clamp-2">
-                          {post.title.rendered}
+                          {decode(post.title.rendered)}
                         </h3>
                         <p className="text-sm md:text-base opacity-90 line-clamp-2">
-                          {post.excerpt.rendered.replace(/<[^>]*>/g, "")}
+                          {decode(post.excerpt.rendered.replace(/<[^>]*>/g, ""))}
                         </p>
                       </div>
                     </div>

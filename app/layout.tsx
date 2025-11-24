@@ -11,9 +11,6 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Tribitat",
   description: "Real Stories in Plain English",
-  icons: {
-    icon: "/favicon.svg",
-  },
 }
 
 export default function RootLayout({

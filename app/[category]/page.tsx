@@ -25,7 +25,7 @@ export default async function CategoryPage({
   const { category: slug } = await params;
   const sp = await searchParams;
   const page = sp?.page ? parseInt(sp.page, 10) || 1 : 1;
-  const perPage = 13; // Fetch 13 posts: 5 for slider (if page 1) + 8 for grid
+  const perPage = 14; // Fetch 14 posts: 5 for slider (if page 1) + 9 for grid
 
   // Fetch the category by slug
   const category = await getCategoryBySlug(slug);

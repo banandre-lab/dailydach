@@ -27,6 +27,7 @@ import type { Post } from "@/lib/wordpress.d";
 import type { Metadata } from "next";
 import { FluidBackground } from "@/components/ui/fluid-background";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { decode } from "html-entities";
 
 interface BlogPostPageProps {
   params: Promise<{ category: string; slug: string }>;
@@ -49,19 +50,19 @@ export async function generateMetadata({
   }
 
   // Strip HTML tags for description
-  const description = post.excerpt.rendered.replace(/<[^>]*>/g, "").trim();
+  const description = decode(post.excerpt.rendered.replace(/<[^>]*>/g, "").trim());
 
   return {
-    title: post.title.rendered,
+    title: decode(post.title.rendered),
     description: description,
     openGraph: {
-      title: post.title.rendered,
+      title: decode(post.title.rendered),
       description: description,
       type: "article",
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title.rendered,
+      title: decode(post.title.rendered),
       description: description,
     },
   };
@@ -111,7 +112,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <div className="relative h-[50vh] min-h-[400px] md:h-[600px] overflow-hidden rounded-b-[3rem] shadow-2xl">
             <img
               src={featuredMedia?.source_url || "/placeholder.svg"}
-              alt={post.title.rendered}
+              alt={decode(post.title.rendered)}
               className="absolute inset-0 w-full h-full object-cover animate-zoom-in"
             />
 
@@ -129,7 +130,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 </span>
               </div>
               <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-balance drop-shadow-lg">
-                <span dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
+                {decode(post.title.rendered)}
               </h1>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-3">
@@ -169,7 +170,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbPage className="max-w-[200px] truncate">
-                  {post.title.rendered}
+                  {decode(post.title.rendered)}
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
@@ -179,7 +180,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <ScrollReveal delay={0.3}>
           <div className="flex justify-end mb-8">
              <ShareButtons
-              title={post.title.rendered}
+              title={decode(post.title.rendered)}
               url={`/${category.slug}/${post.slug}`}
             />
           </div>

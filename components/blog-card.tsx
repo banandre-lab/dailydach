@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { decode } from "html-entities";
 
 interface BlogCardProps {
   post: Post;
@@ -34,7 +35,7 @@ export function BlogCard({ post, featured = false, index = 0 }: BlogCardProps) {
           >
             <Image
               src={featuredImage || "/placeholder.svg"}
-              alt={post.title.rendered}
+              alt={decode(post.title.rendered)}
               fill
               className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
             />
@@ -66,7 +67,7 @@ export function BlogCard({ post, featured = false, index = 0 }: BlogCardProps) {
                 featured ? "text-xl md:text-2xl" : "text-lg"
               }`}
             >
-              <span dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
+              {decode(post.title.rendered)}
             </h3>
 
             {/* Excerpt */}
@@ -75,7 +76,7 @@ export function BlogCard({ post, featured = false, index = 0 }: BlogCardProps) {
                 featured ? "md:line-clamp-3" : ""
               }`}
             >
-              {post.excerpt.rendered.replace(/<[^>]*>/g, "")}
+              {decode(post.excerpt.rendered.replace(/<[^>]*>/g, ""))}
             </p>
             
             {/* Read More Link */}

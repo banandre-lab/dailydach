@@ -16,7 +16,7 @@ export const revalidate = 3600; // Revalidate every hour
 
 export default async function Home() {
   // Fetch real data from WordPress API with embedded data
-  const response = await getPostsPaginated(1, 10);
+  const response = await getPostsPaginated(1, 9);
   const posts: Post[] = response.data;
   const { totalPages } = response.headers;
 

@@ -63,6 +63,7 @@ export function EuropeMap() {
                 key={country.id}
                 onHoverStart={() => isEnabled && setHoveredCountry(country.name)}
                 onHoverEnd={() => isEnabled && setHoveredCountry(null)}
+                onTap={() => isEnabled && handleCountryClick(country.name)}
                 onClick={() => isEnabled && handleCountryClick(country.name)}
                 whileHover={isEnabled ? {
                   scale: 1.02,
