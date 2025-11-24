@@ -14,9 +14,9 @@ export function Footer() {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 md:py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
+        <div className="grid grid-cols-12 gap-8 lg:gap-8 mb-16">
           {/* Brand Column */}
-          <div className="lg:col-span-4 space-y-6">
+          <div className="col-span-12 lg:col-span-4 space-y-6">
             <Link href="/" className="flex items-center gap-2 group">
               <Image
                 src="/logo-dark.svg"
@@ -38,7 +38,7 @@ export function Footer() {
           </div>
 
           {/* Navigation Columns */}
-          <div className="lg:col-span-2 md:col-span-4 col-span-6">
+          <div className="col-span-6 md:col-span-4 lg:col-span-2">
             <h4 className="font-bold text-white mb-6">Explore</h4>
             <ul className="space-y-4">
               <FooterLink href="/stories">All Stories</FooterLink>
@@ -48,7 +48,7 @@ export function Footer() {
             </ul>
           </div>
 
-          <div className="lg:col-span-2 md:col-span-4 col-span-6">
+          <div className="col-span-6 md:col-span-4 lg:col-span-2">
             <h4 className="font-bold text-white mb-6">Company</h4>
             <ul className="space-y-4">
               <FooterLink href="/about">About Us</FooterLink>
@@ -60,7 +60,7 @@ export function Footer() {
           </div>
 
           {/* Newsletter Column */}
-          <div className="lg:col-span-4 md:col-span-8 col-span-12">
+          <div className="col-span-12 md:col-span-8 lg:col-span-4">
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm">
               <h4 className="font-bold text-white mb-2">Subscribe to our newsletter</h4>
               <p className="text-sm text-zinc-400 mb-4">

@@ -575,4 +575,6 @@ export async function getCategoriesClient(): Promise<Category[]> {
   return response.json();
 }
 
+
+
 export { WordPressAPIError };

@@ -1,39 +1,78 @@
-import { SubmitStoryForm } from "@/components/submit-story-form";
 import { Metadata } from "next";
+import Link from "next/link";
+import { Mail, FileText, Image as ImageIcon, ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Submit Your Story | Tribitat",
-  description: "Share your experiences, insights, and stories with the Tribitat community.",
+  description:
+    "Share your experiences, insights, and stories with the Tribitat community. Email us at story@tribitat.com.",
 };
 
 export default function SubmitStoryPage() {
   return (
-    <main className="min-h-screen pt-24 pb-16">
-      {/* Hero Section */}
-      <section className="relative px-4 sm:px-6 lg:px-8 mb-12 md:mb-20">
-        <div className="mx-auto max-w-3xl text-center">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
+    <main className="min-h-[80vh] flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden">
+      <div className="max-w-3xl w-full space-y-12 text-center relative z-10 py-12">
+        {/* Header Section */}
+        <div className="space-y-6">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-foreground">
             Share Your Story
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-            Have a unique perspective or an inspiring experience? We'd love to hear from you. 
-            Submit your story below and become a part of our growing community.
+          <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto leading-relaxed text-balance">
+            Have a unique perspective or an inspiring experience? We'd love to
+            hear from you. Become a part of our growing community.
           </p>
         </div>
-        
-        {/* Background Decoration */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] -z-10 pointer-events-none overflow-hidden">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
-        </div>
-      </section>
 
-      {/* Form Section */}
-      <section className="px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl">
-          <SubmitStoryForm />
+        {/* Main Action Card */}
+        <div className="glass-card p-8 md:p-12 rounded-[2rem] flex flex-col items-center gap-8 max-w-2xl mx-auto">
+          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-2">
+            <Mail className="w-8 h-8" />
+          </div>
+
+          <div className="space-y-4 w-full">
+            <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
+              Send your submission to
+            </p>
+            <Link
+              href="mailto:story@tribitat.com"
+              className="block text-3xl md:text-5xl font-bold text-foreground hover:text-primary transition-colors break-words"
+            >
+              story@tribitat.com
+            </Link>
+          </div>
+
+          <div className="w-full h-px bg-border/50" />
+
+          {/* Instructions */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+            <div className="flex flex-col items-center gap-3 p-6 rounded-2xl bg-secondary/30 border border-border/50">
+              <FileText className="w-6 h-6 text-foreground/70" />
+              <div className="text-center">
+                <h3 className="font-semibold mb-1">Write your story</h3>
+                <p className="text-sm text-muted-foreground">
+                  Share your experience in detail
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-col items-center gap-3 p-6 rounded-2xl bg-secondary/30 border border-border/50">
+              <ImageIcon className="w-6 h-6 text-foreground/70" />
+              <div className="text-center">
+                <h3 className="font-semibold mb-1">Attach media</h3>
+                <p className="text-sm text-muted-foreground">
+                  Include photos or documents
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <Link
+            href="mailto:story@tribitat.com"
+            className="inline-flex items-center gap-2 text-primary font-medium hover:underline underline-offset-4 mt-2"
+          >
+            Open your email client <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
-      </section>
+      </div>
     </main>
   );
 }
