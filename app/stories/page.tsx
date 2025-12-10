@@ -7,6 +7,23 @@ import type { Post } from "@/lib/wordpress.d";
 import { FluidBackground } from "@/components/ui/fluid-background";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { EuropeMap } from "@/components/europe-map";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Stories - Tribitat",
+  description: "Browse real stories from around the world, shared in plain English.",
+  openGraph: {
+    title: "Stories - Tribitat",
+    description: "Browse real stories from around the world, shared in plain English.",
+    url: "https://www.tribitat.com/stories",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Stories - Tribitat",
+    description: "Browse real stories from around the world, shared in plain English.",
+  },
+};
 
 export default async function AllPostsPage({
   searchParams,

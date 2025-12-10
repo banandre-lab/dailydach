@@ -10,12 +10,42 @@ import { TopPostsSlider } from "@/components/top-posts-slider";
 import { getCountryTheme } from "@/lib/country-themes";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { BlogCard } from "@/components/blog-card";
+import type { Metadata } from "next";
 
 import { CountryBackgroundShape } from "@/components/country-background-shape";
 
 interface CategoryPageProps {
   params: Promise<{ category: string }>;
   searchParams: Promise<{ page?: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ category: string }>;
+}): Promise<Metadata> {
+  const { category: slug } = await params;
+  const category = await getCategoryBySlug(slug);
+
+  if (!category) {
+    return {};
+  }
+
+  return {
+    title: `${category.name} Stories - Tribitat`,
+    description: `Browse stories from ${category.name} in plain English.`,
+    openGraph: {
+      title: `${category.name} Stories - Tribitat`,
+      description: `Browse stories from ${category.name} in plain English.`,
+      url: `https://www.tribitat.com/${category.slug}`,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${category.name} Stories - Tribitat`,
+      description: `Browse stories from ${category.name} in plain English.`,
+    },
+  };
 }
 
 export default async function CategoryPage({

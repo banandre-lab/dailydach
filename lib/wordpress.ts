@@ -370,16 +370,16 @@ export async function getAllPostSlugs(): Promise<{ slug: string; category: strin
     );
 
     const posts = response.data;
-    
+
     // We need to fetch categories to map IDs to slugs
-    // This might be expensive if we do it one by one. 
+    // This might be expensive if we do it one by one.
     // Better to fetch all categories once and create a map.
     const allCategories = await getAllCategories();
     const categoryMap = new Map(allCategories.map(c => [c.id, c.slug]));
 
     allSlugs.push(...posts.map((post) => {
-      const categorySlug = post.categories && post.categories.length > 0 
-        ? categoryMap.get(post.categories[0]) || "uncategorized" 
+      const categorySlug = post.categories && post.categories.length > 0
+        ? categoryMap.get(post.categories[0]) || "uncategorized"
         : "uncategorized";
       return { slug: post.slug, category: categorySlug };
     }));
@@ -389,6 +389,62 @@ export async function getAllPostSlugs(): Promise<{ slug: string; category: strin
   }
 
   return allSlugs;
+}
+
+// Function specifically for sitemap generation - fetches ALL posts with images and metadata
+export async function getAllPostsForSitemap(): Promise<{
+  slug: string;
+  category: string;
+  modified: string;
+  image?: string;
+}[]> {
+  const allPosts: {
+    slug: string;
+    category: string;
+    modified: string;
+    image?: string;
+  }[] = [];
+  let page = 1;
+  let hasMore = true;
+
+  // Fetch categories once and create a map
+  const allCategories = await getAllCategories();
+  const categoryMap = new Map(allCategories.map(c => [c.id, c.slug]));
+
+  while (hasMore) {
+    const response = await wordpressFetchWithPagination<Post[]>(
+      "/wp-json/wp/v2/posts",
+      {
+        per_page: 100,
+        page,
+        _embed: true,
+        _fields: "slug,categories,modified,_embedded.wp:featuredmedia",
+      }
+    );
+
+    const posts = response.data;
+
+    allPosts.push(...posts.map((post) => {
+      const categorySlug = post.categories && post.categories.length > 0
+        ? categoryMap.get(post.categories[0]) || "uncategorized"
+        : "uncategorized";
+
+      // Extract featured image URL from embedded data
+      const featuredImage = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
+
+      return {
+        slug: post.slug,
+        category: categorySlug,
+        modified: post.modified,
+        image: featuredImage,
+      };
+    }));
+
+    hasMore = page < response.headers.totalPages;
+    page++;
+  }
+
+  return allPosts;
 }
 
 // Enhanced pagination functions for specific queries

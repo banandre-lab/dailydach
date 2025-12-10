@@ -13,6 +13,22 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Tribitat",
   description: "Real Stories in Plain English",
+  metadataBase: new URL("https://www.tribitat.com"),
+  openGraph: {
+    title: "Tribitat",
+    description: "Real Stories in Plain English",
+    url: "https://www.tribitat.com",
+    siteName: "Tribitat",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Tribitat",
+    description: "Real Stories in Plain English",
+    site: "@tribitat",
+    creator: "@tribitat",
+  },
 }
 
 export default function RootLayout({

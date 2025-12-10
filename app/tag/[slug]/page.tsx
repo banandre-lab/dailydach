@@ -7,11 +7,41 @@ import { notFound } from "next/navigation";
 import { BlogGrid } from "@/components/blog-grid";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import type { Metadata } from "next";
 
 export const revalidate = 3600; // Revalidate every hour
 
 interface TagPageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const tag = await getTagBySlug(slug);
+
+  if (!tag) {
+    return {};
+  }
+
+  return {
+    title: `#${tag.name} - Tribitat`,
+    description: `Browse stories tagged with #${tag.name} in plain English.`,
+    openGraph: {
+      title: `#${tag.name} - Tribitat`,
+      description: `Browse stories tagged with #${tag.name} in plain English.`,
+      url: `https://www.tribitat.com/tag/${tag.slug}`,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `#${tag.name} - Tribitat`,
+      description: `Browse stories tagged with #${tag.name} in plain English.`,
+    },
+  };
 }
 
 export default async function TagPage({ params }: TagPageProps) {

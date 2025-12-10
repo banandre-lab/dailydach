@@ -5,10 +5,22 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, Globe, BookOpen, Sparkles } from "lucide-react";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "About - Tribitat",
   description: "Learn more about Tribitat and our mission to share real stories in plain English.",
+  openGraph: {
+    title: "About - Tribitat",
+    description: "Learn more about Tribitat and our mission to share real stories in plain English.",
+    url: "https://www.tribitat.com/about",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About - Tribitat",
+    description: "Learn more about Tribitat and our mission to share real stories in plain English.",
+  },
 };
 
 export default function AboutPage() {
