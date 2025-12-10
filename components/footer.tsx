@@ -2,7 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Facebook, X, Instagram, Linkedin, Github } from "lucide-react";
+import { XLogoIcon } from "@/components/ui/x-logo";
+import { Facebook, Instagram, Linkedin, Github } from "lucide-react";
 
 export function Footer() {
   return (
@@ -27,13 +28,30 @@ export function Footer() {
               />
             </Link>
             <p className="text-zinc-400 leading-relaxed max-w-sm">
-              Discover curated stories, insightful articles, and fresh perspectives on technology, design, and culture.
+              Discover curated stories, insightful articles, and fresh
+              perspectives on technology, design, and culture.
             </p>
             <div className="flex items-center gap-4 pt-2">
-              <SocialLink href="https://x.com/tribitat_com" icon={<X className="w-5 h-5" />} label="X" />
-              <SocialLink href="#" icon={<Instagram className="w-5 h-5" />} label="Instagram" />
-              <SocialLink href="#" icon={<Linkedin className="w-5 h-5" />} label="LinkedIn" />
-              <SocialLink href="#" icon={<Github className="w-5 h-5" />} label="GitHub" />
+              <SocialLink
+                href="https://x.com/tribitat_com"
+                icon={<XLogoIcon className="w-5 h-5" />}
+                label="X"
+              />
+              <SocialLink
+                href="#"
+                icon={<Instagram className="w-5 h-5" />}
+                label="Instagram"
+              />
+              <SocialLink
+                href="#"
+                icon={<Linkedin className="w-5 h-5" />}
+                label="LinkedIn"
+              />
+              <SocialLink
+                href="#"
+                icon={<Github className="w-5 h-5" />}
+                label="GitHub"
+              />
             </div>
           </div>
 
@@ -42,9 +60,6 @@ export function Footer() {
             <h4 className="font-bold text-white mb-6">Explore</h4>
             <ul className="space-y-4">
               <FooterLink href="/stories">All Stories</FooterLink>
-              <FooterLink href="/categories">Topics</FooterLink>
-              <FooterLink href="/tags">Tags</FooterLink>
-              <FooterLink href="/authors">Authors</FooterLink>
             </ul>
           </div>
 
@@ -53,26 +68,31 @@ export function Footer() {
             <ul className="space-y-4">
               <FooterLink href="/about">About Us</FooterLink>
               <FooterLink href="/submit-story">Submit Story</FooterLink>
-              <FooterLink href="/contact">Contact</FooterLink>
-              <FooterLink href="/careers">Careers</FooterLink>
               <FooterLink href="/privacy">Privacy Policy</FooterLink>
+              <FooterLink href="/terms">Terms of Service</FooterLink>
+              <FooterLink href="/cookies">Cookie Policy</FooterLink>
             </ul>
           </div>
 
           {/* Newsletter Column */}
           <div className="col-span-12 md:col-span-8 lg:col-span-4">
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm">
-              <h4 className="font-bold text-white mb-2">Subscribe to our newsletter</h4>
+              <h4 className="font-bold text-white mb-2">
+                Subscribe to our newsletter
+              </h4>
               <p className="text-sm text-zinc-400 mb-4">
                 Get the latest posts delivered right to your inbox.
               </p>
               <form className="flex flex-col sm:flex-row gap-3">
-                <Input 
-                  type="email" 
-                  placeholder="Enter your email" 
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
                   className="bg-white/10 border-white/10 text-white placeholder:text-zinc-500 focus-visible:ring-primary focus-visible:border-primary"
                 />
-                <Button type="submit" className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
+                <Button
+                  type="submit"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
+                >
                   Subscribe
                 </Button>
               </form>
@@ -86,9 +106,24 @@ export function Footer() {
             © {new Date().getFullYear()} TRIBITAT. All rights reserved.
           </p>
           <div className="flex items-center gap-6 text-sm text-zinc-500">
-            <Link href="/privacy" className="hover:text-primary transition-colors">Privacy</Link>
-            <Link href="/terms" className="hover:text-primary transition-colors">Terms</Link>
-            <Link href="/cookies" className="hover:text-primary transition-colors">Cookies</Link>
+            <Link
+              href="/privacy"
+              className="hover:text-primary transition-colors"
+            >
+              Privacy
+            </Link>
+            <Link
+              href="/terms"
+              className="hover:text-primary transition-colors"
+            >
+              Terms
+            </Link>
+            <Link
+              href="/cookies"
+              className="hover:text-primary transition-colors"
+            >
+              Cookies
+            </Link>
           </div>
         </div>
       </div>
@@ -96,10 +131,18 @@ export function Footer() {
   );
 }
 
-function SocialLink({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
+function SocialLink({
+  href,
+  icon,
+  label,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+}) {
   return (
-    <a 
-      href={href} 
+    <a
+      href={href}
       aria-label={label}
       className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300"
     >
@@ -108,11 +151,17 @@ function SocialLink({ href, icon, label }: { href: string; icon: React.ReactNode
   );
 }
 
-function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
+function FooterLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
   return (
     <li>
-      <Link 
-        href={href} 
+      <Link
+        href={href}
         className="text-sm text-zinc-400 hover:text-primary hover:translate-x-1 transition-all duration-200 inline-block"
       >
         {children}
@@ -120,4 +169,3 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
     </li>
   );
 }
-
