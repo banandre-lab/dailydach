@@ -21,17 +21,17 @@ export function Header() {
   // Prevent hydration mismatch by only rendering after mount
   useEffect(() => {
     setMounted(true);
-    
+
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <motion.header 
+    <motion.header
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
@@ -45,25 +45,24 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
             <div className="flex items-center">
-               {mounted && (
-                  resolvedTheme === "dark" ? (
-                    <Image
-                      src="/logo-dark.svg"
-                      alt="Tribitat"
-                      width={120}
-                      height={40}
-                      className="object-contain h-10 w-auto"
-                    />
-                  ) : (
-                    <Image
-                      src="/logo-light.svg"
-                      alt="Tribitat"
-                      width={120}
-                      height={40}
-                      className="object-contain h-10 w-auto"
-                    />
-                  )
-               )}
+              {mounted &&
+                (resolvedTheme === "dark" ? (
+                  <Image
+                    src="/logo-dark.svg"
+                    alt="Tribitat"
+                    width={120}
+                    height={40}
+                    className="object-contain h-10 w-auto"
+                  />
+                ) : (
+                  <Image
+                    src="/logo-light.svg"
+                    alt="Tribitat"
+                    width={120}
+                    height={40}
+                    className="object-contain h-10 w-auto"
+                  />
+                ))}
             </div>
           </Link>
 
@@ -71,25 +70,22 @@ export function Header() {
           <nav className="hidden md:flex items-center gap-1 bg-white/5 backdrop-blur-sm px-2 py-1 rounded-full border border-white/10">
             <NavLink href="/">Home</NavLink>
             <NavLink href="/stories">Stories</NavLink>
-            <NavLink href="/categories">Topics</NavLink>
-            <NavLink href="/tags">Tags</NavLink>
-            <NavLink href="/map">Map</NavLink>
-            <NavLink href="/about">About</NavLink>
+            <NavLink href="/submit-story">Submit Story</NavLink>
           </nav>
 
           {/* Actions */}
           <div className="flex items-center gap-3">
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               className="rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
               onClick={() => setIsSearchOpen(true)}
             >
               <Search className="w-5 h-5" />
             </Button>
-            
+
             <ModeToggle />
-            
+
             <Button className="hidden sm:flex rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-6">
               Subscribe
             </Button>
@@ -120,11 +116,33 @@ export function Header() {
               className="md:hidden overflow-hidden"
             >
               <div className="flex flex-col gap-2 py-4 px-2 bg-card/50 backdrop-blur-xl rounded-2xl mt-2 border border-white/10">
-                <MobileNavLink href="/" onClick={() => setIsMenuOpen(false)}>Home</MobileNavLink>
-                <MobileNavLink href="/category" onClick={() => setIsMenuOpen(false)}>Stories</MobileNavLink>
-                <MobileNavLink href="/categories" onClick={() => setIsMenuOpen(false)}>Topics</MobileNavLink>
-                <MobileNavLink href="/tags" onClick={() => setIsMenuOpen(false)}>Tags</MobileNavLink>
-                <MobileNavLink href="/about" onClick={() => setIsMenuOpen(false)}>About</MobileNavLink>
+                <MobileNavLink href="/" onClick={() => setIsMenuOpen(false)}>
+                  Home
+                </MobileNavLink>
+                <MobileNavLink
+                  href="/category"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Stories
+                </MobileNavLink>
+                <MobileNavLink
+                  href="/categories"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Topics
+                </MobileNavLink>
+                <MobileNavLink
+                  href="/tags"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Tags
+                </MobileNavLink>
+                <MobileNavLink
+                  href="/about"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  About
+                </MobileNavLink>
                 <div className="pt-2 mt-2 border-t border-white/10">
                   <Button className="w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
                     Subscribe
@@ -135,13 +153,22 @@ export function Header() {
           )}
         </AnimatePresence>
       </div>
-      
-      <SearchToolbar isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+
+      <SearchToolbar
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
     </motion.header>
   );
 }
 
-function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
+function NavLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
   return (
     <Link
       href={href}
@@ -152,7 +179,15 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
   );
 }
 
-function MobileNavLink({ href, onClick, children }: { href: string; onClick: () => void; children: React.ReactNode }) {
+function MobileNavLink({
+  href,
+  onClick,
+  children,
+}: {
+  href: string;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
   return (
     <Link
       href={href}
@@ -163,5 +198,3 @@ function MobileNavLink({ href, onClick, children }: { href: string; onClick: () 
     </Link>
   );
 }
-
-

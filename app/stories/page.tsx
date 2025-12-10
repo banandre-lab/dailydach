@@ -6,6 +6,7 @@ import { getPostsPaginated } from "@/lib/wordpress";
 import type { Post } from "@/lib/wordpress.d";
 import { FluidBackground } from "@/components/ui/fluid-background";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { EuropeMap } from "@/components/europe-map";
 
 export default async function AllPostsPage({
   searchParams,
@@ -25,21 +26,30 @@ export default async function AllPostsPage({
       <FluidBackground />
       <Header />
 
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-16 relative z-10">
-        <ScrollReveal direction="down">
-          <div className="mb-12 text-center">
-            <h1 className="text-5xl md:text-7xl font-bold text-foreground text-balance mb-6 tracking-tight">
+      <ScrollReveal delay={0.2}>
+        <section className="relative z-10 py-10">
+          <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center mb-12">
+            <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4 tracking-tight">
               All Stories
-            </h1>
-            <p className="text-muted-foreground text-xl max-w-2xl mx-auto">
-              Explore our collection of articles, thoughts, and ideas.
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Explore stories from across Europe
             </p>
           </div>
-        </ScrollReveal>
-      </section>
+          <div className="w-full relative">
+            {/* Background Glow */}
+            <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
+            <EuropeMap />
+          </div>
+        </section>
+      </ScrollReveal>
 
       <div className="relative z-10">
-        <BlogGrid posts={posts} totalPages={totalPages} enableInfinite={false} />
+        <BlogGrid
+          posts={posts}
+          totalPages={totalPages}
+          enableInfinite={false}
+        />
       </div>
 
       <ScrollReveal direction="up" delay={0.2}>

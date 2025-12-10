@@ -2,7 +2,6 @@ import { Header } from "@/components/header";
 import { TopPostsSlider } from "@/components/top-posts-slider";
 import { BlogGrid } from "@/components/blog-grid";
 import { Footer } from "@/components/footer";
-import { CountrySelector } from "@/components/country-selector";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getPostsPaginated, getAllCategories } from "@/lib/wordpress";
@@ -33,30 +32,32 @@ export default async function Home() {
               Real Stories in Plain English
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Language is not a barrier. Your story is heard.
+              Your story is heard
             </p>
           </div>
           <div className="w-full relative">
-             {/* Background Glow */}
-             <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
-             <EuropeMap />
+            {/* Background Glow */}
+            <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
+            <EuropeMap />
           </div>
         </section>
       </ScrollReveal>
-      
+
       <ScrollReveal delay={0.6}>
         <div className="relative z-10">
-          <BlogGrid posts={posts} totalPages={totalPages} enableInfinite={false} />
+          <BlogGrid
+            posts={posts}
+            totalPages={totalPages}
+            enableInfinite={false}
+          />
         </div>
       </ScrollReveal>
-      
 
-         <ScrollReveal direction="up" delay={0.2}>
-          <CountrySelector />
-         </ScrollReveal>
-      
+      <ScrollReveal direction="up" delay={0.2}>
+        <CategoriesLiquidBridge categories={categories} />
+      </ScrollReveal>
+
       <Footer />
     </main>
   );
 }
-

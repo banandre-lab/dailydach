@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Facebook, Twitter, Instagram, Linkedin, Github } from "lucide-react";
+import { Facebook, X, Instagram, Linkedin, Github } from "lucide-react";
 
 export function Footer() {
   return (
@@ -30,7 +30,7 @@ export function Footer() {
               Discover curated stories, insightful articles, and fresh perspectives on technology, design, and culture.
             </p>
             <div className="flex items-center gap-4 pt-2">
-              <SocialLink href="#" icon={<Twitter className="w-5 h-5" />} label="Twitter" />
+              <SocialLink href="https://x.com/tribitat_com" icon={<X className="w-5 h-5" />} label="X" />
               <SocialLink href="#" icon={<Instagram className="w-5 h-5" />} label="Instagram" />
               <SocialLink href="#" icon={<Linkedin className="w-5 h-5" />} label="LinkedIn" />
               <SocialLink href="#" icon={<Github className="w-5 h-5" />} label="GitHub" />

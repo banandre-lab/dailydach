@@ -28,7 +28,7 @@ export function EuropeMap() {
   };
 
   return (
-    <div 
+    <div
       className="w-full h-full relative flex items-center justify-center"
       onMouseMove={handleMouseMove}
     >
@@ -36,19 +36,28 @@ export function EuropeMap() {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8 }}
-        className="w-full aspect-[1000/684] relative"
+        className="w-full aspect-[1000/200] relative"
       >
         <svg
-          viewBox="450 250 350 250" // Zoomed in on Central Europe (Germany/Austria)
+          viewBox="0 250 1250 250" // Zoomed in on Central Europe (Germany/Austria)
           className="w-full h-full drop-shadow-2xl"
-          style={{ filter: "drop-shadow(0 0 30px rgba(114, 228, 173, 0.15))" }}
+          style={{
+            filter: "drop-shadow(rgba(114, 228, 173, 0.15) 0px 0px 30px)",
+            transform: "scale(2)",
+          }}
         >
           <defs>
             <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
               <feGaussianBlur stdDeviation="3" result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
-            <linearGradient id="mapGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <linearGradient
+              id="mapGradient"
+              x1="0%"
+              y1="0%"
+              x2="100%"
+              y2="100%"
+            >
               <stop offset="0%" stopColor="var(--map-gradient-start)" />
               <stop offset="100%" stopColor="var(--map-gradient-end)" />
             </linearGradient>
@@ -61,17 +70,23 @@ export function EuropeMap() {
             return (
               <motion.g
                 key={country.id}
-                onHoverStart={() => isEnabled && setHoveredCountry(country.name)}
+                onHoverStart={() =>
+                  isEnabled && setHoveredCountry(country.name)
+                }
                 onHoverEnd={() => isEnabled && setHoveredCountry(null)}
                 onTap={() => isEnabled && handleCountryClick(country.name)}
                 onClick={() => isEnabled && handleCountryClick(country.name)}
-                whileHover={isEnabled ? {
-                  scale: 1.02,
-                  zIndex: 50,
-                } : {}}
+                whileHover={
+                  isEnabled
+                    ? {
+                        scale: 1.02,
+                        zIndex: 50,
+                      }
+                    : {}
+                }
                 whileTap={isEnabled ? { scale: 0.98 } : {}}
-                style={{ 
-                  originX: "50%", 
+                style={{
+                  originX: "50%",
                   originY: "50%",
                   transformBox: "fill-box",
                   opacity: isEnabled ? 1 : 0.3, // Fade out inactive countries
@@ -87,8 +102,12 @@ export function EuropeMap() {
                   initial={false}
                   animate={{
                     fill: isHovered ? "var(--primary)" : "var(--map-fill)",
-                    stroke: isHovered ? "var(--foreground)" : (isEnabled ? "var(--primary)" : "var(--map-stroke-inactive)"),
-                    strokeWidth: isHovered ? 1.5 : (isEnabled ? 1 : 0.5),
+                    stroke: isHovered
+                      ? "var(--foreground)"
+                      : isEnabled
+                      ? "var(--primary)"
+                      : "var(--map-stroke-inactive)",
+                    strokeWidth: isHovered ? 1.5 : isEnabled ? 1 : 0.5,
                     filter: isHovered ? "url(#glow)" : "none",
                   }}
                   transition={{ duration: 0.3 }}
