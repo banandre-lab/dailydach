@@ -234,9 +234,10 @@ export async function getPostBySlug(slug: string): Promise<Post> {
 }
 
 export async function getAllCategories(): Promise<Category[]> {
-  return wordpressFetch<Category[]>("/wp-json/wp/v2/categories");
+  return wordpressFetch<Category[]>("/wp-json/wp/v2/categories", {
+    hide_empty: true,
+  });
 }
-
 export async function getCategoryById(id: number): Promise<Category> {
   return wordpressFetch<Category>(`/wp-json/wp/v2/categories/${id}`);
 }
@@ -628,6 +629,54 @@ export async function getCategoriesClient(): Promise<Category[]> {
   const url = `${baseUrl}/wp-json/wp/v2/categories?per_page=100&_fields=id,name,slug,count`;
   const response = await fetch(url);
   if (!response.ok) throw new Error("Failed to fetch categories");
+  return response.json();
+}
+
+/**
+ * Fetches related posts using the custom blog-writer API endpoint
+ * This endpoint provides optimized related posts based on tag matching
+ * @param tagSlugs - Array of tag slugs to match
+ * @param max - Maximum number of posts to return
+ * @param excludedIds - Optional array of post IDs to exclude
+ * @returns RelatedPostsResponse with matched posts and query info
+ */
+export async function getRelatedPostsByTags(
+  tagSlugs: string[],
+  max: number = 5,
+  excludedIds: number[] = []
+): Promise<import("./wordpress.d").RelatedPostsResponse> {
+  const query: Record<string, any> = {
+    tags: tagSlugs.join(","),
+    max,
+  };
+
+  if (excludedIds.length > 0) {
+    query.excluded_ids = excludedIds.join(",");
+  }
+
+  const url = `${baseUrl}/wp-json/blog-writer/v1/related-posts${
+    query ? `?${querystring.stringify(query)}` : ""
+  }`;
+  const userAgent = "Next.js WordPress Client";
+
+  const response = await fetch(url, {
+    headers: {
+      "User-Agent": userAgent,
+    },
+    next: {
+      tags: ["wordpress", "related-posts"],
+      revalidate: 3600, // 1 hour cache
+    },
+  });
+
+  if (!response.ok) {
+    throw new WordPressAPIError(
+      `WordPress API request failed: ${response.statusText}`,
+      response.status,
+      url
+    );
+  }
+
   return response.json();
 }
 

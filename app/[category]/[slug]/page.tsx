@@ -22,8 +22,9 @@ import {
   getPostsPaginated,
   getAllPostSlugs,
   getTagsByPost,
+  getRelatedPostsByTags,
 } from "@/lib/wordpress";
-import type { Post } from "@/lib/wordpress.d";
+import type { Post, RelatedPost } from "@/lib/wordpress.d";
 import type { Metadata } from "next";
 import { FluidBackground } from "@/components/ui/fluid-background";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
@@ -115,13 +116,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     year: "numeric",
   });
 
-  // Fetch related posts (same category, excluding current post)
-  const relatedResponse = await getPostsPaginated(1, 4, {
-    categories: post.categories[0],
-  });
-  const relatedPostsList = relatedResponse.data
-    .filter((p) => p.id !== post.id)
-    .slice(0, 3);
+  // Fetch related posts using tags
+  let relatedPostsList: RelatedPost[] = [];
+  if (tags.length > 0) {
+    const tagSlugs = tags.map((tag) => tag.slug);
+    const relatedResponse = await getRelatedPostsByTags(tagSlugs, 3, [post.id]);
+    relatedPostsList = relatedResponse.posts;
+  }
 
   return (
     <main className="min-h-screen bg-background relative overflow-hidden">
@@ -241,7 +242,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <div className="relative z-10 bg-muted/30 py-16 mt-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal direction="up">
-             <RelatedPosts posts={relatedPostsList} currentSlug={post.slug} />
+             <RelatedPosts posts={relatedPostsList} />
           </ScrollReveal>
         </div>
       </div>

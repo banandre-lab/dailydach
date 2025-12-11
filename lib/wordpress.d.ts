@@ -236,3 +236,41 @@ interface WPEntity {
     onTagChange?: (tagId: Tag["id"] | undefined) => void;
     onCategoryChange?: (categoryId: Category["id"] | undefined) => void;
   }
+
+  // Related Posts API Types
+  export interface RelatedPostTag {
+    id: number;
+    name: string;
+    slug: string;
+  }
+
+  export interface RelatedPostAuthor {
+    id: number;
+    name: string;
+  }
+
+  export interface RelatedPost {
+    id: number;
+    title: string;
+    slug: string;
+    excerpt: string;
+    date: string;
+    modified: string;
+    link: string;
+    featured_image: string;
+    tags: RelatedPostTag[];
+    author: RelatedPostAuthor;
+  }
+
+  export interface RelatedPostsQuery {
+    tags: string[];
+    max: number;
+    excluded_ids: number[];
+  }
+
+  export interface RelatedPostsResponse {
+    success: boolean;
+    count: number;
+    query: RelatedPostsQuery;
+    posts: RelatedPost[];
+  }
