@@ -11,9 +11,11 @@ interface RelatedPostsProps {
  * Transforms a RelatedPost (from custom API) to Post structure (for BlogCard compatibility)
  */
 function transformRelatedPostToPost(relatedPost: RelatedPost): Post {
-  // Extract category slug from the link
-  const urlParts = relatedPost.link.split("/").filter(Boolean);
-  const categorySlug = urlParts[urlParts.length - 2] || "uncategorized";
+  // Use the first category from the categories array, fallback to uncategorized
+  const firstCategory = relatedPost.categories?.[0];
+  const categorySlug = firstCategory?.slug || "uncategorized";
+  const categoryName = firstCategory?.name || "Uncategorized";
+  const categoryId = firstCategory?.id || 0;
 
   return {
     id: relatedPost.id,
@@ -35,8 +37,8 @@ function transformRelatedPostToPost(relatedPost: RelatedPost): Post {
     sticky: false,
     template: "",
     format: "standard",
-    categories: [],
-    tags: relatedPost.tags.map((tag) => tag.id),
+    categories: relatedPost.categories?.map((cat) => cat.id) || [],
+    tags: relatedPost.tags?.map((tag) => tag.id) || [],
     meta: {},
     _embedded: {
       "wp:featuredmedia": [
@@ -68,11 +70,11 @@ function transformRelatedPostToPost(relatedPost: RelatedPost): Post {
       "wp:term": [
         [
           {
-            id: 0,
+            id: categoryId,
             count: 0,
             description: "",
             link: `/${categorySlug}`,
-            name: categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1),
+            name: categoryName,
             slug: categorySlug,
             taxonomy: "category" as const,
             parent: 0,

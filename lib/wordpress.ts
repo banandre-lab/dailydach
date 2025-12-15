@@ -13,10 +13,13 @@ import type {
   FeaturedMedia,
 } from "./wordpress.d";
 
-const baseUrl = process.env.NEXT_PUBLIC_WORDPRESS_URL || process.env.WORDPRESS_URL;
+const baseUrl =
+  process.env.NEXT_PUBLIC_WORDPRESS_URL || process.env.WORDPRESS_URL;
 
 if (!baseUrl) {
-  throw new Error("WORDPRESS_URL or NEXT_PUBLIC_WORDPRESS_URL environment variable is not defined");
+  throw new Error(
+    "WORDPRESS_URL or NEXT_PUBLIC_WORDPRESS_URL environment variable is not defined"
+  );
 }
 
 class WordPressAPIError extends Error {
@@ -355,7 +358,9 @@ export async function searchAuthors(query: string): Promise<Author[]> {
 }
 
 // Function specifically for generateStaticParams - fetches ALL posts
-export async function getAllPostSlugs(): Promise<{ slug: string; category: string }[]> {
+export async function getAllPostSlugs(): Promise<
+  { slug: string; category: string }[]
+> {
   const allSlugs: { slug: string; category: string }[] = [];
   let page = 1;
   let hasMore = true;
@@ -376,14 +381,17 @@ export async function getAllPostSlugs(): Promise<{ slug: string; category: strin
     // This might be expensive if we do it one by one.
     // Better to fetch all categories once and create a map.
     const allCategories = await getAllCategories();
-    const categoryMap = new Map(allCategories.map(c => [c.id, c.slug]));
+    const categoryMap = new Map(allCategories.map((c) => [c.id, c.slug]));
 
-    allSlugs.push(...posts.map((post) => {
-      const categorySlug = post.categories && post.categories.length > 0
-        ? categoryMap.get(post.categories[0]) || "uncategorized"
-        : "uncategorized";
-      return { slug: post.slug, category: categorySlug };
-    }));
+    allSlugs.push(
+      ...posts.map((post) => {
+        const categorySlug =
+          post.categories && post.categories.length > 0
+            ? categoryMap.get(post.categories[0]) || "uncategorized"
+            : "uncategorized";
+        return { slug: post.slug, category: categorySlug };
+      })
+    );
 
     hasMore = page < response.headers.totalPages;
     page++;
@@ -393,12 +401,14 @@ export async function getAllPostSlugs(): Promise<{ slug: string; category: strin
 }
 
 // Function specifically for sitemap generation - fetches ALL posts with images and metadata
-export async function getAllPostsForSitemap(): Promise<{
-  slug: string;
-  category: string;
-  modified: string;
-  image?: string;
-}[]> {
+export async function getAllPostsForSitemap(): Promise<
+  {
+    slug: string;
+    category: string;
+    modified: string;
+    image?: string;
+  }[]
+> {
   const allPosts: {
     slug: string;
     category: string;
@@ -410,7 +420,7 @@ export async function getAllPostsForSitemap(): Promise<{
 
   // Fetch categories once and create a map
   const allCategories = await getAllCategories();
-  const categoryMap = new Map(allCategories.map(c => [c.id, c.slug]));
+  const categoryMap = new Map(allCategories.map((c) => [c.id, c.slug]));
 
   while (hasMore) {
     const response = await wordpressFetchWithPagination<Post[]>(
@@ -425,21 +435,25 @@ export async function getAllPostsForSitemap(): Promise<{
 
     const posts = response.data;
 
-    allPosts.push(...posts.map((post) => {
-      const categorySlug = post.categories && post.categories.length > 0
-        ? categoryMap.get(post.categories[0]) || "uncategorized"
-        : "uncategorized";
+    allPosts.push(
+      ...posts.map((post) => {
+        const categorySlug =
+          post.categories && post.categories.length > 0
+            ? categoryMap.get(post.categories[0]) || "uncategorized"
+            : "uncategorized";
 
-      // Extract featured image URL from embedded data
-      const featuredImage = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
+        // Extract featured image URL from embedded data
+        const featuredImage =
+          post._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
 
-      return {
-        slug: post.slug,
-        category: categorySlug,
-        modified: post.modified,
-        image: featuredImage,
-      };
-    }));
+        return {
+          slug: post.slug,
+          category: categorySlug,
+          modified: post.modified,
+          image: featuredImage,
+        };
+      })
+    );
 
     hasMore = page < response.headers.totalPages;
     page++;
@@ -496,7 +510,10 @@ export async function getPostsByAuthorPaginated(
 
 // ... existing code ...
 
-export async function searchPosts(query: string, perPage: number = 10): Promise<Post[]> {
+export async function searchPosts(
+  query: string,
+  perPage: number = 10
+): Promise<Post[]> {
   const cacheKey = `search:${query}:${perPage}`;
 
   // Check if running in browser
@@ -505,7 +522,9 @@ export async function searchPosts(query: string, perPage: number = 10): Promise<
     return clientCache.get(
       cacheKey,
       async () => {
-        const url = `${baseUrl}/wp-json/wp/v2/posts?search=${encodeURIComponent(query)}&per_page=${perPage}&_embed=true`;
+        const url = `${baseUrl}/wp-json/wp/v2/posts?search=${encodeURIComponent(
+          query
+        )}&per_page=${perPage}&_embed=true`;
         const response = await fetch(url, {
           headers: {
             "User-Agent": "Next.js WordPress Client",
@@ -527,7 +546,9 @@ export async function searchPosts(query: string, perPage: number = 10): Promise<
   }
 
   // Server-side: no caching
-  const url = `${baseUrl}/wp-json/wp/v2/posts?search=${encodeURIComponent(query)}&per_page=${perPage}&_embed=true`;
+  const url = `${baseUrl}/wp-json/wp/v2/posts?search=${encodeURIComponent(
+    query
+  )}&per_page=${perPage}&_embed=true`;
   const response = await fetch(url, {
     headers: {
       "User-Agent": "Next.js WordPress Client",
@@ -555,7 +576,9 @@ export async function getPostsByCategoryClient(
   perPage: number = 4,
   excludePostId?: number
 ): Promise<Post[]> {
-  const cacheKey = `category:${categoryId}:${perPage}:${excludePostId || "all"}`;
+  const cacheKey = `category:${categoryId}:${perPage}:${
+    excludePostId || "all"
+  }`;
 
   // Check if running in browser
   if (typeof window !== "undefined") {
@@ -618,12 +641,16 @@ export async function getCategoriesClient(): Promise<Category[]> {
 
   if (typeof window !== "undefined") {
     const { clientCache } = await import("./client-cache");
-    return clientCache.get(cacheKey, async () => {
-      const url = `${baseUrl}/wp-json/wp/v2/categories?per_page=100&_fields=id,name,slug,count`;
-      const response = await fetch(url);
-      if (!response.ok) throw new Error("Failed to fetch categories");
-      return response.json();
-    }, 24 * 60 * 60 * 1000); // 24 hours cache
+    return clientCache.get(
+      cacheKey,
+      async () => {
+        const url = `${baseUrl}/wp-json/wp/v2/categories?per_page=100&_fields=id,name,slug,count`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Failed to fetch categories");
+        return response.json();
+      },
+      24 * 60 * 60 * 1000
+    ); // 24 hours cache
   }
 
   const url = `${baseUrl}/wp-json/wp/v2/categories?per_page=100&_fields=id,name,slug,count`;
@@ -651,7 +678,7 @@ export async function getRelatedPostsByTags(
   };
 
   if (excludedIds.length > 0) {
-    query.excluded_ids = excludedIds.join(",");
+    query.exclude = excludedIds.join(",");
   }
 
   const url = `${baseUrl}/wp-json/blog-writer/v1/related-posts${
@@ -679,7 +706,5 @@ export async function getRelatedPostsByTags(
 
   return response.json();
 }
-
-
 
 export { WordPressAPIError };

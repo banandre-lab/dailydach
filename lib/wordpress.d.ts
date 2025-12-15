@@ -244,6 +244,12 @@ interface WPEntity {
     slug: string;
   }
 
+  export interface RelatedPostCategory {
+    id: number;
+    name: string;
+    slug: string;
+  }
+
   export interface RelatedPostAuthor {
     id: number;
     name: string;
@@ -258,6 +264,7 @@ interface WPEntity {
     modified: string;
     link: string;
     featured_image: string;
+    categories: RelatedPostCategory[];
     tags: RelatedPostTag[];
     author: RelatedPostAuthor;
   }

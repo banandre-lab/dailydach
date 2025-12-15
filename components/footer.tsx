@@ -3,7 +3,6 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { XLogoIcon } from "@/components/ui/x-logo";
-import { Facebook, Instagram, Linkedin, Github } from "lucide-react";
 
 export function Footer() {
   return (
@@ -37,7 +36,7 @@ export function Footer() {
                 icon={<XLogoIcon className="w-5 h-5" />}
                 label="X"
               />
-              <SocialLink
+              {/* <SocialLink
                 href="#"
                 icon={<Instagram className="w-5 h-5" />}
                 label="Instagram"
@@ -51,7 +50,7 @@ export function Footer() {
                 href="#"
                 icon={<Github className="w-5 h-5" />}
                 label="GitHub"
-              />
+              /> */}
             </div>
           </div>
 
