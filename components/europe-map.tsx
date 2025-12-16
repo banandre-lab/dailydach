@@ -11,7 +11,7 @@ export function EuropeMap() {
   const router = useRouter();
 
   // Configuration for enabled countries
-  const enabledCountries = ["DE", "AT"];
+  const enabledCountries = ["DE", "AT", "CH"];
 
   const handleMouseMove = (e: React.MouseEvent) => {
     // Get relative coordinates for the tooltip
@@ -43,7 +43,6 @@ export function EuropeMap() {
           className="w-full h-full drop-shadow-2xl"
           style={{
             filter: "drop-shadow(rgba(114, 228, 173, 0.15) 0px 0px 30px)",
-            transform: "scale(2)",
           }}
         >
           <defs>
