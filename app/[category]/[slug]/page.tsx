@@ -229,9 +229,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <ScrollReveal delay={0.5}>
             <div className="flex flex-wrap gap-2 mt-8 pt-8 border-t border-border">
               {tags.map((tag) => (
-                <Badge key={tag.id} variant="secondary" className="text-sm px-3 py-1 hover:bg-primary/20 hover:text-primary transition-colors cursor-pointer">
-                  #{tag.name}
-                </Badge>
+                <Link key={tag.id} href={`/tag/${tag.slug}`}>
+                  <Badge variant="secondary" className="text-sm px-3 py-1 hover:bg-primary/20 hover:text-primary transition-colors cursor-pointer">
+                    #{tag.name}
+                  </Badge>
+                </Link>
               ))}
             </div>
           </ScrollReveal>
