@@ -131,17 +131,17 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
       {/* Hero Section */}
       <ScrollReveal direction="down">
-        <div className="relative w-full group mb-12">
+        <div className="relative w-full group mb-0">
           {/* Hero Image */}
-          <div className="relative h-[50vh] min-h-[400px] md:h-[600px] overflow-hidden rounded-b-[3rem] shadow-2xl">
+          <div className="relative h-[50vh] min-h-[400px] md:h-[600px] overflow-hidden">
             <img
               src={featuredMedia?.source_url || "/placeholder.svg"}
               alt={decode(post.title.rendered)}
               className="absolute inset-0 w-full h-full object-cover animate-zoom-in"
             />
 
-            {/* Overlay Gradient */}
-            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent"></div>
+            {/* Overlay Gradient - Enhanced fade to content */}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-background"></div>
 
             {/* Content Overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12 lg:p-16 text-white max-w-7xl mx-auto w-full">
@@ -175,7 +175,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       </ScrollReveal>
 
       {/* Article Content */}
-      <article className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+      <article className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pt-0 pb-12 relative z-10 -mt-24 md:-mt-32">
         {/* Breadcrumb & Meta */}
         <ScrollReveal delay={0.2}>
           <Breadcrumb className="mb-8 flex justify-center">
