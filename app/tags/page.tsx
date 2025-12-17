@@ -5,8 +5,28 @@ import { FluidBackground } from "@/components/ui/fluid-background";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { getAllTags } from "@/lib/wordpress";
 import type { Tag } from "@/lib/wordpress.d";
+import type { Metadata } from "next";
 
 export const revalidate = 3600; // Revalidate every hour
+
+export const metadata: Metadata = {
+  title: "Discover Tags | Tribitat",
+  description: "Explore our content through a cloud of topics and ideas. Browse all tags to find stories about sustainable travel, cultural experiences, and European destinations.",
+  alternates: {
+    canonical: "https://www.tribitat.com/tags",
+  },
+  openGraph: {
+    title: "Discover Tags | Tribitat",
+    description: "Explore our content through a cloud of topics and ideas. Browse all tags to find stories about sustainable travel, cultural experiences, and European destinations.",
+    url: "/tags",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Discover Tags | Tribitat",
+    description: "Explore our content through a cloud of topics and ideas. Browse all tags to find stories about sustainable travel, cultural experiences, and European destinations.",
+  },
+};
 
 export default async function TagsPage() {
   const tags = await getAllTags();

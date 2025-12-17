@@ -63,13 +63,18 @@ export async function generateMetadata({
 
   const imageUrl = featuredMedia?.source_url || 'https://www.tribitat.com/opengraph-image';
 
+  const canonicalUrl = `https://www.tribitat.com/${category.slug}/${post.slug}`;
+
   return {
     title: decode(post.title.rendered),
     description: description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: decode(post.title.rendered),
       description: description,
-      url: `https://www.tribitat.com/${category.slug}/${post.slug}`,
+      url: canonicalUrl,
       type: "article",
       publishedTime: post.date,
       modifiedTime: post.modified,
@@ -124,8 +129,73 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     relatedPostsList = relatedResponse.posts;
   }
 
+  // Prepare JSON-LD structured data for SEO
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: decode(post.title.rendered),
+    description: decode(post.excerpt.rendered.replace(/<[^>]*>/g, "").trim()),
+    image: featuredMedia?.source_url || 'https://www.tribitat.com/opengraph-image',
+    datePublished: post.date,
+    dateModified: post.modified,
+    author: {
+      "@type": "Person",
+      name: author.name,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Tribitat",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.tribitat.com/opengraph-image",
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://www.tribitat.com/${category.slug}/${post.slug}`,
+    },
+    keywords: tags.map((tag) => tag.name).join(", "),
+  };
+
+  // BreadcrumbList JSON-LD for better search result display
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.tribitat.com",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: category.name,
+        item: `https://www.tribitat.com/${category.slug}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: decode(post.title.rendered),
+        item: `https://www.tribitat.com/${category.slug}/${post.slug}`,
+      },
+    ],
+  };
+
   return (
     <main className="min-h-screen bg-background relative overflow-hidden">
+      {/* JSON-LD structured data for Article */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      {/* JSON-LD structured data for Breadcrumbs */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+
       <FluidBackground />
       <Header />
 

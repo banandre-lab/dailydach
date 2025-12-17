@@ -11,7 +11,10 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Tribitat",
+  title: {
+    default: "Tribitat - Real Stories in Plain English",
+    template: "%s | Tribitat",
+  },
   description: "Real Stories in Plain English",
   metadataBase: new URL("https://www.tribitat.com"),
   openGraph: {
@@ -36,9 +39,45 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  // JSON-LD structured data for Organization and Website
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Tribitat",
+    url: "https://www.tribitat.com",
+    logo: "https://www.tribitat.com/opengraph-image",
+    description: "Real Stories in Plain English",
+    sameAs: [
+      "https://twitter.com/tribitat",
+    ],
+  };
+
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Tribitat",
+    url: "https://www.tribitat.com",
+    description: "Real Stories in Plain English",
+    publisher: {
+      "@type": "Organization",
+      name: "Tribitat",
+    },
+  };
+
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
+      <head>
+        {/* JSON-LD structured data for Organization */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        {/* JSON-LD structured data for Website */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+      </head>
       <body className={`font-sans antialiased`}>
         <ThemeProvider
           attribute="class"

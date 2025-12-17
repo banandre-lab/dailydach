@@ -27,13 +27,18 @@ export async function generateMetadata({
     return {};
   }
 
+  const canonicalUrl = `https://www.tribitat.com/tag/${tag.slug}`;
+
   return {
     title: `#${tag.name} - Tribitat`,
     description: `Browse stories tagged with #${tag.name} in plain English.`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: `#${tag.name} - Tribitat`,
       description: `Browse stories tagged with #${tag.name} in plain English.`,
-      url: `https://www.tribitat.com/tag/${tag.slug}`,
+      url: canonicalUrl,
       type: "website",
     },
     twitter: {
