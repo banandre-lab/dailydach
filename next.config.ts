@@ -1,18 +1,24 @@
 import type { NextConfig } from "next";
+import createMDX from "@next/mdx";
 
-const nextConfig = {
+const wordpressPort = process.env.WORDPRESS_PORT;
+const wordpressRemotePattern = {
+  protocol: (process.env.WORDPRESS_PROTOCOL || "https") as "http" | "https",
+  hostname: process.env.WORDPRESS_HOSTNAME || "www.tribitat.com",
+  ...(wordpressPort && { port: wordpressPort }),
+  pathname: process.env.WORDPRESS_PATHNAME || "/wp-content/uploads/**",
+};
+
+const nextConfig: NextConfig = {
+  // Configure pageExtensions to include markdown and MDX files
+  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
   // Allow more time for slow external data sources during SSG
   staticPageGenerationTimeout: 180,
   // Empty turbopack config to silence warning
   turbopack: {},
   images: {
     remotePatterns: [
-      {
-        protocol: process.env.WORDPRESS_PROTOCOL || "https",
-        hostname: process.env.WORDPRESS_HOSTNAME || "www.tribitat.com",
-        port: process.env.WORDPRESS_PORT || "",
-        pathname: process.env.WORDPRESS_PATHNAME || "/wp-content/uploads/**",
-      },
+      wordpressRemotePattern,
       {
         protocol: "http",
         hostname: "localhost",
@@ -31,4 +37,9 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+  // Add markdown plugins here, as desired
+});
+
+// Merge MDX config with Next.js config
+export default withMDX(nextConfig);

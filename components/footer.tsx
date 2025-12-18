@@ -65,11 +65,11 @@ export function Footer() {
           <div className="col-span-6 md:col-span-4 lg:col-span-2">
             <h4 className="font-bold text-white mb-6">Company</h4>
             <ul className="space-y-4">
-              <FooterLink href="/about">About Us</FooterLink>
               <FooterLink href="/submit-story">Submit Story</FooterLink>
               <FooterLink href="/privacy">Privacy Policy</FooterLink>
               <FooterLink href="/terms">Terms of Service</FooterLink>
               <FooterLink href="/cookies">Cookie Policy</FooterLink>
+              <FooterLink href="/impressum">Impressum</FooterLink>
             </ul>
           </div>
 
