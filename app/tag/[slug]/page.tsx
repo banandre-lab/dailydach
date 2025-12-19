@@ -8,8 +8,14 @@ import { BlogGrid } from "@/components/blog-grid";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
+import { cache } from "react";
 
 export const revalidate = 3600; // Revalidate every hour
+
+// Cache tag lookup to avoid duplicate requests between generateMetadata and page component
+const getCachedTag = cache(async (slug: string) => {
+  return getTagBySlug(slug);
+});
 
 interface TagPageProps {
   params: Promise<{ slug: string }>;
@@ -21,7 +27,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const tag = await getTagBySlug(slug);
+  const tag = await getCachedTag(slug);
 
   if (!tag) {
     return {};
@@ -51,7 +57,7 @@ export async function generateMetadata({
 
 export default async function TagPage({ params }: TagPageProps) {
   const { slug } = await params;
-  const tag = await getTagBySlug(slug);
+  const tag = await getCachedTag(slug);
 
   if (!tag) {
     notFound();

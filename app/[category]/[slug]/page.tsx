@@ -16,12 +16,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import {
   getPostBySlug,
-  getFeaturedMediaById,
-  getAuthorById,
-  getCategoryById,
-  getPostsPaginated,
   getAllPostSlugs,
-  getTagsByPost,
   getRelatedPostsByTags,
 } from "@/lib/wordpress";
 import type { Post, RelatedPost } from "@/lib/wordpress.d";
@@ -29,6 +24,14 @@ import type { Metadata } from "next";
 import { FluidBackground } from "@/components/ui/fluid-background";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { decode } from "html-entities";
+import { cache } from "react";
+
+// Cache post fetching to avoid duplicate requests between generateMetadata and page component
+const getCachedPost = cache(async (slug: string) => {
+  return getPostBySlug(slug);
+});
+
+export const revalidate = 3600; // Revalidate every hour
 
 interface BlogPostPageProps {
   params: Promise<{ category: string; slug: string }>;
@@ -44,7 +47,7 @@ export async function generateMetadata({
   params: Promise<{ category: string; slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const post = await getCachedPost(slug);
 
   if (!post) {
     return {};
@@ -53,13 +56,13 @@ export async function generateMetadata({
   // Strip HTML tags for description
   const description = decode(post.excerpt.rendered.replace(/<[^>]*>/g, "").trim());
 
-  // Get category info for URL
-  const category = await getCategoryById(post.categories[0]);
+  // Extract embedded data (already included in post response)
+  const category = post._embedded?.["wp:term"]?.[0]?.[0];
+  const featuredMedia = post._embedded?.["wp:featuredmedia"]?.[0] || null;
 
-  // Get featured image if it exists
-  const featuredMedia = post.featured_media
-    ? await getFeaturedMediaById(post.featured_media)
-    : null;
+  if (!category) {
+    return {};
+  }
 
   const imageUrl = featuredMedia?.source_url || 'https://www.tribitat.com/opengraph-image';
 
@@ -101,19 +104,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { category: categorySlug, slug } = await params;
 
   // Fetch the post by slug
-  const post = await getPostBySlug(slug);
+  const post = await getCachedPost(slug);
 
   if (!post) {
     notFound();
   }
 
-  // Fetch related data individually (more reliable than embedded data)
-  const featuredMedia = post.featured_media
-    ? await getFeaturedMediaById(post.featured_media)
-    : null;
-  const author = await getAuthorById(post.author);
-  const category = await getCategoryById(post.categories[0]);
-  const tags = post.tags.length > 0 ? await getTagsByPost(post.id) : [];
+  // Extract embedded data from post (already included in _embed response)
+  const featuredMedia = post._embedded?.["wp:featuredmedia"]?.[0] || null;
+  const category = post._embedded?.["wp:term"]?.[0]?.[0]; // First array is categories
+  const tags = post._embedded?.["wp:term"]?.[1] || []; // Second array is tags
+
+  if (!category) {
+    notFound();
+  }
 
   const date = new Date(post.date).toLocaleDateString("en-US", {
     month: "long",
@@ -139,8 +143,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     datePublished: post.date,
     dateModified: post.modified,
     author: {
-      "@type": "Person",
-      name: author.name,
+      "@type": "Organization",
+      name: "Tribitat",
     },
     publisher: {
       "@type": "Organization",
@@ -226,19 +230,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-balance drop-shadow-lg">
                 {decode(post.title.rendered)}
               </h1>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-lg font-bold border border-white/30">
-                    {author.name.charAt(0)}
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-sm font-semibold text-white">
-                      {author.name}
-                    </span>
-                    <span className="text-xs text-white/70">Author</span>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
