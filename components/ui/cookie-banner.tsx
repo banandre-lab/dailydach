@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { isFromEU } from "@/lib/eu-utils";
+import { Button } from "@/components/ui/button";
 
 // Cookie utilities
 const setCookie = (name: string, value: string, days: number) => {
@@ -40,7 +40,13 @@ export function CookieBanner() {
   }, []);
 
   const handleAccept = () => {
-    setCookie("cookie-consent", "accepted", 7); // 7 days
+    setCookie("cookie-consent", "accepted", 365); // 1 year
+    setIsVisible(false);
+    setTimeout(() => setShowBanner(false), 300);
+  };
+
+  const handleReject = () => {
+    setCookie("cookie-consent", "rejected", 365); // 1 year
     setIsVisible(false);
     setTimeout(() => setShowBanner(false), 300);
   };
@@ -65,19 +71,33 @@ export function CookieBanner() {
               >
                 Cookie Policy
               </Link>{" "}
+              and{" "}
+              <Link
+                href="/terms"
+                className="text-accent hover:text-accent-hover underline font-semibold transition-colors whitespace-nowrap"
+              >
+                Terms of Service
+              </Link>{" "}
               here.
             </p>
 
-            <div className="flex-shrink-0">
-              <motion.button
+            <div className="flex-shrink-0 flex gap-2">
+              <Button
+                onClick={handleReject}
+                variant="outline"
+                size="sm"
+                className="px-4 py-2 font-bold uppercase text-xs tracking-wide whitespace-nowrap"
+              >
+                Reject All
+              </Button>
+              <Button
                 onClick={handleAccept}
-                className="px-4 py-2 bg-accent text-accent-foreground font-bold uppercase text-xs tracking-wide brutalist-border hover:bg-accent-hover transition-all duration-200 cursor-pointer whitespace-nowrap"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ duration: 0.2 }}
+                variant="default"
+                size="sm"
+                className="px-4 py-2 bg-accent text-accent-foreground font-bold uppercase text-xs tracking-wide brutalist-border hover:bg-accent-hover whitespace-nowrap"
               >
                 Accept
-              </motion.button>
+              </Button>
             </div>
           </div>
         </div>

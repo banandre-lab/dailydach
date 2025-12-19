@@ -1,9 +1,9 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import GoogleAnalytics from "@/components/google-analytics"
+import VercelAnalytics from "@/components/vercel-analytics"
 import "./globals.css"
 import { CookieBanner } from "@/components/ui/cookie-banner"
 
@@ -86,7 +86,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
-          <Analytics />
+          <VercelAnalytics />
         </ThemeProvider>
         <GoogleAnalytics />
         <CookieBanner />

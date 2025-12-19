@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 
 // Cookie utility to get consent status
 const getCookie = (name: string): string | null => {
@@ -16,7 +16,7 @@ const getCookie = (name: string): string | null => {
   return null;
 };
 
-export default function GoogleAnalytics() {
+export default function VercelAnalytics() {
   const [hasConsent, setHasConsent] = useState(false);
 
   useEffect(() => {
@@ -30,26 +30,5 @@ export default function GoogleAnalytics() {
     return null;
   }
 
-  return (
-    <>
-      {/* Google tag (gtag.js) */}
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-0C34L33RCK"
-        strategy="afterInteractive"
-      />
-      <Script
-        id="google-analytics"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'G-0C34L33RCK');
-          `,
-        }}
-      />
-    </>
-  );
+  return <Analytics />;
 }

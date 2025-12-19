@@ -155,14 +155,12 @@ We implement **the highest standard** across all jurisdictions:
 
 #### Strictly Necessary Cookies Table
 
-| Cookie Name | Provider | Purpose | Duration | Type |
-|-------------|----------|---------|----------|------|
-| `session_id` | tribitat.com | Maintains your browsing session | Session | First-party |
-| `auth_token` | tribitat.com | Authenticates logged-in users | 30 days | First-party |
-| `csrf_token` | tribitat.com | Prevents cross-site request forgery attacks | Session | First-party |
-| `load_balancer` | tribitat.com | Distributes server load | Session | First-party |
-| `cookie_consent` | tribitat.com | Stores your cookie consent preferences | 12 months | First-party |
-| `__cf_bm` | cloudflare.com | Bot management and security | 30 minutes | Third-party |
+- `session_id` - tribitat.com - Maintains your browsing session - Session - First-party
+- `auth_token` - tribitat.com - Authenticates logged-in users - 30 days - First-party
+- `csrf_token` - tribitat.com - Prevents cross-site request forgery attacks - Session - First-party
+- `load_balancer` - tribitat.com - Distributes server load - Session - First-party
+- `cookie_consent` - tribitat.com - Stores your cookie consent preferences - 12 months - First-party
+- `__cf_bm` - cloudflare.com - Bot management and security - 30 minutes - Third-party
 
 ### 4.2 Analytics and Performance Cookies
 
@@ -181,7 +179,7 @@ We implement **the highest standard** across all jurisdictions:
 - Aggregated usage statistics
 
 **Third-Party Analytics:**
-We use [e.g., Google Analytics, Matomo, Plausible] for analytics.
+We use Google Analytics and Cloudflare Analytics for analytics.
 
 **Privacy Protections:**
 - IP address anonymization enabled
@@ -192,17 +190,15 @@ We use [e.g., Google Analytics, Matomo, Plausible] for analytics.
 
 #### Analytics Cookies Table
 
-| Cookie Name | Provider | Purpose | Duration | Type |
-|-------------|----------|---------|----------|------|
-| `_ga` | google.com | Google Analytics - distinguishes users | 2 years | Third-party |
-| `_ga_*` | google.com | Google Analytics - maintains session state | 2 years | Third-party |
-| `_gid` | google.com | Google Analytics - distinguishes users | 24 hours | Third-party |
-| `_gat` | google.com | Google Analytics - throttles request rate | 1 minute | Third-party |
-| `analytics_session` | tribitat.com | Internal analytics tracking | 30 minutes | First-party |
+- `_ga` - google.com - Google Analytics - distinguishes users - 2 years - Third-party
+- `_ga_*` - google.com - Google Analytics - maintains session state - 2 years - Third-party
+- `_gid` - google.com - Google Analytics - distinguishes users - 24 hours - Third-party
+- `_gat` - google.com - Google Analytics - throttles request rate - 1 minute - Third-party
+- `analytics_session` - tribitat.com - Internal analytics tracking - 30 minutes - First-party
 
 **Opt-Out:** You can opt out of Google Analytics by:
 - Declining analytics cookies in our consent banner
-- Installing the [Google Analytics Opt-out Browser Add-on](https://tools.google.com/dlpage/gaoptout)
+- Installing the Google Analytics Opt-out Browser Add-on (https://tools.google.com/dlpage/gaoptout)
 - Adjusting cookie preferences at tribitat.com/cookies
 
 ### 4.3 Functionality and Preference Cookies
@@ -222,11 +218,9 @@ We use [e.g., Google Analytics, Matomo, Plausible] for analytics.
 
 #### Functionality Cookies Table
 
-| Cookie Name | Provider | Purpose | Duration | Type |
-|-------------|----------|---------|----------|------|
-| `language` | tribitat.com | Remembers your language preference | 12 months | First-party |
-| `theme` | tribitat.com | Remembers light/dark mode preference | 12 months | First-party |
-| `layout_pref` | tribitat.com | Stores layout preferences | 6 months | First-party |
+- `language` - tribitat.com - Remembers your language preference - 12 months - First-party
+- `theme` - tribitat.com - Remembers light/dark mode preference - 12 months - First-party
+- `layout_pref` - tribitat.com - Stores layout preferences - 6 months - First-party
 
 **Effect of Disabling:**
 If you disable these cookies:
@@ -235,9 +229,7 @@ If you disable these cookies:
 - Theme will reset to default
 - The Platform will still function, but your experience may be less personalized
 
-### 4.4 Advertising and Marketing Cookies (if applicable)
-
-[Include this section if you plan to use advertising:]
+### 4.4 Advertising and Marketing Cookies 
 
 **Purpose:** Deliver targeted advertising relevant to you and your interests. Track the effectiveness of advertising campaigns.
 
@@ -252,11 +244,9 @@ If you disable these cookies:
 - You can opt out at any time
 
 **Third-Party Advertising:**
-[If applicable, list advertising partners like Google Ads, Facebook Pixel, etc.]
+We do not currently use advertising cookies.
 
-### 4.5 Social Media Cookies (if applicable)
-
-[If you use social media plugins:]
+### 4.5 Social Media Cookies
 
 **Purpose:** Enable social media features like sharing content on Facebook, Twitter, LinkedIn, etc.
 
@@ -265,14 +255,10 @@ If you disable these cookies:
 **Consent Required:** ✅ YES (in most cases)
 
 **Third-Party Cookies:**
-Social media plugins may set cookies from:
-- Facebook (facebook.com)
-- Twitter (twitter.com)
-- LinkedIn (linkedin.com)
-- Instagram (instagram.com)
+Social media plugins may set cookies. We cannot control cookies set by third-party social media plugins. These are subject to the privacy policies of the respective platforms.
 
 **Privacy Notice:**
-These social networks may track your browsing across websites even if you don't click the plugin. They may combine this data with information from your social media account.
+We cannot control cookies set by third-party social media plugins. These are subject to the privacy policies of the respective platforms.
 
 **Control:**
 - Decline social media cookies in our consent banner
@@ -288,7 +274,7 @@ These social networks may track your browsing across websites even if you don't 
 
 In addition to our own first-party cookies, we use cookies from third-party service providers to:
 - Provide analytics and understand Platform usage
-- Deliver content from content delivery networks (CDNs)
+- Deliver content from Cloudflare CDN
 - Enable embedded content (videos, maps)
 - Provide security services
 
@@ -758,15 +744,11 @@ For general data protection questions, see our Privacy Policy contact informatio
 
 **Your Current Cookie Preferences:**
 
-[In an actual implementation, this section would be dynamically generated showing the user's current consent status]
-
 - Strictly Necessary Cookies: **Always Active** (cannot be disabled)
-- Analytics & Performance Cookies: **[Accepted/Rejected]** - Last updated: [Date]
-- Functionality & Preferences Cookies: **[Accepted/Rejected]** - Last updated: [Date]
-- Advertising Cookies: **[Accepted/Rejected]** - Last updated: [Date]
-- Social Media Cookies: **[Accepted/Rejected]** - Last updated: [Date]
-
-**[Update Cookie Preferences]** button
+- Analytics & Performance Cookies: **Accepted/Rejected** - Last updated: December 18, 2025
+- Functionality & Preferences Cookies: **Accepted/Rejected** - Last updated: December 18, 2025
+- Advertising Cookies: **Accepted/Rejected** - Last updated: December 18, 2025
+- Social Media Cookies: **Accepted/Rejected** - Last updated: December 18, 2025
 
 ---
 
