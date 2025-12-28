@@ -1,8 +1,6 @@
 import { Resend } from "resend";
-import { EmailTemplate } from "@/components/email-template";
+import { getEmailHtml } from "@/components/email-template";
 import { NextResponse } from "next/server";
-import { renderToStaticMarkup } from "react-dom/server";
-import * as React from "react";
 import {
   generateSubscriptionHash,
   verifySubscriptionHash,
@@ -34,33 +32,26 @@ export async function POST(request: Request) {
 
     // 1. Manage Audience and Contact
     try {
-      // Use the provided segment ID or fallback to listing segments
       const segmentId = process.env.RESEND_SEGEMENT_ID;
 
       // Add or update the contact in the segment
-      // resend.contacts.create also acts as an update if the contact exists in some cases,
-      // but let's be explicit if we have a hash (meaning it's likely an existing user)
       await resend.contacts.create({
         email,
-        audienceId: segmentId, // The SDK still uses audienceId for the contact's segment
+        audienceId: segmentId,
         unsubscribed: false,
       });
     } catch (contactError) {
-      // Log but don't fail the whole request if contact creation fails
       console.error("Error managing contact in Resend:", contactError);
     }
 
     // 2. Only send Welcome Email if it's a NEW subscription (no hash provided)
     if (!isUpdate) {
-      // Pre-render the email template to HTML using standard React server rendering
-      // to avoid issues with Prettier dependencies in Cloudflare Workers
-      const emailHtml = renderToStaticMarkup(
-        React.createElement(EmailTemplate, {
-          email,
-          categories: selectedCategories,
-          hash: currentHash,
-        })
-      );
+      // Get the email HTML string directly (no React rendering needed in the API)
+      const emailHtml = getEmailHtml({
+        email,
+        categories: selectedCategories,
+        hash: currentHash,
+      });
 
       const { data, error } = await resend.emails.send({
         from: "TRIBITAT <noreply@tribitat.com>",

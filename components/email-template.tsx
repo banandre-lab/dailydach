@@ -1,64 +1,57 @@
-import * as React from "react";
-
 interface EmailTemplateProps {
   email: string;
   categories: string[];
   hash: string;
 }
 
-export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
+export function getEmailHtml({
   email,
   categories,
   hash,
-}) => (
-  <div style={{ fontFamily: "sans-serif", color: "#333" }}>
-    <h1>Welcome to TRIBITAT!</h1>
-    <p>Hi there,</p>
-    <p>
-      Thanks for subscribing to our newsletter with <strong>{email}</strong>.
-    </p>
-    {categories.length > 0 && (
+}: EmailTemplateProps): string {
+  const categoriesHtml =
+    categories.length > 0
+      ? `<p>You have chosen to stay updated on the following topics: ${categories.join(
+          ", "
+        )}.</p>`
+      : "";
+
+  return `
+    <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
+      <h1 style="color: #111;">Welcome to TRIBITAT!</h1>
+      <p>Hi there,</p>
       <p>
-        You have chosen to stay updated on the following topics:{" "}
-        {categories.join(", ")}.
+        Thanks for subscribing to our newsletter with <strong>${email}</strong>.
       </p>
-    )}
-    <p>
-      We&apos;re excited to share curated stories, insightful articles, and
-      fresh perspectives on technology, design, and culture with you.
-    </p>
-    <div
-      style={{
-        marginTop: "40px",
-        paddingTop: "20px",
-        borderTop: "1px solid #eee",
-        fontSize: "12px",
-        color: "#666",
-      }}
-    >
-      <p>Sent with ❤️ from TRIBITAT.</p>
+      ${categoriesHtml}
       <p>
-        <a
-          href={`https://www.tribitat.com/subscribe?email=${email}&hash=${hash}&unsubscribe=true`}
-          style={{ color: "#666", textDecoration: "underline" }}
-        >
-          Unsubscribe
-        </a>
-        {" • "}
-        <a
-          href={`https://www.tribitat.com/subscribe?email=${email}&hash=${hash}`}
-          style={{ color: "#666", textDecoration: "underline" }}
-        >
-          Manage Preferences
-        </a>
+        We're excited to share curated stories, insightful articles, and
+        fresh perspectives on technology, design, and culture with you.
+      </p>
+      <div
+        style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #666;"
+      >
+        <p>Sent with ❤️ from TRIBITAT.</p>
+        <p>
+          <a
+            href="https://www.tribitat.com/subscribe?email=${email}&hash=${hash}&unsubscribe=true"
+            style="color: #666; text-decoration: underline;"
+          >
+            Unsubscribe
+          </a>
+          &nbsp; • &nbsp;
+          <a
+            href="https://www.tribitat.com/subscribe?email=${email}&hash=${hash}"
+            style="color: #666; text-decoration: underline;"
+          >
+            Manage Preferences
+          </a>
+        </p>
+      </div>
+      <p>
+        Best regards,<br />
+        The TRIBITAT Team
       </p>
     </div>
-    <p>
-      Best regards,
-      <br />
-      The TRIBITAT Team
-    </p>
-  </div>
-);
-
-export default EmailTemplate;
+  `;
+}
