@@ -17,15 +17,35 @@ const getCookie = (name: string): string | null => {
 };
 
 export default function GoogleAnalytics() {
-  const [hasConsent, setHasConsent] = useState(false);
+  const [hasConsent, setHasConsent] = useState(false); // Default to false to prevent premature script loading
 
   useEffect(() => {
-    // Check if user has accepted cookies
-    const consent = getCookie("cookie-consent");
-    setHasConsent(consent === "accepted");
+    const checkConsent = () => {
+      const consent = getCookie("cookie-consent");
+      setHasConsent(consent !== "rejected");
+
+      // Also set the global disable flag for GA if rejected
+      if (consent === "rejected") {
+        // @ts-expect-error - Global GA disable flag
+        window["ga-disable-G-0C34L33RCK"] = true;
+      } else {
+        // @ts-expect-error - Global GA disable flag
+        window["ga-disable-G-0C34L33RCK"] = false;
+      }
+    };
+
+    // Use requestAnimationFrame for initial check to avoid synchronous setState during effect
+    requestAnimationFrame(() => {
+      checkConsent();
+    });
+
+    // Listen for changes from the cookie banner
+    window.addEventListener("cookie-consent-changed", checkConsent);
+    return () =>
+      window.removeEventListener("cookie-consent-changed", checkConsent);
   }, []);
 
-  // Only render analytics if user has accepted cookies
+  // Only render analytics if user hasn't rejected cookies
   if (!hasConsent) {
     return null;
   }

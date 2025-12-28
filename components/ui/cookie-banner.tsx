@@ -28,25 +28,30 @@ export function CookieBanner() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Check if user is from EU and has accepted cookies
+    // Check if user is from EU and has not accepted cookies
     const consent = getCookie("cookie-consent");
     const shouldShow = isFromEU() && consent !== "accepted";
 
     if (shouldShow) {
-      setShowBanner(true);
-      // Delay for animation
-      setTimeout(() => setIsVisible(true), 100);
+      // Use requestAnimationFrame to avoid synchronous setState during effect
+      requestAnimationFrame(() => {
+        setShowBanner(true);
+        // Delay for animation
+        setTimeout(() => setIsVisible(true), 100);
+      });
     }
   }, []);
 
   const handleAccept = () => {
     setCookie("cookie-consent", "accepted", 365); // 1 year
+    window.dispatchEvent(new Event("cookie-consent-changed"));
     setIsVisible(false);
     setTimeout(() => setShowBanner(false), 300);
   };
 
   const handleReject = () => {
     setCookie("cookie-consent", "rejected", 365); // 1 year
+    window.dispatchEvent(new Event("cookie-consent-changed"));
     setIsVisible(false);
     setTimeout(() => setShowBanner(false), 300);
   };
@@ -81,7 +86,7 @@ export function CookieBanner() {
               here.
             </p>
 
-            <div className="flex-shrink-0 flex gap-2">
+            <div className="shrink-0 flex gap-2">
               <Button
                 onClick={handleReject}
                 variant="outline"
