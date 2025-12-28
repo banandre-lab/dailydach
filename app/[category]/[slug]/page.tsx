@@ -54,7 +54,9 @@ export async function generateMetadata({
   }
 
   // Strip HTML tags for description
-  const description = decode(post.excerpt.rendered.replace(/<[^>]*>/g, "").trim());
+  const description = decode(
+    post.excerpt.rendered.replace(/<[^>]*>/g, "").trim()
+  );
 
   // Extract embedded data (already included in post response)
   const category = post._embedded?.["wp:term"]?.[0]?.[0];
@@ -64,7 +66,8 @@ export async function generateMetadata({
     return {};
   }
 
-  const imageUrl = featuredMedia?.source_url || 'https://www.tribitat.com/opengraph-image';
+  const imageUrl =
+    featuredMedia?.source_url || "https://www.tribitat.com/opengraph-image";
 
   const canonicalUrl = `https://www.tribitat.com/${category.slug}/${post.slug}`;
 
@@ -81,7 +84,7 @@ export async function generateMetadata({
       type: "article",
       publishedTime: post.date,
       modifiedTime: post.modified,
-      authors: ['Tribitat'],
+      authors: ["Tribitat"],
       images: [
         {
           url: imageUrl,
@@ -139,7 +142,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     "@type": "Article",
     headline: decode(post.title.rendered),
     description: decode(post.excerpt.rendered.replace(/<[^>]*>/g, "").trim()),
-    image: featuredMedia?.source_url || 'https://www.tribitat.com/opengraph-image',
+    image:
+      featuredMedia?.source_url || "https://www.tribitat.com/opengraph-image",
     datePublished: post.date,
     dateModified: post.modified,
     author: {
@@ -230,41 +234,47 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-balance drop-shadow-lg">
                 {decode(post.title.rendered)}
               </h1>
+
+              {/* Breadcrumbs moved here to avoid overlap and always stay under title */}
+              <ScrollReveal delay={0.2}>
+                <Breadcrumb className="flex justify-start">
+                  <BreadcrumbList className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/30 text-white/90 shadow-lg">
+                    <BreadcrumbItem>
+                      <BreadcrumbLink
+                        asChild
+                        className="text-white/80 hover:text-white transition-colors"
+                      >
+                        <Link href="/">Home</Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator className="text-white/40" />
+                    <BreadcrumbItem>
+                      <BreadcrumbLink
+                        asChild
+                        className="text-white/80 hover:text-white transition-colors"
+                      >
+                        <Link href={`/${category.slug}`}>{category.name}</Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator className="text-white/40" />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage className="max-w-[200px] truncate text-white font-medium">
+                        {decode(post.title.rendered)}
+                      </BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+              </ScrollReveal>
             </div>
           </div>
         </div>
       </ScrollReveal>
 
       {/* Article Content */}
-      <article className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pt-0 pb-12 relative z-10 -mt-24 md:-mt-32">
-        {/* Breadcrumb & Meta */}
-        <ScrollReveal delay={0.2}>
-          <Breadcrumb className="mb-8 flex justify-center">
-            <BreadcrumbList className="bg-white/50 dark:bg-black/50 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 dark:border-white/10 shadow-sm">
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link href="/">Home</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link href={`/${category.slug}`}>{category.name}</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage className="max-w-[200px] truncate">
-                  {decode(post.title.rendered)}
-                </BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </ScrollReveal>
-
+      <article className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pt-12 pb-12 relative z-10">
         <ScrollReveal delay={0.3}>
           <div className="flex justify-end mb-8">
-             <ShareButtons
+            <ShareButtons
               title={decode(post.title.rendered)}
               url={`/${category.slug}/${post.slug}`}
             />
@@ -291,7 +301,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <div className="flex flex-wrap gap-2 mt-8 pt-8 border-t border-border">
               {tags.map((tag) => (
                 <Link key={tag.id} href={`/tag/${tag.slug}`}>
-                  <Badge variant="secondary" className="text-sm px-3 py-1 hover:bg-primary/20 hover:text-primary transition-colors cursor-pointer">
+                  <Badge
+                    variant="secondary"
+                    className="text-sm px-3 py-1 hover:bg-primary/20 hover:text-primary transition-colors cursor-pointer"
+                  >
                     #{tag.name}
                   </Badge>
                 </Link>
@@ -305,7 +318,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <div className="relative z-10 bg-muted/30 py-16 mt-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal direction="up">
-             <RelatedPosts posts={relatedPostsList} />
+            <RelatedPosts posts={relatedPostsList} />
           </ScrollReveal>
         </div>
       </div>
