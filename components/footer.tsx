@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { FooterNewsletter } from "@/components/footer-newsletter";
 import { XLogoIcon } from "@/components/ui/x-logo";
 
 export function Footer() {
@@ -82,19 +83,7 @@ export function Footer() {
               <p className="text-sm text-zinc-400 mb-4">
                 Get the latest posts delivered right to your inbox.
               </p>
-              <form className="flex flex-col sm:flex-row gap-3">
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="bg-white/10 border-white/10 text-white placeholder:text-zinc-500 focus-visible:ring-primary focus-visible:border-primary"
-                />
-                <Button
-                  type="submit"
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
-                >
-                  Subscribe
-                </Button>
-              </form>
+              <FooterNewsletter />
             </div>
           </div>
         </div>

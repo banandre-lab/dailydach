@@ -6,6 +6,7 @@ import GoogleAnalytics from "@/components/google-analytics"
 import VercelAnalytics from "@/components/vercel-analytics"
 import "./globals.css"
 import { CookieBanner } from "@/components/ui/cookie-banner"
+import { Toaster } from "sonner"
 
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
@@ -90,6 +91,7 @@ export default function RootLayout({
         </ThemeProvider>
         <GoogleAnalytics />
         <CookieBanner />
+        <Toaster position="top-center" richColors />
       </body>
     </html>
   )

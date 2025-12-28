@@ -20,14 +20,20 @@ export function Header() {
 
   // Prevent hydration mismatch by only rendering after mount
   useEffect(() => {
-    setMounted(true);
+    // Move to next tick to avoid cascading renders warning
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 0);
 
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   return (
@@ -86,9 +92,11 @@ export function Header() {
 
             <ModeToggle />
 
-            <Button className="hidden sm:flex rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-6">
-              Subscribe
-            </Button>
+            <Link href="/subscribe">
+              <Button className="hidden sm:flex rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-6">
+                Subscribe
+              </Button>
+            </Link>
 
             {/* Mobile Menu Button */}
             <button
@@ -126,27 +134,17 @@ export function Header() {
                   Stories
                 </MobileNavLink>
                 <MobileNavLink
-                  href="/categories"
+                  href="/submit-story"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Topics
-                </MobileNavLink>
-                <MobileNavLink
-                  href="/tags"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Tags
-                </MobileNavLink>
-                <MobileNavLink
-                  href="/about"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  About
+                  Submit Story
                 </MobileNavLink>
                 <div className="pt-2 mt-2 border-t border-white/10">
-                  <Button className="w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
-                    Subscribe
-                  </Button>
+                  <Link href="/subscribe" onClick={() => setIsMenuOpen(false)}>
+                    <Button className="w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
+                      Subscribe
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </motion.div>
