@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function SubmitStoryPage() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-between relative overflow-hidden bg-background">
+    <main className="min-h-screen flex flex-col justify-between relative overflow-hidden bg-background">
       <FluidBackground />
       <Header />
       

@@ -42,7 +42,7 @@ export function Header() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
       className={cn(
-        "sticky top-0 z-50 transition-all duration-300 border-b border-transparent",
+        "sticky top-0 z-50 transition-all duration-300 border-b border-transparent w-full",
         scrolled ? "glass border-white/10 py-2" : "bg-transparent py-4"
       )}
     >
@@ -128,7 +128,7 @@ export function Header() {
                   Home
                 </MobileNavLink>
                 <MobileNavLink
-                  href="/category"
+                  href="/stories"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Stories
