@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import { EmailTemplate } from "@/components/email-template";
 import { NextResponse } from "next/server";
-import { render } from "@react-email/render";
+import { renderToStaticMarkup } from "react-dom/server";
 import * as React from "react";
 import {
   generateSubscriptionHash,
@@ -52,8 +52,9 @@ export async function POST(request: Request) {
 
     // 2. Only send Welcome Email if it's a NEW subscription (no hash provided)
     if (!isUpdate) {
-      // Pre-render the email template to HTML
-      const emailHtml = await render(
+      // Pre-render the email template to HTML using standard React server rendering
+      // to avoid issues with Prettier dependencies in Cloudflare Workers
+      const emailHtml = renderToStaticMarkup(
         React.createElement(EmailTemplate, {
           email,
           categories: selectedCategories,
