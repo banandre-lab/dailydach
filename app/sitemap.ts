@@ -1,7 +1,10 @@
 import type { MetadataRoute } from 'next'
-import { getAllPostSlugs, getAllCategories, getAllTags } from '@/lib/wordpress'
+import { getAllPostsForSitemap, getAllCategories, getAllTags } from '@/lib/wordpress'
 
 const baseUrl = 'https://www.tribitat.com'
+
+// Disable caching for sitemap to always fetch latest data
+export const revalidate = 0
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages
@@ -56,13 +59,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  // Fetch all posts from WordPress
-  const posts = await getAllPostSlugs()
+  // Fetch all posts from WordPress with actual modified dates and images
+  const posts = await getAllPostsForSitemap()
   const postPages: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${baseUrl}/${post.category}/${post.slug}`,
-    lastModified: new Date(),
+    lastModified: new Date(post.modified), // Use actual WordPress modified date
     changeFrequency: 'weekly' as const,
     priority: 0.7,
+    // Include featured image if available for better SEO
+    ...(post.image && { images: [post.image] }),
   }))
 
   // Fetch all categories
