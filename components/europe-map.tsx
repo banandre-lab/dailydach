@@ -11,7 +11,7 @@ export function EuropeMap() {
   const router = useRouter();
 
   // Configuration for enabled countries
-  const enabledCountries = ["DE", "AT", "CH"];
+  const enabledCountries = ["DE", "AT", "CH", "NL"];
 
   const handleMouseMove = (e: React.MouseEvent) => {
     // Get relative coordinates for the tooltip
@@ -104,8 +104,8 @@ export function EuropeMap() {
                     stroke: isHovered
                       ? "var(--foreground)"
                       : isEnabled
-                      ? "var(--primary)"
-                      : "var(--map-stroke-inactive)",
+                        ? "var(--primary)"
+                        : "var(--map-stroke-inactive)",
                     strokeWidth: isHovered ? 1.5 : isEnabled ? 1 : 0.5,
                     filter: isHovered ? "url(#glow)" : "none",
                   }}
