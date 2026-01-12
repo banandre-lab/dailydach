@@ -76,7 +76,7 @@ export default async function CategoryPage({
   const response = await getPostsPaginated(page, perPage, {
     category: category.id.toString(),
   });
-  
+
   const allPosts: Post[] = response.data;
   const { totalPages } = response.headers;
 
@@ -84,7 +84,6 @@ export default async function CategoryPage({
   // Only show slider on first page
   const showSlider = page === 1;
   const sliderPosts = showSlider ? allPosts.slice(0, 5) : [];
-  const gridPosts = showSlider ? allPosts.slice(5) : allPosts;
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -94,7 +93,7 @@ export default async function CategoryPage({
       <div className="relative pt-24 pb-12 md:pt-32 md:pb-16 overflow-hidden">
         {/* Background Elements */}
         <CountryBackgroundShape slug={slug} color={theme.primary} />
-        
+
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Link
             href="/"
@@ -110,7 +109,8 @@ export default async function CategoryPage({
                 {category.name}
               </h1>
               <p className="text-xl text-white/80 max-w-2xl font-light leading-relaxed">
-                {category.description || `Explore stories and insights from ${category.name}.`}
+                {category.description ||
+                  `Explore stories and insights from ${category.name}.`}
               </p>
             </div>
           </ScrollReveal>
@@ -129,18 +129,20 @@ export default async function CategoryPage({
       {/* Main Content Grid */}
       <section className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-20 pt-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[minmax(300px,auto)]">
-          {gridPosts.map((post, index) => {
-             // Make every 4th item span 2 columns for visual interest (masonry-ish)
-             const isLarge = (index % 7 === 0 || index % 7 === 4) && index !== gridPosts.length - 1;
-             
-             return (
-               <BlogCard 
-                 key={post.id} 
-                 post={post} 
-                 index={index} 
-                 featured={isLarge} 
-               />
-             );
+          {allPosts.map((post, index) => {
+            // Make every 4th item span 2 columns for visual interest (masonry-ish)
+            const isLarge =
+              (index % 7 === 0 || index % 7 === 4) &&
+              index !== allPosts.length - 1;
+
+            return (
+              <BlogCard
+                key={post.id}
+                post={post}
+                index={index}
+                featured={isLarge}
+              />
+            );
           })}
         </div>
 

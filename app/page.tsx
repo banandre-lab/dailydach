@@ -1,9 +1,6 @@
 import { Header } from "@/components/header";
-import { TopPostsSlider } from "@/components/top-posts-slider";
 import { BlogGrid } from "@/components/blog-grid";
 import { Footer } from "@/components/footer";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { getPostsPaginated, getAllCategories } from "@/lib/wordpress";
 import type { Post, Category } from "@/lib/wordpress.d";
 import { FluidBackground } from "@/components/ui/fluid-background";
