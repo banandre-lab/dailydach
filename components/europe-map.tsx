@@ -11,7 +11,7 @@ export function EuropeMap() {
   const router = useRouter();
 
   // Configuration for enabled countries
-  const enabledCountries = ["DE", "AT", "CH", "NL"];
+  const enabledCountries = ["DE", "AT", "CH", "NL", "FR"];
 
   const handleMouseMove = (e: React.MouseEvent) => {
     // Get relative coordinates for the tooltip
