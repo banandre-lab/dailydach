@@ -3,9 +3,6 @@ import { getAllPostsForSitemap, getAllCategories, getAllTags } from '@/lib/wordp
 
 const baseUrl = 'https://www.tribitat.com'
 
-// Disable caching for sitemap to always fetch latest data
-export const revalidate = 0
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [

@@ -8,8 +8,6 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { CategoriesLiquidBridge } from "@/components/categories-liquid-bridge";
 import { EuropeMap } from "@/components/europe-map";
 
-export const revalidate = 3600; // Revalidate every hour
-
 export default async function Home() {
   // Fetch real data from WordPress API with embedded data
   const response = await getPostsPaginated(1, 9);

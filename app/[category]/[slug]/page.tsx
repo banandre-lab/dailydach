@@ -24,14 +24,14 @@ import type { Metadata } from "next";
 import { FluidBackground } from "@/components/ui/fluid-background";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { decode } from "html-entities";
-import { cache } from "react";
 
-// Cache post fetching to avoid duplicate requests between generateMetadata and page component
-const getCachedPost = cache(async (slug: string) => {
+// Allow dynamic params for routes not in generateStaticParams
+export const dynamicParams = true;
+
+// Fetch post data
+async function getPostData(slug: string) {
   return getPostBySlug(slug);
-});
-
-export const revalidate = 3600; // Revalidate every hour
+}
 
 interface BlogPostPageProps {
   params: Promise<{ category: string; slug: string }>;
@@ -47,7 +47,7 @@ export async function generateMetadata({
   params: Promise<{ category: string; slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getCachedPost(slug);
+  const post = await getPostData(slug);
 
   if (!post) {
     return {};
@@ -107,7 +107,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { category: categorySlug, slug } = await params;
 
   // Fetch the post by slug
-  const post = await getCachedPost(slug);
+  const post = await getPostData(slug);
 
   if (!post) {
     notFound();

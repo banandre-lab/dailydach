@@ -7,8 +7,6 @@ import { getAllTags } from "@/lib/wordpress";
 import type { Tag } from "@/lib/wordpress.d";
 import type { Metadata } from "next";
 
-export const revalidate = 3600; // Revalidate every hour
-
 export const metadata: Metadata = {
   title: "Discover Tags | Tribitat",
   description: "Explore our content through a cloud of topics and ideas. Browse all tags to find stories about sustainable travel, cultural experiences, and European destinations.",
