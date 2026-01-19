@@ -424,6 +424,7 @@ export async function getAllPostsForSitemap(): Promise<
       headers: {
         "User-Agent": "Next.js WordPress Client",
       },
+      cache: 'no-store', // Disable caching to always get fresh posts
     });
 
     if (!response.ok) {

@@ -1,6 +1,9 @@
 import type { MetadataRoute } from 'next'
 import { getAllPostsForSitemap, getAllCategories, getAllTags } from '@/lib/wordpress'
 
+// Force dynamic generation to always fetch fresh data from WordPress
+export const dynamic = 'force-dynamic'
+
 const baseUrl = 'https://www.tribitat.com'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
