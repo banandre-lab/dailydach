@@ -220,6 +220,7 @@ export async function getPostBySlug(slug: string): Promise<Post> {
 export async function getAllCategories(): Promise<Category[]> {
   return wordpressFetch<Category[]>("/wp-json/wp/v2/categories", {
     hide_empty: true,
+    per_page: 100,
   });
 }
 export async function getCategoryById(id: number): Promise<Category> {
@@ -247,7 +248,9 @@ export async function getTagsByPost(postId: number): Promise<Tag[]> {
 }
 
 export async function getAllTags(): Promise<Tag[]> {
-  return wordpressFetch<Tag[]>("/wp-json/wp/v2/tags");
+  return wordpressFetch<Tag[]>("/wp-json/wp/v2/tags", {
+    per_page: 100,
+  });
 }
 
 export async function getTagById(id: number): Promise<Tag> {
