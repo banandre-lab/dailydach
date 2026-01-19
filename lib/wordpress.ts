@@ -385,7 +385,6 @@ export async function getAllPostSlugs(): Promise<
 }
 
 // Function specifically for sitemap generation - fetches ALL posts with images and metadata
-// No caching to ensure sitemap always has the latest posts
 export async function getAllPostsForSitemap(): Promise<
   {
     slug: string;
@@ -408,38 +407,17 @@ export async function getAllPostsForSitemap(): Promise<
   const categoryMap = new Map(allCategories.map((c) => [c.id, c.slug]));
 
   while (hasMore) {
-    // Direct fetch without caching for sitemap generation
-    const query = {
-      per_page: 100,
-      page,
-      _embed: true,
-      _fields: "slug,categories,modified,_embedded.wp:featuredmedia",
-    };
-
-    const url = `${baseUrl}/wp-json/wp/v2/posts${
-      query ? `?${querystring.stringify(query)}` : ""
-    }`;
-
-    const response = await fetch(url, {
-      headers: {
-        "User-Agent": "Next.js WordPress Client",
-      },
-      cache: 'no-store', // Disable caching to always get fresh posts
-    });
-
-    if (!response.ok) {
-      throw new WordPressAPIError(
-        `WordPress API request failed: ${response.statusText}`,
-        response.status,
-        url
-      );
-    }
-
-    const posts = await response.json();
-    const totalPages = parseInt(response.headers.get("X-WP-TotalPages") || "0", 10);
+    const response = await wordpressFetchWithPagination<Post[]>(
+      "/wp-json/wp/v2/posts",
+      {
+        per_page: 100,
+        page,
+        _embed: true,
+      }
+    );
 
     allPosts.push(
-      ...posts.map((post: Post) => {
+      ...response.data.map((post: Post) => {
         const categorySlug =
           post.categories && post.categories.length > 0
             ? categoryMap.get(post.categories[0]) || "uncategorized"
@@ -458,7 +436,7 @@ export async function getAllPostsForSitemap(): Promise<
       })
     );
 
-    hasMore = page < totalPages;
+    hasMore = page < response.headers.totalPages;
     page++;
   }
 
