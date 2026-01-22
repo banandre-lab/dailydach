@@ -11,6 +11,8 @@ const wordpressRemotePattern = {
 };
 
 const nextConfig: NextConfig = {
+  // Disable X-Powered-By header for security
+  poweredByHeader: false,
   // Configure pageExtensions to include markdown and MDX files
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
   // Allow more time for slow external data sources during SSG
