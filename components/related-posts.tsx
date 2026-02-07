@@ -1,21 +1,17 @@
-"use client";
+"use client"
 
-import type { Post, RelatedPost } from "@/lib/wordpress.d";
-import { BlogCard } from "@/components/blog-card";
+import type { Post, RelatedPost } from "@/lib/wordpress.d"
+import { BlogCard } from "@/components/blog-card"
 
 interface RelatedPostsProps {
-  posts: RelatedPost[];
+  posts: RelatedPost[]
 }
 
-/**
- * Transforms a RelatedPost (from custom API) to Post structure (for BlogCard compatibility)
- */
 function transformRelatedPostToPost(relatedPost: RelatedPost): Post {
-  // Use the first category from the categories array, fallback to uncategorized
-  const firstCategory = relatedPost.categories?.[0];
-  const categorySlug = firstCategory?.slug || "uncategorized";
-  const categoryName = firstCategory?.name || "Uncategorized";
-  const categoryId = firstCategory?.id || 0;
+  const firstCategory = relatedPost.categories?.[0]
+  const categorySlug = firstCategory?.slug || "uncategorized"
+  const categoryName = firstCategory?.name || "Uncategorized"
+  const categoryId = firstCategory?.id || 0
 
   return {
     id: relatedPost.id,
@@ -83,24 +79,21 @@ function transformRelatedPostToPost(relatedPost: RelatedPost): Post {
         ],
       ],
     },
-  } as Post;
+  } as Post
 }
 
 export function RelatedPosts({ posts }: RelatedPostsProps) {
-  if (posts.length === 0) return null;
+  if (posts.length === 0) return null
 
   return (
-    <section className="border-t border-border/50 pt-16 mt-16">
-      <div className="mb-10 text-center">
-        <h2 className="text-3xl font-bold text-foreground mb-4">
-          Related Articles
-        </h2>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
-          More stories you might find interesting
-        </p>
+    <section className="mt-4 border-t-2 border-foreground/90 pt-12">
+      <div className="mb-8 flex flex-col gap-2">
+        <span className="section-kicker w-fit">Keep Reading</span>
+        <h2 className="font-display text-3xl font-bold italic sm:text-4xl">Related Stories</h2>
+        <div className="editorial-rule-thin mt-2" />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {posts.map((post, index) => (
           <div key={post.id} className="h-full">
             <BlogCard post={transformRelatedPostToPost(post)} index={index} />
@@ -108,5 +101,5 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
         ))}
       </div>
     </section>
-  );
+  )
 }

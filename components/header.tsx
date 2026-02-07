@@ -1,180 +1,159 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { Menu, X, Search } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
-import { useTheme } from "next-themes";
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { ModeToggle } from "@/components/mode-toggle";
-import { SearchToolbar } from "@/components/search-toolbar";
-import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react"
+import { Menu, Search, X } from "lucide-react"
+import Link from "next/link"
+import Image from "next/image"
+import { useTheme } from "next-themes"
+import { motion, AnimatePresence } from "framer-motion"
+import { Button } from "@/components/ui/button"
+import { ModeToggle } from "@/components/mode-toggle"
+import { SearchToolbar } from "@/components/search-toolbar"
+import { cn } from "@/lib/utils"
 
 export function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const { resolvedTheme } = useTheme();
-  const [scrolled, setScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const { resolvedTheme } = useTheme()
+  const [scrolled, setScrolled] = useState(false)
 
-  // Prevent hydration mismatch by only rendering after mount
   useEffect(() => {
-    // Move to next tick to avoid cascading renders warning
     const timer = setTimeout(() => {
-      setMounted(true);
-    }, 0);
+      setMounted(true)
+    }, 0)
 
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+      setScrolled(window.scrollY > 12)
+    }
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll)
+
     return () => {
-      clearTimeout(timer);
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+      clearTimeout(timer)
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
 
   return (
     <motion.header
-      initial={{ y: -100, opacity: 0 }}
+      initial={{ y: -70, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
       className={cn(
-        "sticky top-0 z-50 transition-all duration-300 border-b border-transparent w-full",
-        scrolled ? "glass border-white/10 py-2" : "bg-transparent py-4"
+        "sticky top-0 z-50 w-full border-b-2 transition-all duration-200",
+        scrolled
+          ? "border-foreground/90 bg-background/95 backdrop-blur-sm"
+          : "border-transparent bg-transparent"
       )}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="flex items-center">
-              {mounted &&
-                (resolvedTheme === "dark" ? (
-                  <Image
-                    src="/logo-dark.svg"
-                    alt="Tribitat"
-                    width={120}
-                    height={40}
-                    className="object-contain h-10 w-auto"
-                  />
-                ) : (
-                  <Image
-                    src="/logo-light.svg"
-                    alt="Tribitat"
-                    width={120}
-                    height={40}
-                    className="object-contain h-10 w-auto"
-                  />
-                ))}
-            </div>
+        <div className="flex h-16 items-center justify-between gap-4">
+          <Link href="/" className="flex shrink-0 items-center gap-2" aria-label="Tribitat Home">
+            <span className="sr-only">Tribitat</span>
+            {mounted && (
+              <Image
+                src={resolvedTheme === "dark" ? "/logo-dark.svg" : "/logo-light.svg"}
+                alt="Tribitat"
+                width={128}
+                height={42}
+                className="h-9 w-auto object-contain"
+                priority
+              />
+            )}
           </Link>
 
-          {/* Navigation - Desktop */}
-          <nav className="hidden md:flex items-center gap-1 bg-white/5 backdrop-blur-sm px-2 py-1 rounded-full border border-white/10">
+          <nav className="hidden items-center gap-0.5 border-2 border-foreground/90 bg-card p-1 shadow-[3px_3px_0_0_var(--foreground)] md:flex">
             <NavLink href="/">Home</NavLink>
             <NavLink href="/stories">Stories</NavLink>
-            <NavLink href="/submit-story">Submit Story</NavLink>
+            <NavLink href="/impressum">About</NavLink>
+            <NavLink href="/submit-story">Submit</NavLink>
           </nav>
 
-          {/* Actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <Button
-              variant="ghost"
+              variant="outline"
               size="icon"
-              className="rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
               onClick={() => setIsSearchOpen(true)}
+              aria-label="Search stories"
             >
-              <Search className="w-5 h-5" />
+              <Search className="size-5" />
             </Button>
 
             <ModeToggle />
 
-            <Link href="/subscribe">
-              <Button className="hidden sm:flex rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-6">
+            <Link href="/subscribe" className="hidden sm:block">
+              <Button className="px-4 text-xs uppercase tracking-[0.1em]">
                 Subscribe
               </Button>
             </Link>
 
-            {/* Mobile Menu Button */}
             <button
-              className="md:hidden p-2 rounded-full hover:bg-muted transition-colors"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="inline-flex size-9 items-center justify-center border-2 border-foreground/90 bg-card text-foreground shadow-[2px_2px_0_0_var(--foreground)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_var(--foreground)] md:hidden"
+              onClick={() => setIsMenuOpen((prev) => !prev)}
               aria-label="Toggle menu"
             >
-              {isMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
+              {isMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="md:hidden overflow-hidden"
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className="overflow-hidden pb-4 md:hidden"
             >
-              <div className="flex flex-col gap-2 py-4 px-2 bg-card/50 backdrop-blur-xl rounded-2xl mt-2 border border-white/10">
-                <MobileNavLink href="/" onClick={() => setIsMenuOpen(false)}>
-                  Home
-                </MobileNavLink>
-                <MobileNavLink
-                  href="/stories"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Stories
-                </MobileNavLink>
-                <MobileNavLink
-                  href="/submit-story"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Submit Story
-                </MobileNavLink>
-                <div className="pt-2 mt-2 border-t border-white/10">
-                  <Link href="/subscribe" onClick={() => setIsMenuOpen(false)}>
-                    <Button className="w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
-                      Subscribe
-                    </Button>
-                  </Link>
+              <div className="border-2 border-foreground/90 bg-card p-3 shadow-[4px_4px_0_0_var(--foreground)]">
+                <div className="mb-3 border-b-2 border-foreground/90 pb-2 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                  Explore Tribitat
                 </div>
+                <div className="flex flex-col gap-1">
+                  <MobileNavLink href="/" onClick={() => setIsMenuOpen(false)}>
+                    Home
+                  </MobileNavLink>
+                  <MobileNavLink href="/stories" onClick={() => setIsMenuOpen(false)}>
+                    Stories
+                  </MobileNavLink>
+                  <MobileNavLink href="/impressum" onClick={() => setIsMenuOpen(false)}>
+                    About
+                  </MobileNavLink>
+                  <MobileNavLink href="/submit-story" onClick={() => setIsMenuOpen(false)}>
+                    Submit Story
+                  </MobileNavLink>
+                </div>
+                <Link href="/subscribe" onClick={() => setIsMenuOpen(false)} className="mt-3 block">
+                  <Button className="w-full">Subscribe</Button>
+                </Link>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      <SearchToolbar
-        isOpen={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
-      />
+      <SearchToolbar isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </motion.header>
-  );
+  )
 }
 
 function NavLink({
   href,
   children,
 }: {
-  href: string;
-  children: React.ReactNode;
+  href: string
+  children: React.ReactNode
 }) {
   return (
     <Link
       href={href}
-      className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/10 rounded-full transition-all duration-200"
+      className="px-3 py-1.5 text-[0.68rem] font-bold uppercase tracking-[0.1em] text-foreground transition-all hover:bg-primary hover:text-primary-foreground"
     >
       {children}
     </Link>
-  );
+  )
 }
 
 function MobileNavLink({
@@ -182,17 +161,17 @@ function MobileNavLink({
   onClick,
   children,
 }: {
-  href: string;
-  onClick: () => void;
-  children: React.ReactNode;
+  href: string
+  onClick: () => void
+  children: React.ReactNode
 }) {
   return (
     <Link
       href={href}
-      className="px-4 py-3 text-base font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-xl transition-colors"
+      className="border-2 border-transparent px-3 py-2 text-sm font-semibold text-foreground transition-all hover:border-foreground/90 hover:bg-muted"
       onClick={onClick}
     >
       {children}
     </Link>
-  );
+  )
 }

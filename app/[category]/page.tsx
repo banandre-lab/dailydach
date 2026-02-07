@@ -1,37 +1,34 @@
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
-import { PaginationControls } from "@/components/pagination-controls";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-import { getCategoryBySlug, getPostsPaginated } from "@/lib/wordpress";
-import { notFound } from "next/navigation";
-import type { Post } from "@/lib/wordpress.d";
-import { TopPostsSlider } from "@/components/top-posts-slider";
-import { getCountryTheme } from "@/lib/country-themes";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { BlogCard } from "@/components/blog-card";
-import type { Metadata } from "next";
+import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
+import { notFound } from "next/navigation"
+import type { Metadata } from "next"
 
-import { CountryBackgroundShape } from "@/components/country-background-shape";
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
+import { PaginationControls } from "@/components/pagination-controls"
+import { getCategoryBySlug, getPostsPaginated } from "@/lib/wordpress"
+import type { Post } from "@/lib/wordpress.d"
+import { ScrollReveal } from "@/components/ui/scroll-reveal"
+import { BlogCard } from "@/components/blog-card"
 
 interface CategoryPageProps {
-  params: Promise<{ category: string }>;
-  searchParams: Promise<{ page?: string }>;
+  params: Promise<{ category: string }>
+  searchParams: Promise<{ page?: string }>
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ category: string }>;
+  params: Promise<{ category: string }>
 }): Promise<Metadata> {
-  const { category: slug } = await params;
-  const category = await getCategoryBySlug(slug);
+  const { category: slug } = await params
+  const category = await getCategoryBySlug(slug)
 
   if (!category) {
-    return {};
+    return {}
   }
 
-  const canonicalUrl = `https://www.tribitat.com/${category.slug}`;
+  const canonicalUrl = `https://www.tribitat.com/${category.slug}`
 
   return {
     title: `${category.name} Stories - Tribitat`,
@@ -50,111 +47,90 @@ export async function generateMetadata({
       title: `${category.name} Stories - Tribitat`,
       description: `Browse stories from ${category.name} in plain English.`,
     },
-  };
+  }
 }
 
-export default async function CategoryPage({
-  params,
-  searchParams,
-}: CategoryPageProps) {
-  const { category: slug } = await params;
-  const sp = await searchParams;
-  const page = sp?.page ? parseInt(sp.page, 10) || 1 : 1;
-  const perPage = 14; // Fetch 14 posts: 5 for slider (if page 1) + 9 for grid
+export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
+  const { category: slug } = await params
+  const sp = await searchParams
+  const page = sp?.page ? parseInt(sp.page, 10) || 1 : 1
+  const perPage = 12
 
-  // Fetch the category by slug
-  const category = await getCategoryBySlug(slug);
-
+  const category = await getCategoryBySlug(slug)
   if (!category) {
-    notFound();
+    notFound()
   }
 
-  // Get country theme
-  const theme = getCountryTheme(slug);
-
-  // Fetch posts
   const response = await getPostsPaginated(page, perPage, {
     category: category.id.toString(),
-  });
+  })
 
-  const allPosts: Post[] = response.data;
-  const { totalPages } = response.headers;
+  const allPosts: Post[] = response.data
+  const { totalPages } = response.headers
 
-  // Split posts for slider and grid
-  // Only show slider on first page
-  const showSlider = page === 1;
-  const sliderPosts = showSlider ? allPosts.slice(0, 5) : [];
+  const featuredPosts = page === 1 ? allPosts.slice(0, 3) : []
+  const gridPosts = page === 1 ? allPosts.slice(3) : allPosts
 
   return (
     <main className="min-h-screen bg-background text-foreground">
       <Header />
 
-      {/* Hero Section with Theme Vibe - Applied only here */}
-      <div className="relative pt-24 pb-12 md:pt-32 md:pb-16 overflow-hidden">
-        {/* Background Elements */}
-        <CountryBackgroundShape slug={slug} color={theme.primary} />
+      <section className="mx-auto max-w-7xl px-4 pb-10 pt-10 sm:px-6 lg:px-8 lg:pt-14">
+        <Link
+          href="/stories"
+          className="mb-5 inline-flex items-center gap-2 border-2 border-foreground/90 bg-card px-4 py-2 text-[0.65rem] font-black uppercase tracking-[0.1em] text-muted-foreground shadow-[2px_2px_0_0_var(--foreground)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:text-foreground hover:shadow-[3px_3px_0_0_var(--foreground)]"
+        >
+          <ArrowLeft className="size-4" />
+          Back to stories
+        </Link>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors mb-8 font-medium backdrop-blur-sm px-3 py-1 rounded-full bg-white/10 border border-white/10"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </Link>
+        <ScrollReveal>
+          <div className="bento-card p-7 sm:p-9">
+            <span className="section-kicker mb-3">Country Channel</span>
+            <h1 className="headline-lg mb-3 text-balance">{category.name}</h1>
+            <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
+              {category.description || `Explore stories, context, and local voices from ${category.name}.`}
+            </p>
+          </div>
+        </ScrollReveal>
+      </section>
 
-          <ScrollReveal direction="down">
-            <div className="mb-12">
-              <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 tracking-tight drop-shadow-lg">
-                {category.name}
-              </h1>
-              <p className="text-xl text-white/80 max-w-2xl font-light leading-relaxed">
-                {category.description ||
-                  `Explore stories and insights from ${category.name}.`}
-              </p>
+      {featuredPosts.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
+          <ScrollReveal>
+            <div className="mb-5 flex items-center justify-between">
+              <h2 className="font-display text-3xl font-bold italic">Featured in {category.name}</h2>
             </div>
           </ScrollReveal>
-
-          {/* Top Posts Slider (Only on Page 1) */}
-          {showSlider && sliderPosts.length > 0 && (
-            <ScrollReveal delay={0.2}>
-              <div className="mb-16 rounded-3xl overflow-hidden shadow-2xl border border-white/10 bg-black/20 backdrop-blur-sm">
-                <TopPostsSlider posts={sliderPosts} />
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+            {featuredPosts.map((post, index) => (
+              <div key={post.id} className={index === 0 ? "lg:col-span-6" : "lg:col-span-3"}>
+                <BlogCard post={post} featured={index === 0} index={index} />
               </div>
-            </ScrollReveal>
-          )}
-        </div>
-      </div>
+            ))}
+          </div>
+        </section>
+      )}
 
-      {/* Main Content Grid */}
-      <section className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-20 pt-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[minmax(300px,auto)]">
-          {allPosts.map((post, index) => {
-            // Make every 4th item span 2 columns for visual interest (masonry-ish)
-            const isLarge =
-              (index % 7 === 0 || index % 7 === 4) &&
-              index !== allPosts.length - 1;
-
-            return (
-              <BlogCard
-                key={post.id}
-                post={post}
-                index={index}
-                featured={isLarge}
-              />
-            );
-          })}
+      <section className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+        <div className="mb-6 mt-6">
+          <h2 className="font-display text-3xl font-bold italic">More stories</h2>
         </div>
 
-        {/* Pagination */}
-        <div className="mt-16">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {gridPosts.map((post, index) => (
+            <BlogCard key={post.id} post={post} index={index + featuredPosts.length} />
+          ))}
+        </div>
+
+        <div className="mt-12">
           <PaginationControls
             currentPage={page}
             totalPages={totalPages}
             buildHref={(p) => {
-              const sp = new URLSearchParams();
-              if (p > 1) sp.set("page", String(p));
-              return `/${slug}${sp.toString() ? `?${sp.toString()}` : ""}`;
+              const params = new URLSearchParams()
+              if (p > 1) params.set("page", String(p))
+              return `/${slug}${params.toString() ? `?${params.toString()}` : ""}`
             }}
           />
         </div>
@@ -162,5 +138,5 @@ export default async function CategoryPage({
 
       <Footer />
     </main>
-  );
+  )
 }

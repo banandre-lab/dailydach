@@ -1,85 +1,69 @@
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
-import { ScrollToTop } from "@/components/scroll-to-top";
-import { ShareButtons } from "@/components/share-buttons";
-import { RelatedPosts } from "@/components/related-posts";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Badge } from "@/components/ui/badge";
+import Link from "next/link"
+import { notFound } from "next/navigation"
+import type { Metadata } from "next"
+import { decode } from "html-entities"
+
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
+import { ScrollToTop } from "@/components/scroll-to-top"
+import { ShareButtons } from "@/components/share-buttons"
+import { RelatedPosts } from "@/components/related-posts"
+import { Badge } from "@/components/ui/badge"
 import {
   getPostBySlug,
   getAllPostSlugs,
   getRelatedPostsByTags,
-} from "@/lib/wordpress";
-import type { Post, RelatedPost } from "@/lib/wordpress.d";
-import type { Metadata } from "next";
-import { FluidBackground } from "@/components/ui/fluid-background";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { decode } from "html-entities";
+  getPostsPaginated,
+} from "@/lib/wordpress"
+import type { Post, RelatedPost } from "@/lib/wordpress.d"
+import { ScrollReveal } from "@/components/ui/scroll-reveal"
 
-// Allow dynamic params for routes not in generateStaticParams
-export const dynamicParams = true;
+export const dynamicParams = true
 
-// Fetch post data
 async function getPostData(slug: string) {
-  return getPostBySlug(slug);
+  return getPostBySlug(slug)
 }
 
 interface BlogPostPageProps {
-  params: Promise<{ category: string; slug: string }>;
+  params: Promise<{ category: string; slug: string }>
 }
 
 export async function generateStaticParams() {
-  return await getAllPostSlugs();
+  return await getAllPostSlugs()
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ category: string; slug: string }>;
+  params: Promise<{ category: string; slug: string }>
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const post = await getPostData(slug);
+  const { slug } = await params
+  const post = await getPostData(slug)
 
   if (!post) {
-    return {};
+    return {}
   }
 
-  // Strip HTML tags for description
-  const description = decode(
-    post.excerpt.rendered.replace(/<[^>]*>/g, "").trim()
-  );
-
-  // Extract embedded data (already included in post response)
-  const category = post._embedded?.["wp:term"]?.[0]?.[0];
-  const featuredMedia = post._embedded?.["wp:featuredmedia"]?.[0] || null;
+  const description = decode(post.excerpt.rendered.replace(/<[^>]*>/g, "").trim())
+  const category = post._embedded?.["wp:term"]?.[0]?.[0]
+  const featuredMedia = post._embedded?.["wp:featuredmedia"]?.[0] || null
 
   if (!category) {
-    return {};
+    return {}
   }
 
-  const imageUrl =
-    featuredMedia?.source_url || "https://www.tribitat.com/opengraph-image";
-
-  const canonicalUrl = `https://www.tribitat.com/${category.slug}/${post.slug}`;
+  const imageUrl = featuredMedia?.source_url || "https://www.tribitat.com/opengraph-image"
+  const canonicalUrl = `https://www.tribitat.com/${category.slug}/${post.slug}`
 
   return {
     title: decode(post.title.rendered),
-    description: description,
+    description,
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
       title: decode(post.title.rendered),
-      description: description,
+      description,
       url: canonicalUrl,
       type: "article",
       publishedTime: post.date,
@@ -97,53 +81,57 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: decode(post.title.rendered),
-      description: description,
+      description,
       images: [imageUrl],
     },
-  };
+  }
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const { category: categorySlug, slug } = await params;
-
-  // Fetch the post by slug
-  const post = await getPostData(slug);
+  const { slug } = await params
+  const post = await getPostData(slug)
 
   if (!post) {
-    notFound();
+    notFound()
   }
 
-  // Extract embedded data from post (already included in _embed response)
-  const featuredMedia = post._embedded?.["wp:featuredmedia"]?.[0] || null;
-  const category = post._embedded?.["wp:term"]?.[0]?.[0]; // First array is categories
-  const tags = post._embedded?.["wp:term"]?.[1] || []; // Second array is tags
+  const featuredMedia = post._embedded?.["wp:featuredmedia"]?.[0] || null
+  const category = post._embedded?.["wp:term"]?.[0]?.[0]
+  const tags = post._embedded?.["wp:term"]?.[1] || []
 
   if (!category) {
-    notFound();
+    notFound()
   }
+
+  const title = decode(post.title.rendered)
+  const description = decode(post.excerpt.rendered.replace(/<[^>]*>/g, "").trim())
 
   const date = new Date(post.date).toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
     year: "numeric",
-  });
+  })
 
-  // Fetch related posts using tags
-  let relatedPostsList: RelatedPost[] = [];
+  let relatedPostsList: RelatedPost[] = []
   if (tags.length > 0) {
-    const tagSlugs = tags.map((tag) => tag.slug);
-    const relatedResponse = await getRelatedPostsByTags(tagSlugs, 3, [post.id]);
-    relatedPostsList = relatedResponse.posts;
+    const tagSlugs = tags.map((tag) => tag.slug)
+    const relatedResponse = await getRelatedPostsByTags(tagSlugs, 3, [post.id])
+    relatedPostsList = relatedResponse.posts
   }
 
-  // Prepare JSON-LD structured data for SEO
+  const latestCategoryResponse = await getPostsPaginated(1, 8, {
+    category: category.id.toString(),
+  })
+  const latestCategoryPosts: Post[] = latestCategoryResponse.data
+    .filter((categoryPost) => categoryPost.id !== post.id)
+    .slice(0, 4)
+
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: decode(post.title.rendered),
-    description: decode(post.excerpt.rendered.replace(/<[^>]*>/g, "").trim()),
-    image:
-      featuredMedia?.source_url || "https://www.tribitat.com/opengraph-image",
+    headline: title,
+    description,
+    image: featuredMedia?.source_url || "https://www.tribitat.com/opengraph-image",
     datePublished: post.date,
     dateModified: post.modified,
     author: {
@@ -163,9 +151,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       "@id": `https://www.tribitat.com/${category.slug}/${post.slug}`,
     },
     keywords: tags.map((tag) => tag.name).join(", "),
-  };
+  }
 
-  // BreadcrumbList JSON-LD for better search result display
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -185,148 +172,168 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       {
         "@type": "ListItem",
         position: 3,
-        name: decode(post.title.rendered),
+        name: title,
         item: `https://www.tribitat.com/${category.slug}/${post.slug}`,
       },
     ],
-  };
+  }
 
   return (
-    <main className="min-h-screen bg-background relative overflow-hidden">
-      {/* JSON-LD structured data for Article */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
-      />
-      {/* JSON-LD structured data for Breadcrumbs */}
+    <main className="min-h-screen bg-background">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      <FluidBackground />
       <Header />
 
-      {/* Hero Section */}
-      <ScrollReveal direction="down">
-        <div className="relative w-full group mb-0">
-          {/* Hero Image */}
-          <div className="relative h-[50vh] min-h-[400px] md:h-[600px] overflow-hidden">
-            <img
-              src={featuredMedia?.source_url || "/placeholder.svg"}
-              alt={decode(post.title.rendered)}
-              className="absolute inset-0 w-full h-full object-cover animate-zoom-in"
-            />
+      {/* ── Full-width cinematic hero ── */}
+      <section className="relative w-full overflow-hidden border-b-2 border-foreground/90">
+        {/* Hero image — edge to edge */}
+        <div className="relative h-[55vh] min-h-[400px] sm:h-[60vh] md:h-[70vh]">
+          <img
+            src={featuredMedia?.source_url || "/placeholder.svg"}
+            alt={title}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
 
-            {/* Overlay Gradient - Enhanced fade to content */}
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-background"></div>
+          {/* Ink-wash gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
 
-            {/* Content Overlay */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12 lg:p-16 text-white max-w-7xl mx-auto w-full">
-              <div className="flex items-center gap-3 mb-6">
-                <span className="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-md border border-white/30 text-white text-sm font-bold rounded-full shadow-lg">
+          {/* Content overlay — pinned to bottom */}
+          <div className="absolute inset-x-0 bottom-0 px-4 pb-8 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl">
+              {/* Breadcrumb row */}
+              <nav className="mb-5 flex items-center gap-2 text-[0.64rem] font-black uppercase tracking-[0.12em] text-white/70">
+                <Link href="/" className="transition-colors hover:text-white">
+                  Home
+                </Link>
+                <span className="text-white/40">/</span>
+                <Link href={`/${category.slug}`} className="transition-colors hover:text-white">
+                  {category.name}
+                </Link>
+                <span className="text-white/40">/</span>
+                <span className="truncate text-white/90">Story</span>
+              </nav>
+
+              {/* Category + date row */}
+              <div className="mb-4 flex flex-wrap items-center gap-3">
+                <span className="inline-flex border-2 border-white/30 bg-white/10 px-3 py-1 text-[0.62rem] font-black uppercase tracking-[0.12em] text-white shadow-[2px_2px_0_0_rgba(255,255,255,0.15)]">
                   {category.name}
                 </span>
-                <span className="text-white/80 text-sm font-medium backdrop-blur-sm px-2 py-1 rounded-md">
+                <span className="text-[0.68rem] font-bold uppercase tracking-[0.1em] text-white/60">
                   {date}
                 </span>
               </div>
-              <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-balance drop-shadow-lg">
-                {decode(post.title.rendered)}
+
+              {/* Title */}
+              <h1 className="max-w-4xl text-balance font-display text-4xl font-bold italic leading-[0.94] text-white sm:text-5xl md:text-6xl lg:text-7xl">
+                {title}
               </h1>
 
-              {/* Breadcrumbs moved here to avoid overlap and always stay under title */}
-              <ScrollReveal delay={0.2}>
-                <Breadcrumb className="flex justify-start">
-                  <BreadcrumbList className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/30 text-white/90 shadow-lg">
-                    <BreadcrumbItem>
-                      <BreadcrumbLink
-                        asChild
-                        className="text-white/80 hover:text-white transition-colors"
-                      >
-                        <Link href="/">Home</Link>
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator className="text-white/40" />
-                    <BreadcrumbItem>
-                      <BreadcrumbLink
-                        asChild
-                        className="text-white/80 hover:text-white transition-colors"
-                      >
-                        <Link href={`/${category.slug}`}>{category.name}</Link>
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator className="text-white/40" />
-                    <BreadcrumbItem>
-                      <BreadcrumbPage className="max-w-[200px] truncate text-white font-medium">
-                        {decode(post.title.rendered)}
-                      </BreadcrumbPage>
-                    </BreadcrumbItem>
-                  </BreadcrumbList>
-                </Breadcrumb>
-              </ScrollReveal>
+              {/* Excerpt teaser */}
+              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/70 sm:text-base">
+                {description}
+              </p>
+
+              {/* Share row — inline on hero */}
+              <div className="mt-6">
+                <ShareButtons title={title} url={`/${category.slug}/${post.slug}`} variant="hero" />
+              </div>
             </div>
           </div>
         </div>
-      </ScrollReveal>
+      </section>
 
-      {/* Article Content */}
-      <article className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pt-12 pb-12 relative z-10">
-        <ScrollReveal delay={0.3}>
-          <div className="flex justify-end mb-8">
-            <ShareButtons
-              title={decode(post.title.rendered)}
-              url={`/${category.slug}/${post.slug}`}
-            />
-          </div>
-        </ScrollReveal>
+      {/* ── Article body + sidebar ── */}
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
+          {/* Main content column */}
+          <ScrollReveal className="lg:col-span-8">
+            <article>
+              <div className="blog-post-content border-2 border-foreground/90 bg-card p-6 shadow-[5px_5px_0_0_var(--foreground)] sm:p-10">
+                {post.content.rendered && <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />}
+              </div>
 
-        {/* Main Content */}
-        <ScrollReveal delay={0.4}>
-          <div className="blog-post-content prose prose-lg prose-stone dark:prose-invert max-w-none text-foreground leading-relaxed mb-16 prose-headings:font-bold prose-headings:tracking-tight prose-p:text-lg prose-p:leading-8 prose-img:rounded-2xl prose-img:shadow-xl">
-            {/* Render WordPress content directly */}
-            {post.content.rendered && (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: post.content.rendered,
-                }}
-              />
-            )}
-          </div>
-        </ScrollReveal>
-
-        {/* Tags */}
-        {tags.length > 0 && (
-          <ScrollReveal delay={0.5}>
-            <div className="flex flex-wrap gap-2 mt-8 pt-8 border-t border-border">
-              {tags.map((tag) => (
-                <Link key={tag.id} href={`/tag/${tag.slug}`}>
-                  <Badge
-                    variant="secondary"
-                    className="text-sm px-3 py-1 hover:bg-primary/20 hover:text-primary transition-colors cursor-pointer"
-                  >
-                    #{tag.name}
-                  </Badge>
-                </Link>
-              ))}
-            </div>
+              {tags.length > 0 && (
+                <div className="mt-8 flex flex-wrap gap-2 border-t-2 border-foreground/90 pt-6">
+                  {tags.map((tag) => (
+                    <Link key={tag.id} href={`/tag/${tag.slug}`}>
+                      <Badge variant="outline" className="cursor-pointer">
+                        #{tag.name}
+                      </Badge>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </article>
           </ScrollReveal>
-        )}
-      </article>
 
-      {/* Related Posts */}
-      <div className="relative z-10 bg-muted/30 py-16 mt-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal direction="up">
-            <RelatedPosts posts={relatedPostsList} />
+          {/* Sidebar — sticky on desktop */}
+          <ScrollReveal delay={0.08} className="lg:col-span-4">
+            <aside className="space-y-5 lg:sticky lg:top-24">
+              {/* Share card */}
+              <div className="bento-card">
+                <p className="section-kicker mb-4">Spread the Word</p>
+                <ShareButtons title={title} url={`/${category.slug}/${post.slug}`} />
+              </div>
+
+              {/* Back to channel */}
+              <Link
+                href={`/${category.slug}`}
+                className="group flex items-center gap-3 border-2 border-foreground/90 bg-card p-4 shadow-[3px_3px_0_0_var(--foreground)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_0_var(--foreground)]"
+              >
+                <span className="inline-flex size-8 items-center justify-center border-2 border-foreground/90 bg-primary text-primary-foreground text-xs font-black">
+                  &larr;
+                </span>
+                <div>
+                  <span className="text-[0.62rem] font-black uppercase tracking-[0.1em] text-muted-foreground">
+                    More from
+                  </span>
+                  <p className="font-display text-lg font-bold italic leading-tight">{category.name}</p>
+                </div>
+              </Link>
+
+              {latestCategoryPosts.length > 0 && (
+                <div className="bento-card">
+                  <p className="section-kicker mb-4">Latest from {category.name}</p>
+                  <div className="space-y-3">
+                    {latestCategoryPosts.map((categoryPost) => {
+                      const categoryPostTitle = decode(categoryPost.title.rendered)
+                      const categoryPostDate = new Date(categoryPost.date).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      })
+
+                      return (
+                        <Link
+                          key={categoryPost.id}
+                          href={`/${category.slug}/${categoryPost.slug}`}
+                          className="block border-2 border-foreground/90 bg-background px-3 py-3 transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_var(--foreground)]"
+                        >
+                          <p className="line-clamp-2 font-display text-base font-bold leading-tight">{categoryPostTitle}</p>
+                          <p className="mt-2 text-[0.64rem] font-black uppercase tracking-[0.1em] text-muted-foreground">
+                            {categoryPostDate}
+                          </p>
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+            </aside>
           </ScrollReveal>
         </div>
-      </div>
+      </section>
 
-      {/* Scroll to Top Button */}
+      {/* ── Related posts ── */}
+      <section className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 lg:px-8">
+        <RelatedPosts posts={relatedPostsList} />
+      </section>
+
       <ScrollToTop />
-
       <Footer />
     </main>
-  );
+  )
 }

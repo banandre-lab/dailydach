@@ -1,67 +1,30 @@
-"use client";
+"use client"
 
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion } from "framer-motion"
 
 export function FluidBackground() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
-
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-3xl" />
-      
+    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
+      <div className="absolute inset-0 bg-background/85" />
+
+      {/* Large editorial cross in top-left */}
       <motion.div
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
-          x: [0, 100, 0],
-          y: [0, -50, 0],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="absolute -top-1/2 -left-1/2 w-[100vw] h-[100vw] bg-primary/20 rounded-full blur-3xl"
-      />
-      
-      <motion.div
-        animate={{
-          scale: [1, 1.5, 1],
-          opacity: [0.2, 0.4, 0.2],
-          x: [0, -100, 0],
-          y: [0, 100, 0],
-        }}
-        transition={{
-          duration: 25,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 2,
-        }}
-        className="absolute -bottom-1/2 -right-1/2 w-[100vw] h-[100vw] bg-accent/20 rounded-full blur-3xl"
+        className="absolute -left-16 top-8 h-48 w-48 border-2 border-primary/10"
+        animate={{ rotate: [0, 3, 0] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
       />
 
-       <motion.div
-        animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.2, 0.4, 0.2],
-          x: [0, 50, 0],
-          y: [0, 50, 0],
-        }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 5,
-        }}
-        className="absolute top-1/4 right-1/4 w-[50vw] h-[50vw] bg-purple-500/10 rounded-full blur-3xl"
+      {/* Geometric square in bottom-right */}
+      <motion.div
+        className="absolute -right-10 bottom-12 h-64 w-64 border-2 border-accent/10"
+        animate={{ rotate: [0, -2, 0] }}
+        transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
       />
+
+      {/* Subtle editorial rules */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+      <div className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-border to-transparent" />
+      <div className="absolute inset-y-0 right-0 w-px bg-gradient-to-b from-transparent via-border to-transparent" />
     </div>
-  );
+  )
 }

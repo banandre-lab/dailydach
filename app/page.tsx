@@ -1,51 +1,65 @@
-import { Header } from "@/components/header";
-import { BlogGrid } from "@/components/blog-grid";
-import { Footer } from "@/components/footer";
-import { getPostsPaginated, getAllCategories } from "@/lib/wordpress";
-import type { Post, Category } from "@/lib/wordpress.d";
-import { FluidBackground } from "@/components/ui/fluid-background";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { CategoriesLiquidBridge } from "@/components/categories-liquid-bridge";
-import { EuropeMap } from "@/components/europe-map";
+import Link from "next/link"
+import { Header } from "@/components/header"
+import { BlogGrid } from "@/components/blog-grid"
+import { Footer } from "@/components/footer"
+import { getPostsPaginated, getAllCategories } from "@/lib/wordpress"
+import type { Post, Category } from "@/lib/wordpress.d"
+import { FluidBackground } from "@/components/ui/fluid-background"
+import { ScrollReveal } from "@/components/ui/scroll-reveal"
+import { CategoriesLiquidBridge } from "@/components/categories-liquid-bridge"
+import { EuropeMap } from "@/components/europe-map"
+import { Button } from "@/components/ui/button"
 
 export default async function Home() {
-  // Fetch real data from WordPress API with embedded data
-  const response = await getPostsPaginated(1, 9);
-  const posts: Post[] = response.data;
-  const { totalPages } = response.headers;
+  const response = await getPostsPaginated(1, 9)
+  const posts: Post[] = response.data
+  const { totalPages } = response.headers
 
-  const categories: Category[] = await getAllCategories();
+  const categories: Category[] = await getAllCategories()
 
   return (
-    <main className="min-h-screen bg-background relative overflow-hidden">
+    <main className="relative min-h-screen overflow-hidden bg-background">
       <FluidBackground />
       <Header />
-      <ScrollReveal delay={0.2}>
-        <section className="relative z-10 py-10">
-          <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4 tracking-tight">
-              Real Stories in Plain English
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Your story is heard
-            </p>
-          </div>
-          <div className="w-full relative">
-            {/* Background Glow */}
-            <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
-            <EuropeMap />
-          </div>
-        </section>
-      </ScrollReveal>
 
-      <ScrollReveal delay={0.6}>
-        <div className="relative z-10">
-          <BlogGrid
-            posts={posts}
-            totalPages={totalPages}
-            enableInfinite={false}
-          />
-        </div>
+      <section className="mx-auto max-w-7xl px-4 pb-10 pt-10 sm:px-6 lg:px-8 lg:pt-14">
+        <ScrollReveal>
+          <div className="bento-card noise-layer p-6 sm:p-8">
+            <span className="section-kicker mb-3">About Tribitat</span>
+            <h1 className="headline-lg text-balance mb-5">Connecting cultures through storytelling.</h1>
+            <p className="max-w-3xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+              Real stories in plain English, for people who want perspective without barriers. Personal journeys,
+              cultural insights, and honest takes on today.
+            </p>
+            <p className="mt-4 inline-flex border-2 border-foreground/90 bg-background px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-foreground shadow-[2px_2px_0_0_var(--foreground)]">
+              &quot;Language is not a barrier&quot;
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Button asChild size="lg" className="px-6 text-xs uppercase tracking-[0.1em]">
+                <Link href="/stories">Read Stories</Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="px-6 text-xs uppercase tracking-[0.1em]">
+                <Link href="/submit-story">Share Your Story</Link>
+              </Button>
+            </div>
+          </div>
+        </ScrollReveal>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
+        <ScrollReveal delay={0.2}>
+          <EuropeMap />
+        </ScrollReveal>
+      </section>
+
+      <ScrollReveal delay={0.25}>
+        <BlogGrid
+          posts={posts}
+          totalPages={totalPages}
+          enableInfinite={false}
+          title="Fresh from Tribitat"
+          subtitle="Stories built for curious readers: direct, global, and human."
+        />
       </ScrollReveal>
 
       <ScrollReveal direction="up" delay={0.2}>
@@ -54,5 +68,5 @@ export default async function Home() {
 
       <Footer />
     </main>
-  );
+  )
 }

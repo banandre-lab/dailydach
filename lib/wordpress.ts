@@ -29,6 +29,9 @@ class WordPressAPIError extends Error {
   }
 }
 
+type QueryValue = string | number | boolean | undefined;
+type QueryParams = Record<string, QueryValue>;
+
 // New types for pagination support
 export interface WordPressPaginationHeaders {
   total: number;
@@ -43,7 +46,7 @@ export interface WordPressResponse<T> {
 // Keep original function for backward compatibility
 async function wordpressFetch<T>(
   path: string,
-  query?: Record<string, any>
+  query?: QueryParams
 ): Promise<T> {
   const url = `${baseUrl}${path}${
     query ? `?${querystring.stringify(query)}` : ""
@@ -70,7 +73,7 @@ async function wordpressFetch<T>(
 // New function for paginated requests
 async function wordpressFetchWithPagination<T>(
   path: string,
-  query?: Record<string, any>
+  query?: QueryParams
 ): Promise<WordPressResponse<T>> {
   const url = `${baseUrl}${path}${
     query ? `?${querystring.stringify(query)}` : ""
@@ -114,10 +117,10 @@ export async function getPostsPaginated(
     _embed?: string;
     categories?: number;
     tags?: number;
-    [key: string]: any;
+    [key: string]: QueryValue;
   }
 ): Promise<WordPressResponse<Post[]>> {
-  const query: Record<string, any> = {
+  const query: QueryParams = {
     _embed: true,
     per_page: perPage,
     page,
@@ -172,7 +175,7 @@ export async function getAllPosts(filterParams?: {
   category?: string;
   search?: string;
 }): Promise<Post[]> {
-  const query: Record<string, any> = {
+  const query: QueryParams = {
     _embed: true,
     per_page: 100,
   };
@@ -567,7 +570,7 @@ export async function getRelatedPostsByTags(
   max: number = 5,
   excludedIds: number[] = []
 ): Promise<import("./wordpress.d").RelatedPostsResponse> {
-  const query: Record<string, any> = {
+  const query: QueryParams = {
     tags: tagSlugs.join(","),
     max,
   };
