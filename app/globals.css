@@ -306,15 +306,15 @@
 }
 
 .blog-post-content {
-  @apply text-base leading-8 md:text-lg;
+  @apply text-base leading-8 md:text-lg md:leading-9;
 }
 
 .blog-post-content p {
-  @apply mb-6 text-blog-post-text-color;
+  @apply mb-6 text-base leading-8 font-normal text-blog-post-text-color md:text-lg md:leading-9;
 }
 
 .blog-post-content p:first-of-type {
-  @apply text-lg leading-9 md:text-xl;
+  @apply text-base leading-8 font-normal md:text-xl md:leading-10;
 }
 
 .blog-post-content h2 {

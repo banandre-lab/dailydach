@@ -88,13 +88,15 @@ export function Header() {
               </Button>
             </Link>
 
-            <button
-              className="inline-flex size-9 items-center justify-center border-2 border-foreground/90 bg-card text-foreground shadow-[2px_2px_0_0_var(--foreground)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_var(--foreground)] md:hidden"
+            <Button
+              variant="outline"
+              size="icon"
+              className="md:hidden"
               onClick={() => setIsMenuOpen((prev) => !prev)}
               aria-label="Toggle menu"
             >
               {isMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-            </button>
+            </Button>
           </div>
         </div>
 
