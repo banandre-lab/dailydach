@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
   // Allow more time for slow external data sources during SSG
   staticPageGenerationTimeout: 180,
+  // Reduce pressure on external APIs during prerender and retry failed pages.
+  experimental: {
+    staticGenerationRetryCount: 3,
+    staticGenerationMaxConcurrency: 4,
+  },
   // Empty turbopack config to silence warning
   turbopack: {},
   images: {
