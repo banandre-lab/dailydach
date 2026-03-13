@@ -64,7 +64,7 @@ export function CookieBanner() {
     >
       <div className="border-2 border-foreground/90 bg-card p-4 shadow-[5px_5px_0_0_var(--foreground)]">
         <p className="mb-3 text-xs leading-relaxed text-muted-foreground">
-          We use cookies to keep Tribitat reliable and relevant. Read our{" "}
+          We use cookies to keep DailyDach reliable and relevant. Read our{" "}
           <Link href="/cookies" className="font-semibold text-foreground underline decoration-2 underline-offset-4">
             Cookie Policy
           </Link>{" "}

@@ -54,9 +54,9 @@ export async function POST(request: Request) {
       });
 
       const { data, error } = await resend.emails.send({
-        from: "TRIBITAT <noreply@tribitat.com>",
+        from: "DailyDach <noreply@dailydach.com>",
         to: [email],
-        subject: "Welcome to TRIBITAT Newsletter!",
+        subject: "Welcome to DailyDach Newsletter!",
         html: emailHtml,
       });
 

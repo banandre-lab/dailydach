@@ -87,9 +87,9 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
 
   return (
     <section className="mt-4 border-t-2 border-foreground/90 pt-12">
-      <div className="mb-8 flex flex-col gap-2">
+      <div className="maxi-panel mb-8 flex flex-col gap-2 p-6">
         <span className="section-kicker w-fit">Keep Reading</span>
-        <h2 className="font-display text-3xl font-bold italic sm:text-4xl">Related Stories</h2>
+        <h2 className="font-display text-3xl leading-[0.9] sm:text-4xl">Related Stories</h2>
         <div className="editorial-rule-thin mt-2" />
       </div>
 

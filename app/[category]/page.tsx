@@ -28,23 +28,23 @@ export async function generateMetadata({
     return {}
   }
 
-  const canonicalUrl = `https://www.tribitat.com/${category.slug}`
+  const canonicalUrl = `https://www.dailydach.com/${category.slug}`
 
   return {
-    title: `${category.name} Stories - Tribitat`,
+    title: `${category.name} Stories - DailyDach`,
     description: `Browse stories from ${category.name} in plain English.`,
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
-      title: `${category.name} Stories - Tribitat`,
+      title: `${category.name} Stories - DailyDach`,
       description: `Browse stories from ${category.name} in plain English.`,
       url: canonicalUrl,
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${category.name} Stories - Tribitat`,
+      title: `${category.name} Stories - DailyDach`,
       description: `Browse stories from ${category.name} in plain English.`,
     },
   }

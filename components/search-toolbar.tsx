@@ -122,7 +122,7 @@ export function SearchToolbar({ isOpen, onClose }: SearchToolbarProps) {
             className="fixed left-0 right-0 top-0 z-50 border-b-2 border-foreground/90 bg-background"
           >
             <div className="mx-auto w-full max-w-4xl px-4 py-4 sm:px-6">
-              <div className="border-2 border-foreground/90 bg-card shadow-[5px_5px_0_0_var(--foreground)]">
+              <div className="brand-radius-lg border-2 border-foreground/90 bg-card shadow-[5px_5px_0_0_var(--foreground)]">
                 <div className="flex items-center gap-3 border-b-2 border-foreground/90 px-4 py-4 sm:px-5">
                   <Search className="size-5 text-muted-foreground" />
                   <input
@@ -135,7 +135,7 @@ export function SearchToolbar({ isOpen, onClose }: SearchToolbarProps) {
                   />
                   <button
                     onClick={handleClose}
-                    className="inline-flex size-9 items-center justify-center border-2 border-foreground/90 bg-background text-foreground transition-all hover:bg-muted"
+                    className="brand-radius inline-flex size-9 items-center justify-center border-2 border-foreground/90 bg-background text-foreground transition-all hover:bg-muted"
                     aria-label="Close search"
                   >
                     <X className="size-5" />
@@ -175,9 +175,9 @@ export function SearchToolbar({ isOpen, onClose }: SearchToolbarProps) {
                               <button
                                 key={post.id}
                                 onClick={() => handleResultClick(post)}
-                                className="group flex items-start gap-3 border-2 border-foreground/90 bg-background p-3 text-left transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_var(--foreground)]"
+                                className="brand-radius group flex items-start gap-3 border-2 border-foreground/90 bg-background p-3 text-left transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_var(--foreground)]"
                               >
-                                <div className="relative h-16 w-24 shrink-0 overflow-hidden border-2 border-foreground/90 bg-muted sm:h-20 sm:w-32">
+                                <div className="brand-radius-sm relative h-16 w-24 shrink-0 overflow-hidden border-2 border-foreground/90 bg-muted sm:h-20 sm:w-32">
                                   {image ? (
                                     <Image
                                       src={image}
@@ -225,7 +225,7 @@ export function SearchToolbar({ isOpen, onClose }: SearchToolbarProps) {
                               <button
                                 key={i}
                                 onClick={() => setQuery(term)}
-                                className="flex items-center gap-3 border-2 border-foreground/90 bg-background px-3 py-2 text-left text-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_var(--foreground)]"
+                                className="brand-radius flex items-center gap-3 border-2 border-foreground/90 bg-background px-3 py-2 text-left text-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_var(--foreground)]"
                               >
                                 <Clock className="size-4 text-muted-foreground" />
                                 <span className="font-medium text-foreground">{term}</span>
@@ -259,7 +259,7 @@ function FilterPill({
     <button
       onClick={onClick}
       className={cn(
-        "border-2 px-3 py-1 text-[0.64rem] font-bold uppercase tracking-[0.1em] whitespace-normal transition-all",
+        "brand-radius border-2 px-3 py-1 text-[0.64rem] font-bold uppercase tracking-[0.1em] whitespace-normal transition-all",
         active
           ? "border-foreground/90 bg-primary text-primary-foreground shadow-[2px_2px_0_0_var(--foreground)]"
           : "border-foreground/90 bg-background text-muted-foreground hover:bg-muted hover:text-foreground"

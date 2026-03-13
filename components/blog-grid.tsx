@@ -20,13 +20,13 @@ const GRID_PATTERN = [
   "md:col-span-6 lg:col-span-4",
   "md:col-span-6 lg:col-span-4",
   "md:col-span-6 lg:col-span-4",
-  "md:col-span-6 lg:col-span-3",
-  "md:col-span-6 lg:col-span-3",
-  "md:col-span-6 lg:col-span-3",
-  "md:col-span-6 lg:col-span-3",
   "md:col-span-6 lg:col-span-5",
   "md:col-span-6 lg:col-span-4",
   "md:col-span-6 lg:col-span-3",
+  "md:col-span-6 lg:col-span-3",
+  "md:col-span-6 lg:col-span-3",
+  "md:col-span-6 lg:col-span-3",
+  "md:col-span-6 lg:col-span-6",
 ]
 
 export function BlogGrid({
@@ -99,11 +99,23 @@ export function BlogGrid({
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-      <header className="mb-10 flex flex-col gap-3">
-        <span className="section-kicker w-fit">Discover</span>
-        <h2 className="headline-lg text-balance">{title}</h2>
-        <p className="max-w-3xl text-sm text-muted-foreground sm:text-base">{subtitle}</p>
-        <div className="editorial-rule mt-2" />
+      <header className="mb-10">
+        <div className="maxi-panel p-6 sm:p-8">
+          <span className="section-kicker mb-3">Story Radar</span>
+          <h2 className="headline-lg text-balance">{title}</h2>
+          <p className="mt-3 max-w-3xl text-sm text-muted-foreground sm:text-base">{subtitle}</p>
+          <div className="editorial-rule mt-5" />
+          <div className="mt-4 overflow-hidden border-y-2 border-foreground bg-secondary py-2">
+            <div className="maxi-ticker-track text-[0.66rem] font-black uppercase tracking-[0.12em] text-secondary-foreground">
+              <span className="px-6">DailyDach Feed</span>
+              <span className="px-6">New Story Drops</span>
+              <span className="px-6">Culture Signals</span>
+              <span className="px-6">DailyDach Feed</span>
+              <span className="px-6">New Story Drops</span>
+              <span className="px-6">Culture Signals</span>
+            </div>
+          </div>
+        </div>
       </header>
 
       <div className="grid grid-cols-1 gap-6 md:auto-rows-fr md:grid-cols-12">
@@ -123,7 +135,7 @@ export function BlogGrid({
         <div className="mt-10 flex items-center justify-center gap-3">
           <span className="h-3 w-3 animate-pulse bg-primary" />
           <span className="h-3 w-3 animate-pulse bg-foreground [animation-delay:120ms]" />
-          <span className="h-3 w-3 animate-pulse bg-primary [animation-delay:240ms]" />
+          <span className="h-3 w-3 animate-pulse bg-accent [animation-delay:240ms]" />
         </div>
       )}
 

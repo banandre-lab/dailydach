@@ -31,7 +31,7 @@ export function ShareButtons({ title, url, variant = "default" }: ShareButtonsPr
   const fullUrl = typeof window !== "undefined" ? `${window.location.origin}${url}` : url
 
   const shareOnX = () => {
-    const text = encodeURIComponent(`Read on Tribitat: ${title}`)
+    const text = encodeURIComponent(`Read on DailyDach: ${title}`)
     window.open(
       `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(fullUrl)}`,
       "_blank"
@@ -52,7 +52,7 @@ export function ShareButtons({ title, url, variant = "default" }: ShareButtonsPr
   }
 
   const shareViaEmail = () => {
-    const subject = encodeURIComponent(`Read this: ${title}`)
+    const subject = encodeURIComponent(`Read this on DailyDach: ${title}`)
     const body = encodeURIComponent(`${title}\n\n${fullUrl}`)
     window.open(`mailto:?subject=${subject}&body=${body}`, "_self")
   }
@@ -65,13 +65,13 @@ export function ShareButtons({ title, url, variant = "default" }: ShareButtonsPr
 
   const labelClass =
     variant === "hero"
-      ? "mr-1 text-[0.64rem] font-bold uppercase tracking-[0.1em] text-white/60"
-      : "mr-1 text-[0.64rem] font-bold uppercase tracking-[0.1em] text-muted-foreground"
+      ? "mr-1 text-[0.64rem] font-black uppercase tracking-[0.12em] text-white/75"
+      : "mr-1 text-[0.64rem] font-black uppercase tracking-[0.12em] text-muted-foreground"
 
   const copiedClass =
     variant === "hero"
-      ? "text-[0.64rem] font-bold uppercase tracking-[0.1em] text-white"
-      : "text-[0.64rem] font-bold uppercase tracking-[0.1em] text-primary"
+      ? "text-[0.64rem] font-black uppercase tracking-[0.12em] text-white"
+      : "text-[0.64rem] font-black uppercase tracking-[0.12em] text-primary"
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -112,16 +112,11 @@ function ShareIconButton({
 }) {
   const buttonClass =
     variant === "hero"
-      ? "inline-flex size-8 cursor-pointer items-center justify-center border-2 border-white/30 bg-white/10 text-white shadow-[2px_2px_0_0_rgba(255,255,255,0.15)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-white/20 hover:shadow-[3px_3px_0_0_rgba(255,255,255,0.2)]"
-      : "inline-flex size-8 cursor-pointer items-center justify-center border-2 border-foreground/90 bg-background text-foreground shadow-[2px_2px_0_0_var(--foreground)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_var(--foreground)]"
+      ? "brand-radius inline-flex size-9 cursor-pointer items-center justify-center border-2 border-white/40 bg-white/10 text-white shadow-[2px_2px_0_0_rgba(255,255,255,0.2)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-white/20 hover:shadow-[4px_4px_0_0_rgba(255,255,255,0.3)]"
+      : "brand-radius inline-flex size-9 cursor-pointer items-center justify-center border-2 border-foreground bg-card text-foreground shadow-[2px_2px_0_0_var(--foreground)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-secondary/65 hover:shadow-[4px_4px_0_0_var(--foreground)]"
 
   return (
-    <button
-      onClick={onClick}
-      className={buttonClass}
-      aria-label={label}
-      title={label}
-    >
+    <button onClick={onClick} className={buttonClass} aria-label={label} title={label}>
       {children}
     </button>
   )

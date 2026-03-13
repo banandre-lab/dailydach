@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { DM_Mono, DM_Sans, Playfair_Display } from "next/font/google"
+import { Bricolage_Grotesque, Bungee, JetBrains_Mono } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import GoogleAnalytics from "@/components/google-analytics"
 import VercelAnalytics from "@/components/vercel-analytics"
@@ -8,43 +8,42 @@ import "./globals.css"
 import { CookieBanner } from "@/components/ui/cookie-banner"
 import { Toaster } from "sonner"
 
-const dmSans = DM_Sans({
+const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   variable: "--font-sans",
 })
 
-const playfairDisplay = Playfair_Display({
+const bungee = Bungee({
   subsets: ["latin"],
+  weight: "400",
   variable: "--font-display",
 })
 
-const dmMono = DM_Mono({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400", "600"],
   variable: "--font-mono",
 })
 
 export const metadata: Metadata = {
   title: {
-    default: "Tribitat - Real Stories in Plain English",
-    template: "%s | Tribitat",
+    default: "DailyDach - Stories with Daily Duck Energy",
+    template: "%s | DailyDach",
   },
-  description: "Real Stories in Plain English",
-  metadataBase: new URL("https://www.tribitat.com"),
+  description: "High-energy stories, cultural signals, and bold voices powered by DailyDach.",
+  metadataBase: new URL("https://www.dailydach.com"),
   openGraph: {
-    title: "Tribitat",
-    description: "Real Stories in Plain English",
-    url: "https://www.tribitat.com",
-    siteName: "Tribitat",
+    title: "DailyDach",
+    description: "High-energy stories, cultural signals, and bold voices powered by DailyDach.",
+    url: "https://www.dailydach.com",
+    siteName: "DailyDach",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tribitat",
-    description: "Real Stories in Plain English",
-    site: "@tribitat",
-    creator: "@tribitat",
+    title: "DailyDach",
+    description: "High-energy stories, cultural signals, and bold voices powered by DailyDach.",
   },
 }
 
@@ -56,22 +55,21 @@ export default function RootLayout({
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Tribitat",
-    url: "https://www.tribitat.com",
-    logo: "https://www.tribitat.com/opengraph-image",
-    description: "Real Stories in Plain English",
-    sameAs: ["https://twitter.com/tribitat"],
+    name: "DailyDach",
+    url: "https://www.dailydach.com",
+    logo: "https://www.dailydach.com/opengraph-image",
+    description: "High-energy stories, cultural signals, and bold voices powered by DailyDach.",
   }
 
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Tribitat",
-    url: "https://www.tribitat.com",
-    description: "Real Stories in Plain English",
+    name: "DailyDach",
+    url: "https://www.dailydach.com",
+    description: "High-energy stories, cultural signals, and bold voices powered by DailyDach.",
     publisher: {
       "@type": "Organization",
-      name: "Tribitat",
+      name: "DailyDach",
     },
   }
 
@@ -88,7 +86,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${dmSans.variable} ${playfairDisplay.variable} ${dmMono.variable} font-sans antialiased`}
+        className={`${bricolage.variable} ${bungee.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
         <ThemeProvider
           attribute="class"

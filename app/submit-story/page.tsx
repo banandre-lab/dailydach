@@ -6,17 +6,17 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 
 export const metadata: Metadata = {
-  title: "Submit Your Story | Tribitat",
+  title: "Submit Your Story | DailyDach",
   description:
-    "Share your experiences, insights, and stories with the Tribitat community. Email us at story@tribitat.com.",
+    "Share your experiences, insights, and stories with the DailyDach community. Email us at story@dailydach.com.",
   alternates: {
-    canonical: "https://www.tribitat.com/submit-story",
+    canonical: "https://www.dailydach.com/submit-story",
   },
   openGraph: {
-    title: "Submit Your Story | Tribitat",
+    title: "Submit Your Story | DailyDach",
     description:
-      "Share your experiences, insights, and stories with the Tribitat community.",
-    url: "https://www.tribitat.com/submit-story",
+      "Share your experiences, insights, and stories with the DailyDach community.",
+    url: "https://www.dailydach.com/submit-story",
     type: "website",
   },
 }
@@ -28,7 +28,7 @@ export default function SubmitStoryPage() {
 
       <section className="mx-auto w-full max-w-4xl flex-1 px-4 py-12 sm:px-6 lg:py-16">
         <div className="border-2 border-foreground/90 bg-card p-6 shadow-[6px_6px_0_0_var(--foreground)] sm:p-10">
-          <span className="section-kicker mb-4">Submit to Tribitat</span>
+          <span className="section-kicker mb-4">Submit to DailyDach</span>
           <h1 className="headline-lg mb-4 text-balance">Share your story with the world.</h1>
           <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
             Main goal: send us your story by email. Personal journeys, cultural insights, and grounded takes are all
@@ -40,17 +40,17 @@ export default function SubmitStoryPage() {
               Editorial inbox
             </p>
             <Link
-              href="mailto:story@tribitat.com"
+              href="mailto:story@dailydach.com"
               className="inline-flex items-center gap-3 font-display text-3xl font-bold italic text-primary transition-colors hover:text-foreground sm:text-5xl"
             >
               <Mail className="size-8" />
-              story@tribitat.com
+              story@dailydach.com
             </Link>
           </div>
 
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
-              href="mailto:story@tribitat.com"
+              href="mailto:story@dailydach.com"
               className="inline-flex items-center gap-2 border-2 border-foreground/90 bg-primary px-5 py-3 text-xs font-black uppercase tracking-[0.1em] text-primary-foreground shadow-[3px_3px_0_0_var(--foreground)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_var(--foreground)]"
             >
               Open email client <ArrowRight className="size-4" />

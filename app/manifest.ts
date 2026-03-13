@@ -2,13 +2,13 @@ import type { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Tribitat - Real Stories in Plain English',
-    short_name: 'Tribitat',
-    description: 'Real Stories in Plain English',
+    name: 'DailyDach - Stories with Daily Duck Energy',
+    short_name: 'DailyDach',
+    description: 'High-energy stories, cultural signals, and bold voices.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#f9f9f9',
-    theme_color: '#ffffff',
+    background_color: '#f8f1cc',
+    theme_color: '#d9aa0d',
     icons: [
       {
         src: '/icon.svg',

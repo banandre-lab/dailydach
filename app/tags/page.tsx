@@ -7,14 +7,14 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { getAllTags } from "@/lib/wordpress"
 
 export const metadata: Metadata = {
-  title: "Discover Tags | Tribitat",
+  title: "Discover Tags | DailyDach",
   description:
     "Explore our content through a cloud of topics and ideas. Browse all tags to find stories about culture and perspectives.",
   alternates: {
-    canonical: "https://www.tribitat.com/tags",
+    canonical: "https://www.dailydach.com/tags",
   },
   openGraph: {
-    title: "Discover Tags | Tribitat",
+    title: "Discover Tags | DailyDach",
     description:
       "Explore our content through a cloud of topics and ideas. Browse all tags to find stories about culture and perspectives.",
     url: "/tags",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Discover Tags | Tribitat",
+    title: "Discover Tags | DailyDach",
     description:
       "Explore our content through a cloud of topics and ideas. Browse all tags to find stories about culture and perspectives.",
   },

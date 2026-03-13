@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react"
 import { Menu, Search, X } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
-import { useTheme } from "next-themes"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
@@ -14,56 +12,39 @@ import { cn } from "@/lib/utils"
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  const { resolvedTheme } = useTheme()
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setMounted(true)
-    }, 0)
-
     const handleScroll = () => {
-      setScrolled(window.scrollY > 12)
+      setScrolled(window.scrollY > 10)
     }
 
     window.addEventListener("scroll", handleScroll)
-
-    return () => {
-      clearTimeout(timer)
-      window.removeEventListener("scroll", handleScroll)
-    }
+    return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
   return (
     <motion.header
-      initial={{ y: -70, opacity: 0 }}
+      initial={{ y: -72, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
+      transition={{ duration: 0.45, ease: "easeOut" }}
       className={cn(
-        "sticky top-0 z-50 w-full border-b-2 transition-all duration-200",
-        scrolled
-          ? "border-foreground/90 bg-background/95 backdrop-blur-sm"
-          : "border-transparent bg-transparent"
+        "sticky top-0 z-50 w-full border-b-2 border-foreground/30 transition-all duration-200",
+        scrolled ? "bg-background/92 backdrop-blur-md" : "bg-transparent"
       )}
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between gap-4">
-          <Link href="/" className="flex shrink-0 items-center gap-2" aria-label="Tribitat Home">
-            <span className="sr-only">Tribitat</span>
-            {mounted && (
-              <Image
-                src={resolvedTheme === "dark" ? "/logo-dark.svg" : "/logo-light.svg"}
-                alt="Tribitat"
-                width={128}
-                height={42}
-                className="h-9 w-auto object-contain"
-                priority
-              />
-            )}
+      <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between gap-3">
+          <Link href="/" className="relative inline-flex items-center gap-2" aria-label="DailyDach Home">
+            <span className="brand-radius hidden -rotate-2 border-2 border-foreground bg-primary px-2.5 py-1 text-[0.58rem] font-black uppercase tracking-[0.12em] text-primary-foreground shadow-[2px_2px_0_0_var(--foreground)] sm:inline-flex">
+              Duck Signal
+            </span>
+            <span className="brand-radius-lg relative inline-flex -rotate-1 border-2 border-foreground bg-secondary px-3.5 py-2 shadow-[4px_4px_0_0_var(--foreground)]">
+              <span className="font-display text-2xl leading-none text-secondary-foreground sm:text-3xl">DailyDach</span>
+            </span>
           </Link>
 
-          <nav className="hidden items-center gap-0.5 border-2 border-foreground/90 bg-card p-1 shadow-[3px_3px_0_0_var(--foreground)] md:flex">
+          <nav className="brand-radius-lg relative hidden items-center gap-1 border-2 border-foreground bg-card p-1 shadow-[4px_4px_0_0_var(--foreground)] md:flex">
             <NavLink href="/">Home</NavLink>
             <NavLink href="/stories">Stories</NavLink>
             <NavLink href="/impressum">About</NavLink>
@@ -76,6 +57,7 @@ export function Header() {
               size="icon"
               onClick={() => setIsSearchOpen(true)}
               aria-label="Search stories"
+              className="bg-card"
             >
               <Search className="size-5" />
             </Button>
@@ -83,15 +65,13 @@ export function Header() {
             <ModeToggle />
 
             <Link href="/subscribe" className="hidden sm:block">
-              <Button className="px-4 text-xs uppercase tracking-[0.1em]">
-                Subscribe
-              </Button>
+              <Button className="px-4 text-[0.67rem] uppercase tracking-[0.12em]">Join Drop</Button>
             </Link>
 
             <Button
               variant="outline"
               size="icon"
-              className="md:hidden"
+              className="bg-card md:hidden"
               onClick={() => setIsMenuOpen((prev) => !prev)}
               aria-label="Toggle menu"
             >
@@ -107,11 +87,11 @@ export function Header() {
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.2, ease: "easeInOut" }}
-              className="overflow-hidden pb-4 md:hidden"
+              className="overflow-hidden md:hidden"
             >
-              <div className="border-2 border-foreground/90 bg-card p-3 shadow-[4px_4px_0_0_var(--foreground)]">
-                <div className="mb-3 border-b-2 border-foreground/90 pb-2 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-muted-foreground">
-                  Explore Tribitat
+              <div className="brand-radius-lg mt-3 border-2 border-foreground bg-card p-3 shadow-[4px_4px_0_0_var(--foreground)]">
+                <div className="mb-3 border-b-2 border-foreground/70 pb-2 text-[0.66rem] font-black uppercase tracking-[0.13em] text-muted-foreground">
+                  Navigate DailyDach
                 </div>
                 <div className="flex flex-col gap-1">
                   <MobileNavLink href="/" onClick={() => setIsMenuOpen(false)}>
@@ -128,7 +108,7 @@ export function Header() {
                   </MobileNavLink>
                 </div>
                 <Link href="/subscribe" onClick={() => setIsMenuOpen(false)} className="mt-3 block">
-                  <Button className="w-full">Subscribe</Button>
+                  <Button className="w-full">Join Newsletter</Button>
                 </Link>
               </div>
             </motion.div>
@@ -151,7 +131,7 @@ function NavLink({
   return (
     <Link
       href={href}
-      className="px-3 py-1.5 text-[0.68rem] font-bold uppercase tracking-[0.1em] text-foreground transition-all hover:bg-primary hover:text-primary-foreground"
+      className="brand-radius border-2 border-transparent px-3 py-1.5 text-[0.66rem] font-black uppercase tracking-[0.12em] text-foreground transition-all hover:-translate-y-0.5 hover:border-foreground hover:bg-primary"
     >
       {children}
     </Link>
@@ -170,7 +150,7 @@ function MobileNavLink({
   return (
     <Link
       href={href}
-      className="border-2 border-transparent px-3 py-2 text-sm font-semibold text-foreground transition-all hover:border-foreground/90 hover:bg-muted"
+      className="brand-radius border-2 border-transparent px-3 py-2 text-sm font-semibold text-foreground transition-all hover:border-foreground hover:bg-muted"
       onClick={onClick}
     >
       {children}

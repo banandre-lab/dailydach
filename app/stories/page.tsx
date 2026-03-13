@@ -6,22 +6,21 @@ import { getPostsPaginated } from "@/lib/wordpress"
 import type { Post } from "@/lib/wordpress.d"
 import { FluidBackground } from "@/components/ui/fluid-background"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
-import { EuropeMap } from "@/components/europe-map"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Stories - Tribitat",
-  description: "Browse real stories from around the world, shared in plain English.",
+  title: "Stories - DailyDach",
+  description: "Browse DailyDach stories, cultural signals, and bold voices in one feed.",
   openGraph: {
-    title: "Stories - Tribitat",
-    description: "Browse real stories from around the world, shared in plain English.",
-    url: "https://www.tribitat.com/stories",
+    title: "Stories - DailyDach",
+    description: "Browse DailyDach stories, cultural signals, and bold voices in one feed.",
+    url: "https://www.dailydach.com/stories",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Stories - Tribitat",
-    description: "Browse real stories from around the world, shared in plain English.",
+    title: "Stories - DailyDach",
+    description: "Browse DailyDach stories, cultural signals, and bold voices in one feed.",
   },
 }
 
@@ -43,19 +42,15 @@ export default async function AllPostsPage({
       <FluidBackground />
       <Header />
 
-      <section className="mx-auto max-w-7xl px-4 pb-6 pt-10 sm:px-6 lg:px-8 lg:pt-14">
+      <section className="mx-auto max-w-7xl px-4 pb-6 pt-8 sm:px-6 lg:px-8 lg:pt-12">
         <ScrollReveal>
-          <div className="bento-card mb-8 p-7 sm:p-9">
+          <div className="maxi-panel mb-8 p-7 sm:p-9">
             <span className="section-kicker mb-3">Story Feed</span>
-            <h1 className="headline-lg text-balance mb-4">All stories, one place.</h1>
+            <h1 className="headline-lg text-balance mb-4">All DailyDach Stories</h1>
             <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
-              Discover personal journeys and cultural snapshots from across Europe in plain English.
+              Fast-moving culture stories and personal perspectives from across Europe and beyond.
             </p>
           </div>
-        </ScrollReveal>
-
-        <ScrollReveal delay={0.1}>
-          <EuropeMap />
         </ScrollReveal>
       </section>
 
@@ -63,8 +58,8 @@ export default async function AllPostsPage({
         posts={posts}
         totalPages={totalPages}
         enableInfinite={false}
-        title={page > 1 ? `Page ${page} Stories` : "Latest Stories"}
-        subtitle="Scroll less, discover faster."
+        title={page > 1 ? `Page ${page} Story Drops` : "Latest Story Drops"}
+        subtitle="Scroll less. Feel more."
       />
 
       <ScrollReveal direction="up" delay={0.12}>

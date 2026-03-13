@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import { decode } from "html-entities"
@@ -14,9 +15,11 @@ import {
   getAllPostSlugs,
   getRelatedPostsByTags,
   getPostsPaginated,
+  sanitizeInlineBackgrounds,
 } from "@/lib/wordpress"
 import type { Post, RelatedPost } from "@/lib/wordpress.d"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
+import { FluidBackground } from "@/components/ui/fluid-background"
 
 export const dynamicParams = true
 
@@ -52,8 +55,8 @@ export async function generateMetadata({
     return {}
   }
 
-  const imageUrl = featuredMedia?.source_url || "https://www.tribitat.com/opengraph-image"
-  const canonicalUrl = `https://www.tribitat.com/${category.slug}/${post.slug}`
+  const imageUrl = featuredMedia?.source_url || "https://www.dailydach.com/opengraph-image"
+  const canonicalUrl = `https://www.dailydach.com/${category.slug}/${post.slug}`
 
   return {
     title: decode(post.title.rendered),
@@ -68,7 +71,7 @@ export async function generateMetadata({
       type: "article",
       publishedTime: post.date,
       modifiedTime: post.modified,
-      authors: ["Tribitat"],
+      authors: ["DailyDach"],
       images: [
         {
           url: imageUrl,
@@ -131,24 +134,24 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     "@type": "Article",
     headline: title,
     description,
-    image: featuredMedia?.source_url || "https://www.tribitat.com/opengraph-image",
+    image: featuredMedia?.source_url || "https://www.dailydach.com/opengraph-image",
     datePublished: post.date,
     dateModified: post.modified,
     author: {
       "@type": "Organization",
-      name: "Tribitat",
+      name: "DailyDach",
     },
     publisher: {
       "@type": "Organization",
-      name: "Tribitat",
+      name: "DailyDach",
       logo: {
         "@type": "ImageObject",
-        url: "https://www.tribitat.com/opengraph-image",
+        url: "https://www.dailydach.com/opengraph-image",
       },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://www.tribitat.com/${category.slug}/${post.slug}`,
+      "@id": `https://www.dailydach.com/${category.slug}/${post.slug}`,
     },
     keywords: tags.map((tag) => tag.name).join(", "),
   }
@@ -161,25 +164,27 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.tribitat.com",
+        item: "https://www.dailydach.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: category.name,
-        item: `https://www.tribitat.com/${category.slug}`,
+        item: `https://www.dailydach.com/${category.slug}`,
       },
       {
         "@type": "ListItem",
         position: 3,
         name: title,
-        item: `https://www.tribitat.com/${category.slug}/${post.slug}`,
+        item: `https://www.dailydach.com/${category.slug}/${post.slug}`,
       },
     ],
   }
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="relative min-h-screen bg-background">
+      <FluidBackground />
+
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <script
         type="application/ld+json"
@@ -188,79 +193,67 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
       <Header />
 
-      {/* ── Full-width cinematic hero ── */}
-      <section className="relative w-full overflow-hidden border-b-2 border-foreground/90">
-        {/* Hero image — edge to edge */}
-        <div className="relative h-[55vh] min-h-[400px] sm:h-[60vh] md:h-[70vh]">
-          <img
-            src={featuredMedia?.source_url || "/placeholder.svg"}
-            alt={title}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
+      <section className="relative w-full min-h-[430px] overflow-hidden border-b-2 border-foreground/70 md:min-h-[560px]">
+        <div className="absolute inset-0">
+          {featuredMedia?.source_url ? (
+            <Image
+              src={featuredMedia.source_url}
+              alt={title}
+              fill
+              className="object-cover"
+              priority
+            />
+          ) : (
+            <div className="h-full w-full bg-[linear-gradient(135deg,color-mix(in_oklab,var(--secondary)_85%,transparent),color-mix(in_oklab,var(--accent)_55%,transparent),color-mix(in_oklab,var(--primary)_75%,transparent))]" />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/30 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-36 bg-black/18 backdrop-blur-md [mask-image:linear-gradient(to_top,black,transparent)]" />
+        </div>
 
-          {/* Ink-wash gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+        <div className="relative z-10 mx-auto flex min-h-[430px] w-full max-w-7xl items-end px-4 pb-8 pt-24 sm:px-6 md:min-h-[560px] md:pb-12 md:pt-32 lg:px-8">
+          <div className="w-full max-w-4xl">
+            <div className="mb-4">
+              <span className="section-kicker border-white/20 bg-primary text-primary-foreground shadow-[2px_2px_0_0_rgba(0,0,0,0.35)]">
+                {category.name}
+              </span>
+            </div>
 
-          {/* Content overlay — pinned to bottom */}
-          <div className="absolute inset-x-0 bottom-0 px-4 pb-8 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-7xl">
-              {/* Breadcrumb row */}
-              <nav className="mb-5 flex items-center gap-2 text-[0.64rem] font-black uppercase tracking-[0.12em] text-white/70">
-                <Link href="/" className="transition-colors hover:text-white">
-                  Home
-                </Link>
-                <span className="text-white/40">/</span>
-                <Link href={`/${category.slug}`} className="transition-colors hover:text-white">
-                  {category.name}
-                </Link>
-                <span className="text-white/40">/</span>
-                <span className="truncate text-white/90">Story</span>
-              </nav>
+            <h1 className="max-w-4xl font-display text-4xl leading-[0.9] text-white sm:text-5xl lg:text-7xl">
+              {title}
+            </h1>
 
-              {/* Category + date row */}
-              <div className="mb-4 flex flex-wrap items-center gap-3">
-                <span className="inline-flex border-2 border-white/30 bg-white/10 px-3 py-1 text-[0.62rem] font-black uppercase tracking-[0.12em] text-white shadow-[2px_2px_0_0_rgba(255,255,255,0.15)]">
-                  {category.name}
-                </span>
-                <span className="text-[0.68rem] font-bold uppercase tracking-[0.1em] text-white/60">
-                  {date}
-                </span>
-              </div>
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/88 sm:text-base md:text-lg">
+              {description}
+            </p>
 
-              {/* Title */}
-              <h1 className="max-w-4xl text-balance font-display text-4xl font-bold italic leading-[0.94] text-white sm:text-5xl md:text-6xl lg:text-7xl">
-                {title}
-              </h1>
-
-              {/* Excerpt teaser */}
-              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/70 sm:text-base">
-                {description}
-              </p>
-
-              {/* Share row — inline on hero */}
-              <div className="mt-6">
-                <ShareButtons title={title} url={`/${category.slug}/${post.slug}`} variant="hero" />
-              </div>
+            <div className="mt-4 flex items-center gap-4 text-sm font-medium text-white/78">
+              <time dateTime={post.date}>{date}</time>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Article body + sidebar ── */}
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
-          {/* Main content column */}
           <ScrollReveal className="lg:col-span-8">
             <article>
-              <div className="blog-post-content border-2 border-foreground/90 bg-card p-6 shadow-[5px_5px_0_0_var(--foreground)] sm:p-10">
-                {post.content.rendered && <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />}
+              <div className="maxi-panel p-6 sm:p-10">
+                <div className="blog-post-content drop-cap">
+                  {post.content.rendered && (
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeInlineBackgrounds(post.content.rendered),
+                      }}
+                    />
+                  )}
+                </div>
               </div>
 
               {tags.length > 0 && (
-                <div className="mt-8 flex flex-wrap gap-2 border-t-2 border-foreground/90 pt-6">
+                <div className="mt-8 flex flex-wrap gap-2 border-t-2 border-foreground/80 pt-6">
                   {tags.map((tag) => (
                     <Link key={tag.id} href={`/tag/${tag.slug}`}>
-                      <Badge variant="outline" className="cursor-pointer">
+                      <Badge variant="outline" className="cursor-pointer border-2 border-foreground bg-card px-3 py-1 text-[0.62rem] font-black uppercase tracking-[0.1em]">
                         #{tag.name}
                       </Badge>
                     </Link>
@@ -270,34 +263,31 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </article>
           </ScrollReveal>
 
-          {/* Sidebar — sticky on desktop */}
           <ScrollReveal delay={0.08} className="lg:col-span-4">
             <aside className="space-y-5 lg:sticky lg:top-24">
-              {/* Share card */}
-              <div className="bento-card">
-                <p className="section-kicker mb-4">Spread the Word</p>
+              <div className="maxi-panel p-5">
+                <p className="section-kicker mb-4">Spread It</p>
                 <ShareButtons title={title} url={`/${category.slug}/${post.slug}`} />
               </div>
 
-              {/* Back to channel */}
               <Link
                 href={`/${category.slug}`}
-                className="group flex items-center gap-3 border-2 border-foreground/90 bg-card p-4 shadow-[3px_3px_0_0_var(--foreground)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_0_var(--foreground)]"
+                className="brand-radius-lg group flex items-center gap-3 border-2 border-foreground bg-card p-4 shadow-[4px_4px_0_0_var(--foreground)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_var(--foreground)]"
               >
-                <span className="inline-flex size-8 items-center justify-center border-2 border-foreground/90 bg-primary text-primary-foreground text-xs font-black">
+                <span className="brand-radius inline-flex size-8 items-center justify-center border-2 border-foreground bg-primary text-xs font-black text-primary-foreground">
                   &larr;
                 </span>
                 <div>
-                  <span className="text-[0.62rem] font-black uppercase tracking-[0.1em] text-muted-foreground">
+                  <span className="text-[0.62rem] font-black uppercase tracking-[0.11em] text-muted-foreground">
                     More from
                   </span>
-                  <p className="font-display text-lg font-bold italic leading-tight">{category.name}</p>
+                  <p className="font-display text-xl leading-none">{category.name}</p>
                 </div>
               </Link>
 
               {latestCategoryPosts.length > 0 && (
-                <div className="bento-card">
-                  <p className="section-kicker mb-4">Latest from {category.name}</p>
+                <div className="maxi-panel p-5">
+                  <p className="section-kicker mb-4">Latest in {category.name}</p>
                   <div className="space-y-3">
                     {latestCategoryPosts.map((categoryPost) => {
                       const categoryPostTitle = decode(categoryPost.title.rendered)
@@ -310,10 +300,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         <Link
                           key={categoryPost.id}
                           href={`/${category.slug}/${categoryPost.slug}`}
-                          className="block border-2 border-foreground/90 bg-background px-3 py-3 transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_var(--foreground)]"
+                          className="brand-radius block border-2 border-foreground bg-background px-3 py-3 transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_var(--foreground)]"
                         >
-                          <p className="line-clamp-2 font-display text-base font-bold leading-tight">{categoryPostTitle}</p>
-                          <p className="mt-2 text-[0.64rem] font-black uppercase tracking-[0.1em] text-muted-foreground">
+                          <p className="line-clamp-2 font-display text-lg leading-[0.92]">{categoryPostTitle}</p>
+                          <p className="mt-2 text-[0.62rem] font-black uppercase tracking-[0.11em] text-muted-foreground">
                             {categoryPostDate}
                           </p>
                         </Link>
@@ -327,7 +317,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
       </section>
 
-      {/* ── Related posts ── */}
       <section className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 lg:px-8">
         <RelatedPosts posts={relatedPostsList} />
       </section>

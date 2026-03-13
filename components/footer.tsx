@@ -1,62 +1,46 @@
 import Link from "next/link"
-import Image from "next/image"
 import { FooterNewsletter } from "@/components/footer-newsletter"
 import { XLogoIcon } from "@/components/ui/x-logo"
 
 export function Footer() {
   return (
-    <footer className="relative mt-24 border-t-2 border-foreground/90 bg-card">
+    <footer className="relative mt-24 border-t-2 border-foreground bg-card">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-          <section className="bento-card noise-layer lg:col-span-5">
-            <Link href="/" className="mb-5 inline-flex items-center" aria-label="Tribitat home">
-              <>
-                <Image
-                  src="/logo-light.svg"
-                  alt="Tribitat"
-                  width={156}
-                  height={52}
-                  className="h-12 w-auto dark:hidden"
-                />
-                <Image
-                  src="/logo-dark.svg"
-                  alt="Tribitat"
-                  width={156}
-                  height={52}
-                  className="hidden h-12 w-auto dark:block"
-                />
-              </>
+          <section className="maxi-panel noise-layer p-6 lg:col-span-5">
+            <Link href="/" className="mb-4 inline-flex items-center" aria-label="DailyDach home">
+              <span className="brand-radius-lg inline-flex -rotate-1 border-2 border-foreground bg-secondary px-4 py-2 shadow-[4px_4px_0_0_var(--foreground)]">
+                <span className="font-display text-3xl leading-none text-secondary-foreground">DailyDach</span>
+              </span>
             </Link>
             <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
-              Tribitat is where everyday people share cultural stories in plain English. Read, connect,
-              and contribute your voice.
+              DailyDach publishes high-energy cultural stories with a playful daily-duck spirit. Read fast,
+              think deeper, and drop your own voice.
             </p>
             <div className="mt-6 flex items-center gap-3">
-              <SocialLink href="https://x.com/tribitat_com" label="X" icon={<XLogoIcon className="size-4" />} />
+              <SocialLink href="https://x.com/dailydach" label="X" icon={<XLogoIcon className="size-4" />} />
             </div>
           </section>
 
-          <section className="bento-card lg:col-span-3">
+          <section className="maxi-panel p-6 lg:col-span-3">
             <p className="section-kicker mb-4">Explore</p>
             <nav className="space-y-1">
               <FooterLink href="/stories">Stories</FooterLink>
-              <FooterLink href="/impressum">About Tribitat</FooterLink>
+              <FooterLink href="/impressum">About DailyDach</FooterLink>
               <FooterLink href="/submit-story">Submit Story</FooterLink>
             </nav>
           </section>
 
-          <section className="bento-card lg:col-span-4">
+          <section className="maxi-panel p-6 lg:col-span-4">
             <p className="section-kicker mb-4">Newsletter</p>
-            <h3 className="font-display text-2xl italic">Weekly story drop</h3>
-            <p className="mt-2 mb-5 text-sm text-muted-foreground">
-              New voices, fresh context, no noise.
-            </p>
+            <h3 className="font-display text-3xl leading-[0.9]">Weekly Story Drop</h3>
+            <p className="mb-5 mt-2 text-sm text-muted-foreground">Sharp voices. Visual culture. Zero filler.</p>
             <FooterNewsletter />
           </section>
         </div>
 
-        <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t-2 border-foreground/90 pt-6 text-xs font-bold uppercase tracking-[0.1em] text-muted-foreground sm:flex-row sm:items-center">
-          <p>&copy; {new Date().getFullYear()} Tribitat</p>
+        <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t-2 border-foreground/70 pt-6 text-xs font-black uppercase tracking-[0.11em] text-muted-foreground sm:flex-row sm:items-center">
+          <p>&copy; {new Date().getFullYear()} DailyDach</p>
           <div className="flex items-center gap-4">
             <Link href="/privacy" className="transition-colors hover:text-foreground">
               Privacy
@@ -87,7 +71,7 @@ function SocialLink({
     <a
       href={href}
       aria-label={label}
-      className="inline-flex size-9 items-center justify-center border-2 border-foreground/90 bg-background text-foreground shadow-[2px_2px_0_0_var(--foreground)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_var(--foreground)]"
+      className="brand-radius inline-flex size-9 items-center justify-center border-2 border-foreground bg-background text-foreground shadow-[2px_2px_0_0_var(--foreground)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_var(--foreground)]"
     >
       {icon}
     </a>
@@ -104,7 +88,7 @@ function FooterLink({
   return (
     <Link
       href={href}
-      className="block border-2 border-transparent px-2 py-1.5 text-sm font-semibold text-foreground transition-all hover:border-foreground/90 hover:bg-muted"
+      className="brand-radius block border-2 border-transparent px-2 py-1.5 text-sm font-semibold text-foreground transition-all hover:border-foreground hover:bg-muted"
     >
       {children}
     </Link>

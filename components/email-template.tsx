@@ -18,7 +18,7 @@ export function getEmailHtml({
 
   return `
     <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
-      <h1 style="color: #111;">Welcome to TRIBITAT!</h1>
+      <h1 style="color: #111;">Welcome to DailyDach!</h1>
       <p>Hi there,</p>
       <p>
         Thanks for subscribing to our newsletter with <strong>${email}</strong>.
@@ -31,17 +31,17 @@ export function getEmailHtml({
       <div
         style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #666;"
       >
-        <p>Sent with ❤️ from TRIBITAT.</p>
+        <p>Sent with ❤️ from DailyDach.</p>
         <p>
           <a
-            href="https://www.tribitat.com/subscribe?email=${email}&hash=${hash}&unsubscribe=true"
+            href="https://www.dailydach.com/subscribe?email=${email}&hash=${hash}&unsubscribe=true"
             style="color: #666; text-decoration: underline;"
           >
             Unsubscribe
           </a>
           &nbsp; • &nbsp;
           <a
-            href="https://www.tribitat.com/subscribe?email=${email}&hash=${hash}"
+            href="https://www.dailydach.com/subscribe?email=${email}&hash=${hash}"
             style="color: #666; text-decoration: underline;"
           >
             Manage Preferences
@@ -50,7 +50,7 @@ export function getEmailHtml({
       </div>
       <p>
         Best regards,<br />
-        The TRIBITAT Team
+        The DailyDach Team
       </p>
     </div>
   `;

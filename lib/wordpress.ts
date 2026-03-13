@@ -43,6 +43,14 @@ export interface WordPressResponse<T> {
   headers: WordPressPaginationHeaders;
 }
 
+interface SitemapPost {
+  slug: string;
+  category: string;
+  date: string;
+  modified: string;
+  image?: string;
+}
+
 // Keep original function for backward compatibility
 async function wordpressFetch<T>(
   path: string,
@@ -344,6 +352,31 @@ export async function searchAuthors(query: string): Promise<Author[]> {
   });
 }
 
+/**
+ * Remove background colors from inline styles when no text color is specified.
+ * This prevents CMS-authored light background blocks from becoming unreadable
+ * against the site theme when WordPress only outputs a background style.
+ */
+export function sanitizeInlineBackgrounds(content: string): string {
+  return content.replace(/style="([^"]*)"/gi, (_match, style: string) => {
+    const hasBackground = /background(-color)?\s*:/i.test(style);
+    const hasTextColor = /(?<!-)color\s*:/i.test(style);
+
+    if (hasBackground && !hasTextColor) {
+      const cleaned = style
+        .replace(/background-color\s*:[^;]*(;|$)/gi, "")
+        .replace(/background\s*:[^;]*(;|$)/gi, "")
+        .replace(/;\s*;/g, ";")
+        .trim()
+        .replace(/^;+|;+$/g, "");
+
+      return cleaned ? `style="${cleaned}"` : "";
+    }
+
+    return `style="${style}"`;
+  });
+}
+
 // Function specifically for generateStaticParams - fetches ALL posts
 export async function getAllPostSlugs(): Promise<
   { slug: string; category: string }[]
@@ -441,6 +474,95 @@ export async function getAllPostsForSitemap(): Promise<
 
     hasMore = page < response.headers.totalPages;
     page++;
+  }
+
+  return allPosts;
+}
+
+export async function getPostCount(): Promise<number> {
+  const response = await wordpressFetchWithPagination<Array<Pick<Post, "id">>>(
+    "/wp-json/wp/v2/posts",
+    {
+      per_page: 1,
+      page: 1,
+      _fields: "id",
+    }
+  );
+
+  return response.headers.total;
+}
+
+export async function getNewestPostDateAtOffset(offset: number): Promise<string | null> {
+  const perPage = 100;
+  const page = Math.floor(offset / perPage) + 1;
+  const positionInPage = offset % perPage;
+  const url = `${baseUrl}/wp-json/wp/v2/posts?per_page=${perPage}&page=${page}&_fields=date,modified&orderby=date&order=desc`;
+
+  const response = await fetch(url, {
+    headers: {
+      "User-Agent": "Next.js WordPress Client",
+    },
+  });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const posts: Array<Pick<Post, "date" | "modified">> = await response.json();
+  const post = posts[positionInPage];
+
+  return post ? post.modified || post.date : null;
+}
+
+export async function getPostsBatchForSitemap(
+  offset: number,
+  limit: number
+): Promise<SitemapPost[]> {
+  const perPage = 100;
+  const allPosts: SitemapPost[] = [];
+  const startPage = Math.floor(offset / perPage) + 1;
+  const endOffset = offset + limit;
+  const categories = await getAllCategories();
+  const categoryMap = new Map(categories.map((category) => [category.id, category.slug]));
+
+  let currentOffset = offset;
+  let page = startPage;
+
+  while (currentOffset < endOffset) {
+    const response = await wordpressFetchWithPagination<Post[]>("/wp-json/wp/v2/posts", {
+      per_page: perPage,
+      page,
+      _embed: true,
+    });
+    const posts = response.data;
+
+    if (posts.length === 0) {
+      break;
+    }
+
+    const pageStartOffset = (page - 1) * perPage;
+    const skipFromStart = Math.max(0, currentOffset - pageStartOffset);
+    const takeCount = Math.min(posts.length - skipFromStart, endOffset - currentOffset);
+
+    allPosts.push(
+      ...posts.slice(skipFromStart, skipFromStart + takeCount).map((post) => ({
+        slug: post.slug,
+        category:
+          post.categories && post.categories.length > 0
+            ? categoryMap.get(post.categories[0]) || "uncategorized"
+            : "uncategorized",
+        date: post.date,
+        modified: post.modified,
+        image: post._embedded?.["wp:featuredmedia"]?.[0]?.source_url,
+      }))
+    );
+
+    currentOffset += takeCount;
+    page++;
+
+    if (page > response.headers.totalPages) {
+      break;
+    }
   }
 
   return allPosts;

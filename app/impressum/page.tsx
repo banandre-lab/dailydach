@@ -8,18 +8,18 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { Button } from "@/components/ui/button"
 
 export const metadata: Metadata = {
-  title: "About - Tribitat",
-  description: "Learn more about Tribitat and our mission to share real stories in plain English.",
+  title: "About - DailyDach",
+  description: "Learn more about DailyDach and our mission to share real stories in plain English.",
   openGraph: {
-    title: "About - Tribitat",
-    description: "Learn more about Tribitat and our mission to share real stories in plain English.",
-    url: "https://www.tribitat.com/impressum",
+    title: "About - DailyDach",
+    description: "Learn more about DailyDach and our mission to share real stories in plain English.",
+    url: "https://www.dailydach.com/impressum",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "About - Tribitat",
-    description: "Learn more about Tribitat and our mission to share real stories in plain English.",
+    title: "About - DailyDach",
+    description: "Learn more about DailyDach and our mission to share real stories in plain English.",
   },
 }
 
@@ -31,15 +31,15 @@ export default function AboutPage() {
       <section className="mx-auto max-w-7xl px-4 pb-12 pt-10 sm:px-6 lg:px-8 lg:pt-14">
         <ScrollReveal>
           <div className="bento-card p-7 sm:p-10">
-            <span className="section-kicker mb-4">About Tribitat</span>
+            <span className="section-kicker mb-4">About DailyDach</span>
             <h1 className="headline-xl mb-6 text-balance">Connecting cultures through the power of storytelling.</h1>
             <p className="max-w-3xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              At Tribitat, we believe that everyone has a story worth telling. Our platform is designed to break
+              At DailyDach, we believe that everyone has a story worth telling. Our platform is designed to break
               down language barriers and bring authentic voices to the forefront.
             </p>
             <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               Whether you are sharing a personal journey, a cultural insight, or a unique perspective on current
-              events, Tribitat gives your voice a clear and beautiful place to be heard.
+              events, DailyDach gives your voice a clear and beautiful place to be heard.
             </p>
             <p className="mt-5 inline-flex border-2 border-foreground/90 bg-background px-4 py-2 text-xs font-black uppercase tracking-[0.1em] shadow-[2px_2px_0_0_var(--foreground)]">
               &quot;Language is not a barrier&quot;
@@ -61,7 +61,7 @@ export default function AboutPage() {
           <div className="bento-card p-8 text-center sm:p-10">
             <h2 className="font-display text-3xl font-bold italic sm:text-4xl">Ready to share your story?</h2>
             <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
-              Join the Tribitat community and publish your perspective for a global audience.
+              Join the DailyDach community and publish your perspective for a global audience.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <Button asChild size="lg" className="px-6 text-xs uppercase tracking-[0.1em]">

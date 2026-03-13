@@ -5,7 +5,7 @@ const wordpressPort = process.env.WORDPRESS_PORT;
 
 const wordpressRemotePattern = {
   protocol: (process.env.WORDPRESS_PROTOCOL || "https") as "http" | "https",
-  hostname: process.env.WORDPRESS_HOSTNAME || "www.tribitat.com",
+  hostname: process.env.WORDPRESS_HOSTNAME || "www.dailydach.com",
   ...(wordpressPort && { port: wordpressPort }),
   pathname: process.env.WORDPRESS_PATHNAME || "/wp-content/uploads/**",
 };
