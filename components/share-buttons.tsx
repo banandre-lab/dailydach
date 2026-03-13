@@ -3,6 +3,7 @@
 import { Mail, Linkedin, Link2 } from "lucide-react"
 import { useState } from "react"
 import { XLogoIcon } from "./ui/x-logo"
+import { InkBorder } from "./ui/ink-border"
 
 function FacebookIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -112,11 +113,12 @@ function ShareIconButton({
 }) {
   const buttonClass =
     variant === "hero"
-      ? "brand-radius inline-flex size-9 cursor-pointer items-center justify-center border-2 border-white/40 bg-white/10 text-white shadow-[2px_2px_0_0_rgba(255,255,255,0.2)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-white/20 hover:shadow-[4px_4px_0_0_rgba(255,255,255,0.3)]"
-      : "brand-radius inline-flex size-9 cursor-pointer items-center justify-center border-2 border-foreground bg-card text-foreground shadow-[2px_2px_0_0_var(--foreground)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-secondary/65 hover:shadow-[4px_4px_0_0_var(--foreground)]"
+      ? "brand-radius relative isolate overflow-hidden inline-flex size-9 cursor-pointer items-center justify-center bg-white/10 text-white shadow-[2px_2px_0_0_rgba(255,255,255,0.2)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-white/20 hover:shadow-[4px_4px_0_0_rgba(255,255,255,0.3)]"
+      : "brand-radius relative isolate overflow-hidden inline-flex size-9 cursor-pointer items-center justify-center bg-card text-foreground shadow-[2px_2px_0_0_var(--foreground)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-secondary/65 hover:shadow-[4px_4px_0_0_var(--foreground)]"
 
   return (
     <button onClick={onClick} className={buttonClass} aria-label={label} title={label}>
+      <InkBorder rx={12} className={variant === "hero" ? "text-white" : undefined} />
       {children}
     </button>
   )

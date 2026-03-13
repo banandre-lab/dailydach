@@ -32,6 +32,8 @@ import {
 import type { Post, RelatedPost } from "@/lib/wordpress.d"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { FluidBackground } from "@/components/ui/fluid-background"
+import { Card } from "@/components/ui/card"
+import { InkBorder } from "@/components/ui/ink-border"
 
 export const dynamicParams = true
 
@@ -306,7 +308,7 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
           <ScrollReveal className="lg:col-span-8">
             <article>
-              <div className="maxi-panel-clean p-6 sm:p-10">
+              <div>
                 <div className="blog-post-content drop-cap">
                   {articleContent && (
                     <div
@@ -334,12 +336,11 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
 
           <ScrollReveal delay={0.08} className="lg:col-span-4">
             <aside className="space-y-5 lg:sticky lg:top-24">
-              <div className="maxi-panel p-5">
-                <p className="section-kicker mb-4">Spread It</p>
+              <div className="p-5 hover:translate-y-0 shadow-[7px_7px_0_0_hsl(var(--foreground))]">
                 <ShareButtons title={title} url={getPostPath(post.slug)} />
               </div>
 
-              <div className="maxi-panel overflow-hidden p-0">
+              <Card frame="full" className="py-0 hover:translate-y-0 shadow-[7px_7px_0_0_hsl(var(--foreground))]">
                 <div className="border-b-2 border-foreground bg-secondary px-5 py-4 text-secondary-foreground">
                   <h2 className="font-display text-2xl leading-[0.92]">Follow the angles</h2>
                 </div>
@@ -348,10 +349,11 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
                     <Link
                       key={categoryItem.id}
                       href={getCategoryPath(categoryItem.slug)}
-                      className={`brand-radius-lg flex items-center justify-between gap-3 border-2 border-foreground px-4 py-3 transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_var(--foreground)] ${
-                        index === 0 ? "bg-primary text-primary-foreground" : "bg-card"
+                      className={`brand-radius-lg relative isolate overflow-hidden flex items-center justify-between gap-3 px-4 py-3 transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_var(--foreground)] ${
+                        index === 0 ? "bg-primary text-primary-foreground" : "bg-card text-foreground"
                       }`}
                     >
+                      <InkBorder rx={8} />
                       <div>
                         <span
                           className={`text-[0.58rem] font-black uppercase tracking-[0.12em] ${
@@ -368,10 +370,10 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
                     </Link>
                   ))}
                 </div>
-              </div>
+              </Card>
 
               {categoryRailItems.length > 0 && (
-                <div className="maxi-panel overflow-hidden p-0">
+                <Card frame="full" className="py-0 hover:translate-y-0 shadow-[7px_7px_0_0_hsl(var(--foreground))]">
                   <div className="border-b-2 border-foreground bg-secondary px-5 py-4 text-secondary-foreground">
                     <h2 className="font-display text-2xl leading-[0.92]">Fresh picks</h2>
                   </div>
@@ -389,8 +391,9 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
                         <Link
                           key={`${categoryItem.id}-${categoryPost.id}`}
                           href={getPostPath(categoryPost.slug)}
-                          className="brand-radius block border-2 border-foreground bg-background p-2.5 transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_var(--foreground)]"
+                          className="brand-radius relative isolate overflow-hidden block bg-background p-2.5 transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_var(--foreground)]"
                         >
+                          <InkBorder rx={5} />
                           <div className="flex gap-3">
                             <div className="relative h-16 w-16 shrink-0 overflow-hidden border-2 border-foreground bg-muted">
                               {categoryPostImage ? (
@@ -423,7 +426,7 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
                       )
                     })}
                   </div>
-                </div>
+                </Card>
               )}
             </aside>
           </ScrollReveal>
