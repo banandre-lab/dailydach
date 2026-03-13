@@ -41,7 +41,7 @@ export async function POST(request: Request) {
         // Add or update the contact in the configured segment.
         await resend.contacts.create({
           email,
-          segments: [segmentId],
+          segments: [{ id: segmentId }],
           unsubscribed: false,
         });
       }
