@@ -16,6 +16,7 @@ import {
   getRelatedPostsByTags,
   getPostsPaginated,
   getCategoryBySlug,
+  normalizeArticleHeadingHierarchy,
   sanitizeInlineBackgrounds,
   stripDuplicatedArticleChrome,
 } from "@/lib/wordpress"
@@ -135,7 +136,7 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
   const title = decode(post.title.rendered)
   const description = decode(post.excerpt.rendered.replace(/<[^>]*>/g, "").trim())
   const articleContent = sanitizeInlineBackgrounds(
-    stripDuplicatedArticleChrome(post.content.rendered || "")
+    normalizeArticleHeadingHierarchy(stripDuplicatedArticleChrome(post.content.rendered || ""))
   )
 
   const date = new Date(post.date).toLocaleDateString("en-US", {

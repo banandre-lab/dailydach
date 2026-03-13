@@ -399,6 +399,17 @@ export function stripDuplicatedArticleChrome(content: string): string {
   return cleaned;
 }
 
+/**
+ * Keep article pages to a single H1 by demoting CMS-authored body headings.
+ * The app renders the canonical page title in the hero, so body-level H1 tags
+ * should become H2 tags to preserve hierarchy and avoid SEO duplication.
+ */
+export function normalizeArticleHeadingHierarchy(content: string): string {
+  return content
+    .replace(/<h1\b([^>]*)>/gi, "<h2$1>")
+    .replace(/<\/h1>/gi, "</h2>");
+}
+
 // Function specifically for generateStaticParams - fetches ALL posts
 export async function getAllPostSlugs(): Promise<{ slug: string }[]> {
   const allSlugs: { slug: string }[] = [];
