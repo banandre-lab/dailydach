@@ -32,14 +32,19 @@ export async function POST(request: Request) {
 
     // 1. Manage Audience and Contact
     try {
-      const segmentId = process.env.RESEND_SEGEMENT_ID;
+      const segmentId =
+        process.env.RESEND_SEGEMENT_ID || process.env.RESEND_SEGMENT_ID;
 
-      // Add or update the contact in the segment
-      await resend.contacts.create({
-        email,
-        audienceId: segmentId,
-        unsubscribed: false,
-      });
+      if (!segmentId) {
+        console.error("Missing Resend segment configuration");
+      } else {
+        // Add or update the contact in the configured segment.
+        await resend.contacts.create({
+          email,
+          segments: [segmentId],
+          unsubscribed: false,
+        });
+      }
     } catch (contactError) {
       console.error("Error managing contact in Resend:", contactError);
     }
