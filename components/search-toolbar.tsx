@@ -7,8 +7,9 @@ import { Search, X, Clock, ArrowRight, Loader2, FileText } from "lucide-react"
 import Image from "next/image"
 import { searchPosts, getCategoriesClient } from "@/lib/wordpress"
 import { cn } from "@/lib/utils"
-import type { Post, Category, Tag } from "@/lib/wordpress.d"
+import type { Post, Category } from "@/lib/wordpress.d"
 import { decode } from "html-entities"
+import { getPostPath } from "@/lib/urls"
 
 interface SearchToolbarProps {
   isOpen: boolean
@@ -88,13 +89,8 @@ export function SearchToolbar({ isOpen, onClose }: SearchToolbarProps) {
   }
 
   const handleResultClick = (post: Post) => {
-    const primaryCategory = post._embedded?.["wp:term"]?.[0]?.find(
-      (term: Category | Tag) => term.taxonomy === "category"
-    )
-
-    const href = `/${primaryCategory?.slug || "uncategorized"}/${post.slug}`
     handleClose()
-    router.push(href)
+    router.push(getPostPath(post.slug))
   }
 
   const clearRecent = () => {

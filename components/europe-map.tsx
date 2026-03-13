@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { europeMapData } from "./europe-map-data"
+import { getCategoryPath } from "@/lib/urls"
 
 const ENABLED_COUNTRIES = ["DE", "AT", "CH", "NL", "FR"]
 
@@ -21,7 +22,7 @@ export function EuropeMap() {
 
   const handleCountryClick = (countryName: string) => {
     const slug = countryName.toLowerCase().replace(/\s+/g, "-")
-    router.push(`/${slug}`)
+    router.push(getCategoryPath(slug))
   }
 
   return (

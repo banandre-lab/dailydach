@@ -2,6 +2,7 @@ import Link from "next/link"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import type { Category } from "@/lib/wordpress.d"
 import { europeMapData } from "@/components/europe-map-data"
+import { getCategoryPath } from "@/lib/urls"
 
 interface CategoriesLiquidBridgeProps {
   categories: Category[]
@@ -63,7 +64,7 @@ export function CategoriesLiquidBridge({ categories }: CategoriesLiquidBridgePro
             {coveredCountries.map((category) => (
               <Link
                 key={category.id}
-                href={`/${category.slug}`}
+                href={getCategoryPath(category.slug)}
                 className="group flex min-h-[150px] flex-col justify-between bg-card px-5 py-4 transition-colors hover:bg-primary dark:hover:bg-accent"
               >
                 <div>

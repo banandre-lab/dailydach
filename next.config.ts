@@ -43,6 +43,16 @@ const nextConfig: NextConfig = {
     // Cloudflare Workers doesn't support Next.js Image Optimization API
     unoptimized: true,
   },
+  async redirects() {
+    return [
+      {
+        source:
+          "/:category((?!api|stories|tag|tags|sitemap|privacy|terms|cookies|subscribe|submit-story|impressum).+)/:slug",
+        destination: "/:slug",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 const withMDX = createMDX({

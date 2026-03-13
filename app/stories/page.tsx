@@ -11,6 +11,9 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   title: "Stories - DailyDach",
   description: "Browse DailyDach stories, cultural signals, and bold voices in one feed.",
+  alternates: {
+    canonical: "https://www.dailydach.com/stories",
+  },
   openGraph: {
     title: "Stories - DailyDach",
     description: "Browse DailyDach stories, cultural signals, and bold voices in one feed.",

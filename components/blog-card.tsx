@@ -1,8 +1,10 @@
-import type { Post, Category, Tag } from "@/lib/wordpress.d"
+import type { Post } from "@/lib/wordpress.d"
 import Image from "next/image"
 import Link from "next/link"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { decode } from "html-entities"
+import { getPostCategories, getPostPath } from "@/lib/urls"
+import { Badge } from "@/components/ui/badge"
 
 interface BlogCardProps {
   post: Post
@@ -12,9 +14,9 @@ interface BlogCardProps {
 
 export function BlogCard({ post, featured = false, index = 0 }: BlogCardProps) {
   const featuredImage = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url
-  const primaryCategory = post._embedded?.["wp:term"]?.[0]?.find(
-    (term: Category | Tag) => term.taxonomy === "category"
-  )
+  const categories = getPostCategories(post)
+  const visibleCategories = categories.slice(0, featured ? 3 : 2)
+  const remainingCategories = categories.length - visibleCategories.length
 
   const title = decode(post.title.rendered)
   const excerpt = decode(post.excerpt.rendered.replace(/<[^>]*>/g, "").trim())
@@ -26,7 +28,7 @@ export function BlogCard({ post, featured = false, index = 0 }: BlogCardProps) {
 
   return (
     <ScrollReveal delay={Math.min(index * 0.05, 0.45)} className="h-full">
-      <Link href={`/${primaryCategory?.slug || "uncategorized"}/${post.slug}`} className="block h-full no-underline">
+      <Link href={getPostPath(post.slug)} className="block h-full no-underline">
         <article
           className={`brand-radius-lg group relative flex h-full flex-col overflow-hidden border-2 border-foreground bg-card transition-all duration-250 hover:z-10 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[9px_9px_0_0_var(--foreground)] ${
             featured ? "shadow-[7px_7px_0_0_var(--foreground)]" : "shadow-[5px_5px_0_0_var(--foreground)]"
@@ -43,13 +45,51 @@ export function BlogCard({ post, featured = false, index = 0 }: BlogCardProps) {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/20 to-transparent" />
 
-            <span className="brand-radius absolute left-3 top-3 inline-flex -rotate-2 border-2 border-foreground bg-secondary px-3 py-1 text-[0.6rem] font-black uppercase tracking-[0.12em] text-secondary-foreground shadow-[2px_2px_0_0_var(--foreground)]">
-              {primaryCategory?.name || "Uncategorized"}
-            </span>
+            <div className="absolute left-3 top-3 flex max-w-[calc(100%-1.5rem)] flex-wrap gap-2">
+              {visibleCategories.length > 0 ? (
+                <>
+                  {visibleCategories.map((category, categoryIndex) => (
+                    <Badge
+                      key={category.id}
+                      variant={categoryIndex === 0 ? "secondary" : "outline"}
+                      className="h-auto max-w-full -rotate-2 px-3 py-1 text-[0.58rem] font-black tracking-[0.12em]"
+                    >
+                      {category.name}
+                    </Badge>
+                  ))}
+                  {remainingCategories > 0 && (
+                    <Badge
+                      variant="outline"
+                      className="h-auto bg-card/90 px-3 py-1 text-[0.58rem] font-black tracking-[0.12em] backdrop-blur-sm"
+                    >
+                      +{remainingCategories}
+                    </Badge>
+                  )}
+                </>
+              ) : (
+                <Badge variant="secondary" className="h-auto -rotate-2 px-3 py-1 text-[0.58rem] font-black tracking-[0.12em]">
+                  Uncategorized
+                </Badge>
+              )}
+            </div>
           </div>
 
           <div className="relative flex grow flex-col p-5">
-            <time className="mb-3 text-[0.64rem] font-black uppercase tracking-[0.12em] text-muted-foreground">{date}</time>
+            <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+              <time className="text-[0.64rem] font-black uppercase tracking-[0.12em] text-muted-foreground">{date}</time>
+              {categories.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {categories.slice(0, 3).map((category) => (
+                    <span
+                      key={category.id}
+                      className="inline-flex items-center text-[0.58rem] font-black uppercase tracking-[0.1em] text-primary"
+                    >
+                      {category.name}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
 
             <h3
               className={`text-balance font-display leading-[0.9] text-foreground ${

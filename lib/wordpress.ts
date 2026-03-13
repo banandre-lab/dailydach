@@ -45,7 +45,6 @@ export interface WordPressResponse<T> {
 
 interface SitemapPost {
   slug: string;
-  category: string;
   date: string;
   modified: string;
   image?: string;
@@ -377,11 +376,32 @@ export function sanitizeInlineBackgrounds(content: string): string {
   });
 }
 
+/**
+ * Remove duplicated article chrome injected by the CMS when the app already
+ * renders the title, meta block, and featured image in the page hero.
+ */
+export function stripDuplicatedArticleChrome(content: string): string {
+  let cleaned = content.trimStart();
+
+  cleaned = cleaned.replace(
+    /^<h1\b[^>]*class="[^"]*\bpage-title\b[^"]*"[^>]*>[\s\S]*?<\/h1>\s*/i,
+    ""
+  );
+  cleaned = cleaned.replace(
+    /^<p\b[^>]*class="[^"]*\bmeta-info\b[^"]*"[^>]*>[\s\S]*?<\/p>\s*/i,
+    ""
+  );
+  cleaned = cleaned.replace(
+    /^<figure\b[^>]*class="[^"]*\bfigure-wrapper\b[^"]*\bimg-embed\b[^"]*"[^>]*>[\s\S]*?<\/figure>\s*/i,
+    ""
+  );
+
+  return cleaned;
+}
+
 // Function specifically for generateStaticParams - fetches ALL posts
-export async function getAllPostSlugs(): Promise<
-  { slug: string; category: string }[]
-> {
-  const allSlugs: { slug: string; category: string }[] = [];
+export async function getAllPostSlugs(): Promise<{ slug: string }[]> {
+  const allSlugs: { slug: string }[] = [];
   let page = 1;
   let hasMore = true;
 
@@ -391,27 +411,12 @@ export async function getAllPostSlugs(): Promise<
       {
         per_page: 100,
         page,
-        _fields: "slug,categories", // Fetch slug and categories
+        _fields: "slug",
       }
     );
 
     const posts = response.data;
-
-    // We need to fetch categories to map IDs to slugs
-    // This might be expensive if we do it one by one.
-    // Better to fetch all categories once and create a map.
-    const allCategories = await getAllCategories();
-    const categoryMap = new Map(allCategories.map((c) => [c.id, c.slug]));
-
-    allSlugs.push(
-      ...posts.map((post) => {
-        const categorySlug =
-          post.categories && post.categories.length > 0
-            ? categoryMap.get(post.categories[0]) || "uncategorized"
-            : "uncategorized";
-        return { slug: post.slug, category: categorySlug };
-      })
-    );
+    allSlugs.push(...posts.map((post) => ({ slug: post.slug })));
 
     hasMore = page < response.headers.totalPages;
     page++;
@@ -424,23 +429,17 @@ export async function getAllPostSlugs(): Promise<
 export async function getAllPostsForSitemap(): Promise<
   {
     slug: string;
-    category: string;
     modified: string;
     image?: string;
   }[]
 > {
   const allPosts: {
     slug: string;
-    category: string;
     modified: string;
     image?: string;
   }[] = [];
   let page = 1;
   let hasMore = true;
-
-  // Fetch categories once and create a map
-  const allCategories = await getAllCategories();
-  const categoryMap = new Map(allCategories.map((c) => [c.id, c.slug]));
 
   while (hasMore) {
     const response = await wordpressFetchWithPagination<Post[]>(
@@ -454,18 +453,11 @@ export async function getAllPostsForSitemap(): Promise<
 
     allPosts.push(
       ...response.data.map((post: Post) => {
-        const categorySlug =
-          post.categories && post.categories.length > 0
-            ? categoryMap.get(post.categories[0]) || "uncategorized"
-            : "uncategorized";
-
-        // Extract featured image URL from embedded data
         const featuredImage =
           post._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
 
         return {
           slug: post.slug,
-          category: categorySlug,
           modified: post.modified,
           image: featuredImage,
         };
@@ -522,8 +514,6 @@ export async function getPostsBatchForSitemap(
   const allPosts: SitemapPost[] = [];
   const startPage = Math.floor(offset / perPage) + 1;
   const endOffset = offset + limit;
-  const categories = await getAllCategories();
-  const categoryMap = new Map(categories.map((category) => [category.id, category.slug]));
 
   let currentOffset = offset;
   let page = startPage;
@@ -547,10 +537,6 @@ export async function getPostsBatchForSitemap(
     allPosts.push(
       ...posts.slice(skipFromStart, skipFromStart + takeCount).map((post) => ({
         slug: post.slug,
-        category:
-          post.categories && post.categories.length > 0
-            ? categoryMap.get(post.categories[0]) || "uncategorized"
-            : "uncategorized",
         date: post.date,
         modified: post.modified,
         image: post._embedded?.["wp:featuredmedia"]?.[0]?.source_url,

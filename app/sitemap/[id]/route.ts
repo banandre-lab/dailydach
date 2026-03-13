@@ -5,6 +5,7 @@ import {
   getAllTags,
   getPostsBatchForSitemap,
 } from "@/lib/wordpress";
+import { getCategoryPath, getPostPath } from "@/lib/urls";
 
 import { siteConfig, sitemapConfig } from "../../config";
 
@@ -123,7 +124,7 @@ async function generatePostUrls(batchIndex: number): Promise<SitemapUrl[]> {
   const posts = await getPostsBatchForSitemap(offset, sitemapConfig.postsPerSitemap);
 
   return posts.map((post) => ({
-    loc: `${siteConfig.url}/${post.category}/${post.slug}`,
+    loc: `${siteConfig.url}${getPostPath(post.slug)}`,
     lastmod: new Date(post.modified || post.date).toISOString(),
     changefreq: "weekly",
     priority: 0.9,
@@ -136,7 +137,7 @@ async function generateCategoryUrls(): Promise<SitemapUrl[]> {
   const now = new Date().toISOString();
 
   return categories.map((category) => ({
-    loc: `${siteConfig.url}/${category.slug}`,
+    loc: `${siteConfig.url}${getCategoryPath(category.slug)}`,
     lastmod: now,
     changefreq: "daily",
     priority: 0.8,

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import type { Post, Category, Tag } from "@/lib/wordpress.d"
+import type { Post } from "@/lib/wordpress.d"
 import {
   Carousel,
   CarouselContent,
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/carousel"
 import Autoplay from "embla-carousel-autoplay"
 import { decode } from "html-entities"
+import { getPostPath, getPrimaryCategory } from "@/lib/urls"
 
 interface TopPostsSliderProps {
   posts: Post[]
@@ -54,13 +55,11 @@ export function TopPostsSlider({ posts }: TopPostsSliderProps) {
         <CarouselContent>
           {sliderPosts.map((post) => {
             const featuredImage = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url
-            const primaryCategory = post._embedded?.["wp:term"]?.[0]?.find(
-              (term: Category | Tag) => term.taxonomy === "category"
-            )
+            const primaryCategory = getPrimaryCategory(post)
 
             return (
               <CarouselItem key={post.id}>
-                <Link href={`/${primaryCategory?.slug || "uncategorized"}/${post.slug}`}>
+                <Link href={getPostPath(post.slug)}>
                   <div className="relative h-80 cursor-pointer overflow-hidden border-2 border-foreground/90 bg-muted shadow-[4px_4px_0_0_var(--foreground)] sm:h-[420px]">
                     <img
                       src={featuredImage || "/placeholder.svg"}

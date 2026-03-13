@@ -7,6 +7,7 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { PaginationControls } from "@/components/pagination-controls"
 import { getCategoryBySlug, getPostsPaginated } from "@/lib/wordpress"
+import { getCategoryPath, getCategoryUrl } from "@/lib/urls"
 import type { Post } from "@/lib/wordpress.d"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { BlogCard } from "@/components/blog-card"
@@ -28,7 +29,7 @@ export async function generateMetadata({
     return {}
   }
 
-  const canonicalUrl = `https://www.dailydach.com/${category.slug}`
+  const canonicalUrl = getCategoryUrl(category.slug)
 
   return {
     title: `${category.name} Stories - DailyDach`,
@@ -128,9 +129,9 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
             currentPage={page}
             totalPages={totalPages}
             buildHref={(p) => {
-              const params = new URLSearchParams()
-              if (p > 1) params.set("page", String(p))
-              return `/${slug}${params.toString() ? `?${params.toString()}` : ""}`
+              const nextParams = new URLSearchParams()
+              if (p > 1) nextParams.set("page", String(p))
+              return `${getCategoryPath(slug)}${nextParams.toString() ? `?${nextParams.toString()}` : ""}`
             }}
           />
         </div>

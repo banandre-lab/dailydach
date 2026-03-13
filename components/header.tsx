@@ -29,22 +29,19 @@ export function Header() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
       className={cn(
-        "sticky top-0 z-50 w-full border-b-2 border-foreground/30 transition-all duration-200",
-        scrolled ? "bg-background/92 backdrop-blur-md" : "bg-transparent"
+        "noise-layer sticky top-0 z-50 w-full border-b-2 border-foreground/30 bg-card transition-all duration-200",
+        scrolled ? "backdrop-blur-md" : ""
       )}
     >
       <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-3">
           <Link href="/" className="relative inline-flex items-center gap-2" aria-label="DailyDach Home">
-            <span className="brand-radius hidden -rotate-2 border-2 border-foreground bg-primary px-2.5 py-1 text-[0.58rem] font-black uppercase tracking-[0.12em] text-primary-foreground shadow-[2px_2px_0_0_var(--foreground)] sm:inline-flex">
-              Duck Signal
-            </span>
             <span className="brand-radius-lg relative inline-flex -rotate-1 border-2 border-foreground bg-secondary px-3.5 py-2 shadow-[4px_4px_0_0_var(--foreground)]">
               <span className="font-display text-2xl leading-none text-secondary-foreground sm:text-3xl">DailyDach</span>
             </span>
           </Link>
 
-          <nav className="brand-radius-lg relative hidden items-center gap-1 border-2 border-foreground bg-card p-1 shadow-[4px_4px_0_0_var(--foreground)] md:flex">
+          <nav className="relative hidden items-center gap-1 md:flex">
             <NavLink href="/">Home</NavLink>
             <NavLink href="/stories">Stories</NavLink>
             <NavLink href="/impressum">About</NavLink>

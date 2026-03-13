@@ -4,10 +4,10 @@ import { XLogoIcon } from "@/components/ui/x-logo"
 
 export function Footer() {
   return (
-    <footer className="relative mt-24 border-t-2 border-foreground bg-card">
+    <footer className="noise-layer relative mt-24 border-t-2 border-foreground/70 bg-card">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-          <section className="maxi-panel noise-layer p-6 lg:col-span-5">
+          <section className="py-2 lg:col-span-5">
             <Link href="/" className="mb-4 inline-flex items-center" aria-label="DailyDach home">
               <span className="brand-radius-lg inline-flex -rotate-1 border-2 border-foreground bg-secondary px-4 py-2 shadow-[4px_4px_0_0_var(--foreground)]">
                 <span className="font-display text-3xl leading-none text-secondary-foreground">DailyDach</span>
@@ -22,7 +22,7 @@ export function Footer() {
             </div>
           </section>
 
-          <section className="maxi-panel p-6 lg:col-span-3">
+          <section className="py-2 lg:col-span-3">
             <p className="section-kicker mb-4">Explore</p>
             <nav className="space-y-1">
               <FooterLink href="/stories">Stories</FooterLink>
@@ -31,7 +31,7 @@ export function Footer() {
             </nav>
           </section>
 
-          <section className="maxi-panel p-6 lg:col-span-4">
+          <section className="py-2 lg:col-span-4">
             <p className="section-kicker mb-4">Newsletter</p>
             <h3 className="font-display text-3xl leading-[0.9]">Weekly Story Drop</h3>
             <p className="mb-5 mt-2 text-sm text-muted-foreground">Sharp voices. Visual culture. Zero filler.</p>

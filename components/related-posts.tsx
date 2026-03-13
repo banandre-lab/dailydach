@@ -2,6 +2,7 @@
 
 import type { Post, RelatedPost } from "@/lib/wordpress.d"
 import { BlogCard } from "@/components/blog-card"
+import { getCategoryPath } from "@/lib/urls"
 
 interface RelatedPostsProps {
   posts: RelatedPost[]
@@ -69,7 +70,7 @@ function transformRelatedPostToPost(relatedPost: RelatedPost): Post {
             id: categoryId,
             count: 0,
             description: "",
-            link: `/${categorySlug}`,
+            link: getCategoryPath(categorySlug),
             name: categoryName,
             slug: categorySlug,
             taxonomy: "category" as const,
@@ -87,11 +88,9 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
 
   return (
     <section className="mt-4 border-t-2 border-foreground/90 pt-12">
-      <div className="maxi-panel mb-8 flex flex-col gap-2 p-6">
-        <span className="section-kicker w-fit">Keep Reading</span>
-        <h2 className="font-display text-3xl leading-[0.9] sm:text-4xl">Related Stories</h2>
-        <div className="editorial-rule-thin mt-2" />
-      </div>
+      <h2 className="mb-8 font-display text-3xl font-black leading-[0.9] sm:text-4xl">
+        Related Stories
+      </h2>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {posts.map((post, index) => (
