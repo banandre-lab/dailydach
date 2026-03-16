@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowLeft } from "lucide-react"
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
@@ -11,6 +12,17 @@ import { getCategoryPath, getCategoryUrl } from "@/lib/urls"
 import type { Post } from "@/lib/wordpress.d"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { BlogCard } from "@/components/blog-card"
+
+const COUNTRY_MASCOTS: Record<string, string> = {
+  austria: "/dailydach-austria.webp",
+  germany: "/dailydach-germany.webp",
+  switzerland: "/dailydach-switzerland.webp",
+}
+
+
+function getMascotSrc(slug: string): string {
+  return COUNTRY_MASCOTS[slug.toLowerCase()] ?? "/dailydach.webp"
+}
 
 interface CategoryPageProps {
   params: Promise<{ category: string }>
@@ -69,8 +81,10 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   const allPosts: Post[] = response.data
   const { totalPages } = response.headers
 
-  const featuredPosts = page === 1 ? allPosts.slice(0, 3) : []
-  const gridPosts = page === 1 ? allPosts.slice(3) : allPosts
+  const heroPost = page === 1 ? allPosts[0] : null
+  const gridPosts = page === 1 ? allPosts.slice(1) : allPosts
+
+  const mascotSrc = getMascotSrc(slug)
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -79,48 +93,47 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
       <section className="mx-auto max-w-7xl px-4 pb-10 pt-10 sm:px-6 lg:px-8 lg:pt-14">
         <Link
           href="/stories"
-          className="mb-5 inline-flex items-center gap-2 border-2 border-foreground/90 bg-card px-4 py-2 text-[0.65rem] font-black uppercase tracking-[0.1em] text-muted-foreground shadow-[2px_2px_0_0_var(--foreground)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:text-foreground hover:shadow-[3px_3px_0_0_var(--foreground)]"
+          className="mb-8 inline-flex items-center gap-2 border-2 border-foreground/90 bg-card px-4 py-2 text-[0.65rem] font-black uppercase tracking-[0.1em] text-muted-foreground shadow-[2px_2px_0_0_var(--foreground)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:text-foreground hover:shadow-[3px_3px_0_0_var(--foreground)]"
         >
           <ArrowLeft className="size-4" />
           Back to stories
         </Link>
 
-        <ScrollReveal>
-          <div className="bento-card p-7 sm:p-9">
-            <span className="section-kicker mb-3">Country Channel</span>
-            <h1 className="headline-lg mb-3 text-balance">{category.name}</h1>
-            <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
-              {category.description || `Explore stories, context, and local voices from ${category.name}.`}
-            </p>
-          </div>
-        </ScrollReveal>
-      </section>
-
-      {featuredPosts.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
-          <ScrollReveal>
-            <div className="mb-5 flex items-center justify-between">
-              <h2 className="font-display text-3xl font-bold italic">Featured in {category.name}</h2>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-center">
+          {/* Left: mascot + category name */}
+          <ScrollReveal className="lg:col-span-5">
+            <div className="flex flex-col items-center gap-4 p-2 text-center sm:p-4">
+              <Image
+                src={mascotSrc}
+                alt={`${category.name} mascot`}
+                width={750}
+                height={1000}
+                priority
+                className="h-auto w-full max-w-xs object-contain sm:max-w-sm"
+              />
+              <h1 className="headline-lg text-balance leading-none">{category.name}</h1>
             </div>
           </ScrollReveal>
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-            {featuredPosts.map((post, index) => (
-              <div key={post.id} className={index === 0 ? "lg:col-span-6" : "lg:col-span-3"}>
-                <BlogCard post={post} featured={index === 0} index={index} />
+
+          {/* Right: single post, centered */}
+          {heroPost && (
+            <ScrollReveal delay={0.08} className="flex items-center justify-center lg:col-span-7">
+              <div className="w-full max-w-md">
+                <BlogCard post={heroPost} featured index={0} />
               </div>
-            ))}
-          </div>
-        </section>
-      )}
+            </ScrollReveal>
+          )}
+        </div>
+      </section>
 
       <section className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-        <div className="mb-6 mt-6">
+        <div className="mb-6 mt-2">
           <h2 className="font-display text-3xl font-bold italic">More stories</h2>
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {gridPosts.map((post, index) => (
-            <BlogCard key={post.id} post={post} index={index + featuredPosts.length} />
+            <BlogCard key={post.id} post={post} index={index + 1} />
           ))}
         </div>
 

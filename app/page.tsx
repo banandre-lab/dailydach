@@ -61,9 +61,9 @@ export default async function Home() {
           <ScrollReveal delay={0.08} className="hidden lg:col-span-5 lg:block">
             <div className="flex h-full items-center justify-center">
               <Image
-                src="/dailydach_logo.png"
+                src="/dailydach.webp"
                 alt="DailyDach logo"
-                width={1200}
+                width={750}
                 height={1200}
                 priority
                 className="h-auto w-full max-w-md object-contain"
