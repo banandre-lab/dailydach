@@ -45,5 +45,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
+.meili_data/
 .idea/
