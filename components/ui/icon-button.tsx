@@ -1,6 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { InkBorder } from "@/components/ui/ink-border"
+import { interactiveSurfaceClass } from "@/components/ui/interactive-surface"
 
 interface IconButtonProps {
   label: string
@@ -11,8 +12,8 @@ interface IconButtonProps {
 
 const iconButtonClass = {
   default:
-    "brand-radius relative isolate overflow-hidden inline-flex size-9 cursor-pointer items-center justify-center bg-card text-foreground transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-secondary/65",
-  hero: "brand-radius relative isolate overflow-hidden inline-flex size-9 cursor-pointer items-center justify-center bg-white/10 text-white transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-white/20",
+    `${interactiveSurfaceClass} size-9 bg-card text-foreground hover:bg-secondary/65`,
+  hero: `${interactiveSurfaceClass} size-9 bg-white/10 text-white hover:bg-white/20`,
 }
 
 export function IconButton({

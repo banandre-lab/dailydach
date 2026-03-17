@@ -9,6 +9,8 @@ import { ModeToggle } from "@/components/mode-toggle"
 import { SearchToolbar } from "@/components/search-toolbar"
 import { Logo } from "@/components/logo"
 import { cn } from "@/lib/utils"
+import { InkBorder } from "@/components/ui/ink-border"
+import { interactiveSurfaceClass } from "@/components/ui/interactive-surface"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -125,8 +127,12 @@ function NavLink({
   return (
     <Link
       href={href}
-      className="brand-radius border-2 border-transparent px-3 py-1.5 text-[0.66rem] font-black uppercase tracking-[0.12em] text-foreground transition-all hover:-translate-y-0.5 hover:border-foreground hover:bg-primary"
+      className={cn(
+        interactiveSurfaceClass,
+        "bg-card px-3 py-1.5 text-[0.66rem] font-black uppercase tracking-[0.12em] text-foreground hover:bg-secondary/65"
+      )}
     >
+      <InkBorder rx={8} />
       {children}
     </Link>
   )
@@ -144,9 +150,13 @@ function MobileNavLink({
   return (
     <Link
       href={href}
-      className="brand-radius border-2 border-transparent px-3 py-2 text-sm font-semibold text-foreground transition-all hover:border-foreground hover:bg-muted"
+      className={cn(
+        interactiveSurfaceClass,
+        "w-full justify-start bg-card px-3 py-2 text-sm font-semibold text-foreground hover:bg-secondary/65"
+      )}
       onClick={onClick}
     >
+      <InkBorder rx={8} />
       {children}
     </Link>
   )

@@ -85,21 +85,6 @@ function Card({
               x="1.8"
               y="1.8"
             />
-            <rect
-              fill="none"
-              filter={`url(#${filterId})`}
-              height="93"
-              rx="6.5"
-              ry="6.5"
-              stroke="currentColor"
-              strokeDasharray="8 11"
-              strokeOpacity="0.35"
-              strokeWidth="0.75"
-              vectorEffect="non-scaling-stroke"
-              width="92.8"
-              x="3.8"
-              y="4.1"
-            />
           </>
         ) : (
           <>
@@ -112,16 +97,6 @@ function Card({
               strokeLinejoin="round"
               strokeOpacity="0.92"
               strokeWidth="1.5"
-              vectorEffect="non-scaling-stroke"
-            />
-            <path
-              d="M 2.2 4.4 L 2.2 96.6 L 97.8 96.6 L 97.8 4.4"
-              fill="none"
-              filter={`url(#${filterId})`}
-              stroke="currentColor"
-              strokeDasharray="8 11"
-              strokeOpacity="0.35"
-              strokeWidth="0.75"
               vectorEffect="non-scaling-stroke"
             />
           </>

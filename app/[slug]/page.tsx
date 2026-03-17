@@ -34,6 +34,7 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { PostContent } from "@/components/post-content"
 import { Card } from "@/components/ui/card"
 import { InkBorder } from "@/components/ui/ink-border"
+import { interactiveSurfaceClass } from "@/components/ui/interactive-surface"
 
 export const dynamicParams = true
 
@@ -315,10 +316,13 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
               {tags.length > 0 && (
                 <div className="mt-8 flex flex-wrap gap-2 border-t-2 border-foreground/80 pt-6">
                   {tags.map((tag) => (
-                    <Link key={tag.id} href={getTagPath(tag.slug)}>
-                      <Badge variant="ghost" className="cursor-pointer">
-                        #{tag.name}
-                      </Badge>
+                    <Link
+                      key={tag.id}
+                      href={getTagPath(tag.slug)}
+                      className={`${interactiveSurfaceClass} bg-card px-3 py-1.5 text-[0.68rem] font-black uppercase tracking-[0.1em] text-foreground hover:bg-secondary/65`}
+                    >
+                      <InkBorder rx={8} />
+                      #{tag.name}
                     </Link>
                   ))}
                 </div>

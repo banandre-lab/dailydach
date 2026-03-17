@@ -2,8 +2,10 @@ import Link from "next/link"
 import { FooterNewsletter } from "@/components/footer-newsletter"
 import { XLogoIcon } from "@/components/ui/x-logo"
 import { Logo } from "@/components/logo"
-import { IconLink } from "@/components/ui/icon-button"
 import { Badge } from "@/components/ui/badge"
+import { InkBorder } from "@/components/ui/ink-border"
+import { cn } from "@/lib/utils"
+import { interactiveSurfaceClass } from "@/components/ui/interactive-surface"
 
 export function Footer() {
   return (
@@ -17,9 +19,14 @@ export function Footer() {
               think deeper, and drop your own voice.
             </p>
             <div className="mt-6 flex items-center gap-3">
-              <IconLink href="https://x.com/dailydach" label="X">
-                <XLogoIcon className="size-4" />
-              </IconLink>
+              <Link
+                href="https://x.com/dailydach"
+                aria-label="X"
+                title="X"
+                className="inline-flex size-9 items-center justify-center rounded-[4px] border-2 border-foreground/90 bg-card text-foreground transition-all duration-150 outline-none hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-secondary/65 focus-visible:ring-[3px] focus-visible:ring-ring/40"
+              >
+                <XLogoIcon className="h-3.5 w-3.5 shrink-0" />
+              </Link>
             </div>
           </section>
 
@@ -43,15 +50,9 @@ export function Footer() {
         <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t-2 border-foreground/70 pt-6 text-xs font-black uppercase tracking-[0.11em] text-muted-foreground sm:flex-row sm:items-center">
           <p>&copy; {new Date().getFullYear()} DailyDach</p>
           <div className="flex items-center gap-4">
-            <Link href="/privacy" className="transition-colors hover:text-foreground">
-              Privacy
-            </Link>
-            <Link href="/terms" className="transition-colors hover:text-foreground">
-              Terms
-            </Link>
-            <Link href="/cookies" className="transition-colors hover:text-foreground">
-              Cookies
-            </Link>
+            <FooterMetaLink href="/privacy">Privacy</FooterMetaLink>
+            <FooterMetaLink href="/terms">Terms</FooterMetaLink>
+            <FooterMetaLink href="/cookies">Cookies</FooterMetaLink>
           </div>
         </div>
       </div>
@@ -70,8 +71,33 @@ function FooterLink({
   return (
     <Link
       href={href}
-      className="brand-radius block border-2 border-transparent px-2 py-1.5 text-sm font-semibold text-foreground transition-all hover:border-foreground hover:bg-muted"
+      className={cn(
+        interactiveSurfaceClass,
+        "w-full justify-start bg-card px-2 py-1.5 text-sm font-semibold text-foreground hover:bg-secondary/65"
+      )}
     >
+      <InkBorder rx={8} />
+      {children}
+    </Link>
+  )
+}
+
+function FooterMetaLink({
+  href,
+  children,
+}: {
+  href: string
+  children: React.ReactNode
+}) {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        interactiveSurfaceClass,
+        "bg-transparent px-2 py-1 text-xs font-black uppercase tracking-[0.11em] text-muted-foreground hover:bg-muted/65 hover:text-foreground"
+      )}
+    >
+      <InkBorder rx={8} />
       {children}
     </Link>
   )

@@ -67,21 +67,6 @@ export function InkBorder({ rx = 5.5, className }: InkBorderProps) {
         x="1.8"
         y="1.8"
       />
-      <rect
-        fill="none"
-        filter={`url(#${filterId})`}
-        height="93"
-        rx={rx * 0.85}
-        ry={rx * 0.85}
-        stroke="currentColor"
-        strokeDasharray="8 11"
-        strokeOpacity="0.35"
-        strokeWidth="0.75"
-        vectorEffect="non-scaling-stroke"
-        width="92.8"
-        x="3.8"
-        y="4.1"
-      />
     </svg>
   )
 }
