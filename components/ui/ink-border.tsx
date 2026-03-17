@@ -17,7 +17,6 @@ export function InkBorder({ rx = 5.5, className }: InkBorderProps) {
   const baseX = (0.010 + (signature % 5) * 0.0015).toFixed(4)
   const baseY = (0.018 + (signature % 7) * 0.0016).toFixed(4)
   const scale = Number((1.6 + (signature % 4) * 0.22).toFixed(2))
-  const duration = 7 + (signature % 4)
 
   return (
     <svg
@@ -42,28 +41,14 @@ export function InkBorder({ rx = 5.5, className }: InkBorderProps) {
             result="noise"
             seed={noiseSeed}
             type="fractalNoise"
-          >
-            <animate
-              attributeName="baseFrequency"
-              dur={`${duration}s`}
-              repeatCount="indefinite"
-              values={`${baseX} ${baseY};${(Number(baseX) + 0.0028).toFixed(4)} ${(Number(baseY) + 0.0035).toFixed(4)};${(Number(baseX) - 0.0018).toFixed(4)} ${(Number(baseY) - 0.0025).toFixed(4)};${baseX} ${baseY}`}
-            />
-          </feTurbulence>
+          />
           <feDisplacementMap
             in="SourceGraphic"
             in2="noise"
             scale={scale}
             xChannelSelector="R"
             yChannelSelector="G"
-          >
-            <animate
-              attributeName="scale"
-              dur={`${duration - 1}s`}
-              repeatCount="indefinite"
-              values={`${scale};${(scale + 0.9).toFixed(2)};${(scale - 0.7).toFixed(2)};${scale}`}
-            />
-          </feDisplacementMap>
+          />
         </filter>
       </defs>
       <rect
@@ -76,7 +61,7 @@ export function InkBorder({ rx = 5.5, className }: InkBorderProps) {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeOpacity="0.92"
-        strokeWidth="1.15"
+        strokeWidth="1.5"
         vectorEffect="non-scaling-stroke"
         width="96.4"
         x="1.8"
@@ -91,7 +76,7 @@ export function InkBorder({ rx = 5.5, className }: InkBorderProps) {
         stroke="currentColor"
         strokeDasharray="8 11"
         strokeOpacity="0.35"
-        strokeWidth="0.62"
+        strokeWidth="0.75"
         vectorEffect="non-scaling-stroke"
         width="92.8"
         x="3.8"

@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
 import { SearchToolbar } from "@/components/search-toolbar"
+import { Logo } from "@/components/logo"
 import { cn } from "@/lib/utils"
 
 export function Header() {
@@ -35,11 +36,7 @@ export function Header() {
     >
       <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-3">
-          <Link href="/" className="relative inline-flex items-center gap-2" aria-label="DailyDach Home">
-            <span className="brand-radius-lg relative inline-flex -rotate-1 border-2 border-foreground bg-secondary px-3.5 py-2 shadow-[4px_4px_0_0_var(--foreground)]">
-              <span className="font-display text-2xl leading-none text-secondary-foreground sm:text-3xl">DailyDach</span>
-            </span>
-          </Link>
+          <Logo size="sm" />
 
           <nav className="relative hidden items-center gap-1 md:flex">
             <NavLink href="/">Home</NavLink>
@@ -86,7 +83,7 @@ export function Header() {
               transition={{ duration: 0.2, ease: "easeInOut" }}
               className="overflow-hidden md:hidden"
             >
-              <div className="brand-radius-lg mt-3 border-2 border-foreground bg-card p-3 shadow-[4px_4px_0_0_var(--foreground)]">
+              <div className="brand-radius-lg mt-3 border-2 border-foreground bg-card p-3">
                 <div className="mb-3 border-b-2 border-foreground/70 pb-2 text-[0.66rem] font-black uppercase tracking-[0.13em] text-muted-foreground">
                   Navigate DailyDach
                 </div>

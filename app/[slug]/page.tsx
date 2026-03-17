@@ -29,9 +29,9 @@ import {
   getPrimaryCategory,
   getTagPath,
 } from "@/lib/urls"
-import type { Post, RelatedPost } from "@/lib/wordpress.d"
+import type { RelatedPost } from "@/lib/wordpress.d"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
-import { FluidBackground } from "@/components/ui/fluid-background"
+import { PostContent } from "@/components/post-content"
 import { Card } from "@/components/ui/card"
 import { InkBorder } from "@/components/ui/ink-border"
 
@@ -240,9 +240,7 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
   }
 
   return (
-    <main className="relative min-h-screen bg-background">
-      <FluidBackground />
-
+    <main className="min-h-screen bg-background">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <script
         type="application/ld+json"
@@ -309,22 +307,16 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
           <ScrollReveal className="lg:col-span-8">
             <article>
               <div>
-                <div className="blog-post-content drop-cap">
-                  {articleContent && (
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: articleContent,
-                      }}
-                    />
-                  )}
-                </div>
+                {articleContent && (
+                  <PostContent html={articleContent} className="blog-post-content drop-cap" />
+                )}
               </div>
 
               {tags.length > 0 && (
                 <div className="mt-8 flex flex-wrap gap-2 border-t-2 border-foreground/80 pt-6">
                   {tags.map((tag) => (
                     <Link key={tag.id} href={getTagPath(tag.slug)}>
-                      <Badge variant="outline" className="cursor-pointer border-2 border-foreground bg-card px-3 py-1 text-[0.62rem] font-black uppercase tracking-[0.1em]">
+                      <Badge variant="ghost" className="cursor-pointer">
                         #{tag.name}
                       </Badge>
                     </Link>
@@ -341,7 +333,7 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
               </div>
 
               <Card frame="full" className="py-0 hover:translate-y-0 shadow-[7px_7px_0_0_hsl(var(--foreground))]">
-                <div className="border-b-2 border-foreground bg-secondary px-5 py-4 text-secondary-foreground">
+                <div className="border-foreground bg-secondary px-5 py-4 text-secondary-foreground">
                   <h2 className="font-display text-2xl leading-[0.92]">Follow the angles</h2>
                 </div>
                 <div className="space-y-3 p-4">
@@ -374,7 +366,7 @@ export default async function BlogPostPage({ params, searchParams }: BlogPostPag
 
               {categoryRailItems.length > 0 && (
                 <Card frame="full" className="py-0 hover:translate-y-0 shadow-[7px_7px_0_0_hsl(var(--foreground))]">
-                  <div className="border-b-2 border-foreground bg-secondary px-5 py-4 text-secondary-foreground">
+                  <div className="border-foreground bg-secondary px-5 py-4 text-secondary-foreground">
                     <h2 className="font-display text-2xl leading-[0.92]">Fresh picks</h2>
                   </div>
                   <div className="space-y-2.5 p-5">

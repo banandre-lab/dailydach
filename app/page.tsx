@@ -5,7 +5,6 @@ import { BlogGrid } from "@/components/blog-grid"
 import { Footer } from "@/components/footer"
 import { getPostsPaginated } from "@/lib/wordpress"
 import type { Post } from "@/lib/wordpress.d"
-import { FluidBackground } from "@/components/ui/fluid-background"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { Button } from "@/components/ui/button"
 
@@ -15,8 +14,7 @@ export default async function Home() {
   const { totalPages } = response.headers
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-background">
-      <FluidBackground />
+    <main className="min-h-screen bg-background">
       <Header />
 
       <section className="mx-auto max-w-7xl px-4 pb-10 pt-8 sm:px-6 lg:px-8 lg:pt-12">

@@ -89,7 +89,7 @@ export function SubscriptionForm({
           ? "Successfully unsubscribed."
           : "Successfully subscribed!"
       );
-    } catch (_err) {
+    } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);

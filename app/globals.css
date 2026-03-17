@@ -87,13 +87,6 @@
   --sidebar-border: oklch(0.2 0.04 258 / 20%);
   --sidebar-ring: oklch(0.8 0.16 95);
 
-  --map-fill: rgba(215, 167, 12, 0.18);
-  --map-fill-hover: rgba(62, 178, 225, 0.34);
-  --map-stroke: rgba(20, 15, 44, 0.55);
-  --map-stroke-inactive: rgba(20, 15, 44, 0.19);
-  --map-gradient-start: rgba(215, 167, 12, 0.28);
-  --map-gradient-end: rgba(62, 178, 225, 0.08);
-
   --blog-post-text-color: #14122a;
   --accent-hover: color-mix(in oklab, var(--accent) 85%, white);
 }
@@ -133,35 +126,8 @@
   --sidebar-border: oklch(0.95 0.02 95 / 18%);
   --sidebar-ring: oklch(0.78 0.16 95);
 
-  --map-fill: rgba(215, 167, 12, 0.26);
-  --map-fill-hover: rgba(62, 178, 225, 0.46);
-  --map-stroke: rgba(236, 224, 176, 0.52);
-  --map-stroke-inactive: rgba(236, 224, 176, 0.2);
-  --map-gradient-start: rgba(215, 167, 12, 0.34);
-  --map-gradient-end: rgba(62, 178, 225, 0.13);
-
   --blog-post-text-color: #f8efc8;
   --accent-hover: color-mix(in oklab, var(--accent) 85%, black);
-}
-
-@keyframes drift {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) rotate(0deg);
-  }
-  50% {
-    transform: translate3d(0, -10px, 0) rotate(1deg);
-  }
-}
-
-@keyframes pulseEdge {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 color-mix(in oklab, var(--accent) 40%, transparent);
-  }
-  50% {
-    box-shadow: 0 0 0 8px color-mix(in oklab, var(--accent) 0%, transparent);
-  }
 }
 
 @keyframes ticker {
@@ -186,20 +152,6 @@
     @apply bg-background text-foreground;
     font-family: var(--font-sans), sans-serif;
     min-height: 100dvh;
-    background-image:
-      radial-gradient(circle at 6% 8%, color-mix(in oklab, var(--secondary) 76%, transparent) 0 8%, transparent 36%),
-      radial-gradient(circle at 85% 12%, color-mix(in oklab, var(--primary) 54%, transparent) 0 10%, transparent 38%),
-      radial-gradient(circle at 72% 76%, color-mix(in oklab, var(--accent) 34%, transparent) 0 12%, transparent 34%),
-      repeating-linear-gradient(130deg, transparent 0 24px, color-mix(in oklab, var(--foreground) 4%, transparent) 24px 26px, transparent 26px 52px);
-    background-attachment: fixed;
-  }
-
-  .dark body {
-    background-image:
-      radial-gradient(circle at 6% 8%, color-mix(in oklab, var(--secondary) 40%, transparent) 0 10%, transparent 36%),
-      radial-gradient(circle at 85% 12%, color-mix(in oklab, var(--primary) 46%, transparent) 0 12%, transparent 40%),
-      radial-gradient(circle at 72% 76%, color-mix(in oklab, var(--accent) 28%, transparent) 0 14%, transparent 38%),
-      repeating-linear-gradient(130deg, transparent 0 24px, color-mix(in oklab, var(--foreground) 8%, transparent) 24px 26px, transparent 26px 52px);
   }
 
   h1,
@@ -297,14 +249,6 @@
   .maxi-hero-title {
     @apply font-display text-5xl leading-[0.86] sm:text-6xl lg:text-8xl;
     text-wrap: balance;
-  }
-
-  .maxi-burst {
-    animation: drift 6s ease-in-out infinite;
-  }
-
-  .maxi-outline-pulse {
-    animation: pulseEdge 2.5s ease-in-out infinite;
   }
 
   .maxi-ticker-track {
@@ -471,16 +415,15 @@
 }
 
 .blog-post-content img {
-  @apply my-10 w-full border-2 border-foreground object-cover;
-  box-shadow: 5px 5px 0 0 var(--foreground);
+  @apply my-10 w-full object-cover;
 }
 
 .blog-post-content figure {
-  @apply my-10;
+  @apply m-0;
 }
 
 .blog-post-content figure img {
-  @apply my-0;
+  @apply my-0 block w-full;
 }
 
 .blog-post-content figcaption,
@@ -489,9 +432,26 @@
   @apply mt-2 border-l-2 border-foreground/40 pl-3 text-sm leading-relaxed text-muted-foreground;
 }
 
+/* Image card — only image inside the ink border */
+.blog-post-content .post-figure figure,
+.blog-post-content .post-figure p {
+  @apply m-0;
+}
+
+.blog-post-content .post-figure figure img,
+.blog-post-content .post-figure p img {
+  @apply my-0 block w-full object-cover;
+}
+
+/* Caption rendered outside the card */
+.blog-post-content .post-figure-caption figcaption,
+.blog-post-content .post-figure-caption .wp-caption-text,
+.blog-post-content .post-figure-caption .figure-caption {
+  @apply border-l-2 border-primary/50 pl-3 pt-2 text-sm leading-relaxed text-muted-foreground;
+}
+
 .blog-post-content pre {
   @apply my-10 overflow-x-auto border-2 border-foreground bg-foreground p-6 font-mono text-sm text-background;
-  box-shadow: 5px 5px 0 0 var(--primary);
 }
 
 .blog-post-content code {

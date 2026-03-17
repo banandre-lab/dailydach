@@ -22,7 +22,6 @@ function Card({
   const baseX = (0.010 + (signature % 5) * 0.0015).toFixed(4)
   const baseY = (0.018 + (signature % 7) * 0.0016).toFixed(4)
   const displacementScale = Number((2.1 + (signature % 5) * 0.25).toFixed(2))
-  const duration = 7 + (signature % 4)
 
   return (
     <div
@@ -30,7 +29,7 @@ function Card({
       data-size={size}
       data-frame={frame}
       className={cn(
-        "group/card relative isolate flex flex-col gap-4 overflow-hidden border border-transparent bg-[linear-gradient(180deg,hsl(var(--card))_0%,hsl(var(--card)/0.94)_100%)] py-4 text-sm text-card-foreground shadow-[3px_4px_0_0_hsl(var(--foreground)/0.82)] transition-transform duration-300 hover:-translate-y-0.5 has-data-[slot=card-footer]:pb-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-none *:[img:last-child]:rounded-none before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_18%_8%,hsl(var(--foreground)/0.05)_0,transparent_56%),radial-gradient(circle_at_84%_88%,hsl(var(--foreground)/0.03)_0,transparent_48%)] before:opacity-70",
+        "group/card relative isolate flex flex-col gap-4 overflow-hidden border border-transparent bg-[linear-gradient(180deg,hsl(var(--card))_0%,hsl(var(--card)/0.94)_100%)] py-4 text-sm text-card-foreground transition-transform duration-300 hover:-translate-y-0.5 has-data-[slot=card-footer]:pb-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-none *:[img:last-child]:rounded-none before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_18%_8%,hsl(var(--foreground)/0.05)_0,transparent_56%),radial-gradient(circle_at_84%_88%,hsl(var(--foreground)/0.03)_0,transparent_48%)] before:opacity-70",
         frame === "full" ? "rounded-[18px]" : "rounded-b-[18px] rounded-t-none",
         className
       )}
@@ -58,28 +57,14 @@ function Card({
               result="noise"
               seed={noiseSeed}
               type="fractalNoise"
-            >
-              <animate
-                attributeName="baseFrequency"
-                dur={`${duration}s`}
-                repeatCount="indefinite"
-                values={`${baseX} ${baseY};${(Number(baseX) + 0.0028).toFixed(4)} ${(Number(baseY) + 0.0035).toFixed(4)};${(Number(baseX) - 0.0018).toFixed(4)} ${(Number(baseY) - 0.0025).toFixed(4)};${baseX} ${baseY}`}
-              />
-            </feTurbulence>
+            />
             <feDisplacementMap
               in="SourceGraphic"
               in2="noise"
               scale={displacementScale}
               xChannelSelector="R"
               yChannelSelector="G"
-            >
-              <animate
-                attributeName="scale"
-                dur={`${duration - 1}s`}
-                repeatCount="indefinite"
-                values={`${displacementScale};${(displacementScale + 1.1).toFixed(2)};${(displacementScale - 0.9).toFixed(2)};${displacementScale}`}
-              />
-            </feDisplacementMap>
+            />
           </filter>
         </defs>
         {frame === "full" ? (
@@ -94,7 +79,7 @@ function Card({
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeOpacity="0.92"
-              strokeWidth="1.15"
+              strokeWidth="1.5"
               vectorEffect="non-scaling-stroke"
               width="96.4"
               x="1.8"
@@ -109,7 +94,7 @@ function Card({
               stroke="currentColor"
               strokeDasharray="8 11"
               strokeOpacity="0.35"
-              strokeWidth="0.62"
+              strokeWidth="0.75"
               vectorEffect="non-scaling-stroke"
               width="92.8"
               x="3.8"
@@ -126,7 +111,7 @@ function Card({
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeOpacity="0.92"
-              strokeWidth="1.15"
+              strokeWidth="1.5"
               vectorEffect="non-scaling-stroke"
             />
             <path
@@ -136,7 +121,7 @@ function Card({
               stroke="currentColor"
               strokeDasharray="8 11"
               strokeOpacity="0.35"
-              strokeWidth="0.62"
+              strokeWidth="0.75"
               vectorEffect="non-scaling-stroke"
             />
           </>

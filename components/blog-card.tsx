@@ -76,7 +76,7 @@ export function BlogCard({ post, featured = false, index = 0 }: BlogCardProps) {
           <Card
             frame="sides-bottom"
             className={`grow py-0 hover:translate-y-0 ${
-              featured ? "shadow-[4px_7px_0_0_hsl(var(--foreground)/0.86)]" : "shadow-[3px_5px_0_0_hsl(var(--foreground)/0.82)]"
+              ""
             }`}
           >
             <div className="relative flex grow flex-col p-5">

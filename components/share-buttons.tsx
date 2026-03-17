@@ -3,7 +3,7 @@
 import { Mail, Linkedin, Link2 } from "lucide-react"
 import { useState } from "react"
 import { XLogoIcon } from "./ui/x-logo"
-import { InkBorder } from "./ui/ink-border"
+import { IconButton } from "./ui/icon-button"
 
 function FacebookIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -77,49 +77,25 @@ export function ShareButtons({ title, url, variant = "default" }: ShareButtonsPr
   return (
     <div className="flex flex-wrap items-center gap-2">
       <span className={labelClass}>Share</span>
-      <ShareIconButton label="Share on X" onClick={shareOnX} variant={variant}>
+      <IconButton label="Share on X" onClick={shareOnX} variant={variant}>
         <XLogoIcon className="size-4" />
-      </ShareIconButton>
-      <ShareIconButton label="Share on Facebook" onClick={shareOnFacebook} variant={variant}>
+      </IconButton>
+      <IconButton label="Share on Facebook" onClick={shareOnFacebook} variant={variant}>
         <FacebookIcon className="size-4" />
-      </ShareIconButton>
-      <ShareIconButton label="Share on LinkedIn" onClick={shareOnLinkedIn} variant={variant}>
+      </IconButton>
+      <IconButton label="Share on LinkedIn" onClick={shareOnLinkedIn} variant={variant}>
         <Linkedin className="size-4" />
-      </ShareIconButton>
-      <ShareIconButton label="Share on WhatsApp" onClick={shareOnWhatsApp} variant={variant}>
+      </IconButton>
+      <IconButton label="Share on WhatsApp" onClick={shareOnWhatsApp} variant={variant}>
         <WhatsAppIcon className="size-4" />
-      </ShareIconButton>
-      <ShareIconButton label="Share via email" onClick={shareViaEmail} variant={variant}>
+      </IconButton>
+      <IconButton label="Share via email" onClick={shareViaEmail} variant={variant}>
         <Mail className="size-4" />
-      </ShareIconButton>
-      <ShareIconButton label="Copy link" onClick={copyToClipboard} variant={variant}>
+      </IconButton>
+      <IconButton label="Copy link" onClick={copyToClipboard} variant={variant}>
         <Link2 className="size-4" />
-      </ShareIconButton>
+      </IconButton>
       {copied && <span className={copiedClass}>Copied</span>}
     </div>
-  )
-}
-
-function ShareIconButton({
-  label,
-  onClick,
-  children,
-  variant = "default",
-}: {
-  label: string
-  onClick: () => void
-  children: React.ReactNode
-  variant?: "default" | "hero"
-}) {
-  const buttonClass =
-    variant === "hero"
-      ? "brand-radius relative isolate overflow-hidden inline-flex size-9 cursor-pointer items-center justify-center bg-white/10 text-white shadow-[2px_2px_0_0_rgba(255,255,255,0.2)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-white/20 hover:shadow-[4px_4px_0_0_rgba(255,255,255,0.3)]"
-      : "brand-radius relative isolate overflow-hidden inline-flex size-9 cursor-pointer items-center justify-center bg-card text-foreground shadow-[2px_2px_0_0_var(--foreground)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-secondary/65 hover:shadow-[4px_4px_0_0_var(--foreground)]"
-
-  return (
-    <button onClick={onClick} className={buttonClass} aria-label={label} title={label}>
-      <InkBorder rx={12} className={variant === "hero" ? "text-white" : undefined} />
-      {children}
-    </button>
   )
 }
