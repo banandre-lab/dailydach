@@ -20,7 +20,7 @@ export function Footer() {
             </p>
             <div className="mt-6 flex items-center gap-3">
               <Link
-                href="https://x.com/dailydach"
+                href="https://x.com/dailydach_com"
                 aria-label="X"
                 title="X"
                 className="inline-flex size-9 items-center justify-center rounded-[4px] border-2 border-foreground/90 bg-card text-foreground transition-all duration-150 outline-none hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-secondary/65 focus-visible:ring-[3px] focus-visible:ring-ring/40"

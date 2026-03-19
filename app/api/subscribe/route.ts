@@ -59,7 +59,7 @@ export async function POST(request: Request) {
       });
 
       const { data, error } = await resend.emails.send({
-        from: "DailyDach <noreply@dailydach.com>",
+        from: "DailyDach <contact@dailydach.com>",
         to: [email],
         subject: "Welcome to DailyDach Newsletter!",
         html: emailHtml,

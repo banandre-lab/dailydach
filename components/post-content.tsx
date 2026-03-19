@@ -9,6 +9,9 @@ type HtmlPart = { type: "text"; content: string } | { type: "figure"; content: s
 
 // Matches <figure>...</figure> or <p> containing only an <img>
 const IMAGE_BLOCK_REGEX = /(<figure[\s\S]*?<\/figure>)|(<p[^>]*>\s*<img[^>]*>\s*<\/p>)/gi
+const STRUCTURED_LAYOUT_REGEX =
+  /<aside\b|class="[^"]*\b(content-group|sidebar-image|blog-grid|article-section)\b[^"]*"|style="[^"]*display\s*:\s*(flex|grid)/i
+const IMAGE_TAG_REGEX = /<img\b[^>]*\/?>/gi
 
 function splitAtImageBlocks(html: string): HtmlPart[] {
   const parts: HtmlPart[] = []
@@ -38,7 +41,35 @@ function extractCaption(html: string): { imageHtml: string; captionHtml: string 
   return { imageHtml, captionHtml: captionMatch[0] }
 }
 
+function createInlineInkFrameSvg(index: number): string {
+  const noiseSeed = (index % 97) + 3
+  const baseX = (0.01 + (index % 5) * 0.0015).toFixed(4)
+  const baseY = (0.018 + (index % 7) * 0.0016).toFixed(4)
+  const scale = (1.6 + (index % 4) * 0.22).toFixed(2)
+  const filterId = `inline-ink-filter-${index}`
+
+  return `<svg aria-hidden="true" class="inline-ink-frame-svg" preserveAspectRatio="none" viewBox="0 0 100 100"><defs><filter id="${filterId}" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse" height="132" width="132" x="-16" y="-16"><feTurbulence baseFrequency="${baseX} ${baseY}" numOctaves="2" result="noise" seed="${noiseSeed}" type="fractalNoise"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="noise" scale="${scale}" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap></filter></defs><rect fill="none" filter="url(#${filterId})" height="96.4" rx="7.2" ry="7.2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.92" stroke-width="1.5" vector-effect="non-scaling-stroke" width="96.4" x="1.8" y="1.8"></rect></svg>`
+}
+
+function injectInlineImageFrames(html: string): string {
+  let imageIndex = 0
+
+  return html.replace(IMAGE_TAG_REGEX, (imageTag) => {
+    if (imageTag.includes("inline-ink-frame")) {
+      return imageTag
+    }
+
+    imageIndex += 1
+    return `<span class="inline-ink-frame">${imageTag}${createInlineInkFrameSvg(imageIndex)}</span>`
+  })
+}
+
 export function PostContent({ html, className }: PostContentProps) {
+  // CMS-authored multi-column blocks rely on images remaining in-place.
+  if (STRUCTURED_LAYOUT_REGEX.test(html)) {
+    return <div className={className} dangerouslySetInnerHTML={{ __html: injectInlineImageFrames(html) }} />
+  }
+
   const parts = splitAtImageBlocks(html)
 
   return (
