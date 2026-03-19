@@ -27,14 +27,14 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "DailyDach - Stories with Daily Duck Energy",
+    default: "DailyDach - Raw stories from the DACH region",
     template: "%s | DailyDach",
   },
-  description: "High-energy stories, cultural signals, and bold voices powered by DailyDach.",
+  description: "Raw, skeptical, kuschelig stories from Austria, Germany, and Switzerland.",
   metadataBase: new URL("https://www.dailydach.com"),
   openGraph: {
     title: "DailyDach",
-    description: "High-energy stories, cultural signals, and bold voices powered by DailyDach.",
+    description: "Raw, skeptical, kuschelig stories from Austria, Germany, and Switzerland.",
     url: "https://www.dailydach.com",
     siteName: "DailyDach",
     locale: "en_US",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "DailyDach",
-    description: "High-energy stories, cultural signals, and bold voices powered by DailyDach.",
+    description: "Raw, skeptical, kuschelig stories from Austria, Germany, and Switzerland.",
   },
 }
 
@@ -58,7 +58,7 @@ export default function RootLayout({
     name: "DailyDach",
     url: "https://www.dailydach.com",
     logo: "https://www.dailydach.com/opengraph-image",
-    description: "High-energy stories, cultural signals, and bold voices powered by DailyDach.",
+    description: "Raw, skeptical, kuschelig stories from Austria, Germany, and Switzerland.",
   }
 
   const websiteJsonLd = {
@@ -66,7 +66,7 @@ export default function RootLayout({
     "@type": "WebSite",
     name: "DailyDach",
     url: "https://www.dailydach.com",
-    description: "High-energy stories, cultural signals, and bold voices powered by DailyDach.",
+    description: "Raw, skeptical, kuschelig stories from Austria, Germany, and Switzerland.",
     publisher: {
       "@type": "Organization",
       name: "DailyDach",

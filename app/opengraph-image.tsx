@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og"
 
 export const runtime = "edge"
 
-export const alt = "DailyDach - Stories with Daily Duck Energy"
+export const alt = "DailyDach - Raw stories from the DACH region"
 export const size = {
   width: 1200,
   height: 630,
@@ -85,7 +85,7 @@ export default async function Image() {
               marginBottom: "16px",
             }}
           >
-            Daily Duck Energy
+            Raw. Skeptical. Kuschelig.
           </div>
           <h1
             style={{
@@ -106,7 +106,7 @@ export default async function Image() {
               marginBottom: 0,
             }}
           >
-            Stories with bold cultural pulse
+            Austria, Germany, Switzerland.
           </p>
         </div>
       </div>

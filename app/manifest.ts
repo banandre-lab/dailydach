@@ -2,9 +2,9 @@ import type { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'DailyDach - Stories with Daily Duck Energy',
+    name: 'DailyDach - Raw stories from the DACH region',
     short_name: 'DailyDach',
-    description: 'High-energy stories, cultural signals, and bold voices.',
+    description: 'Raw, skeptical, kuschelig stories from Austria, Germany, and Switzerland.',
     start_url: '/',
     display: 'standalone',
     background_color: '#f8f1cc',

@@ -1,8 +1,16 @@
 "use client"
 
+import Link from "next/link"
 import { useState, useEffect, useRef, useCallback } from "react"
 import type { Post } from "@/lib/wordpress.d"
 import { BlogCard } from "./blog-card"
+import { Badge, badgeVariants } from "./ui/badge"
+import { cn } from "@/lib/utils"
+
+type TickerItem = string | {
+  label: string
+  href?: string
+}
 
 interface BlogGridProps {
   posts: Post[]
@@ -10,8 +18,11 @@ interface BlogGridProps {
   tagId?: number
   totalPages?: number
   enableInfinite?: boolean
+  showHeader?: boolean
+  eyebrow?: string
   title?: string
   subtitle?: string
+  tickerItems?: TickerItem[]
 }
 
 const GRID_PATTERN = [
@@ -35,8 +46,11 @@ export function BlogGrid({
   tagId,
   totalPages,
   enableInfinite = true,
+  showHeader = true,
+  eyebrow = "Latest Stories",
   title = "Latest Stories",
   subtitle = "Stories from people, places, and perspectives across Europe",
+  tickerItems = ["Latest Stories", "Across the Region", "Fresh Perspectives"],
 }: BlogGridProps) {
   const [posts, setPosts] = useState<Post[]>(initialPosts)
   const [isLoading, setIsLoading] = useState(false)
@@ -99,24 +113,45 @@ export function BlogGrid({
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-      <header className="mb-10">
-        <div className="maxi-panel p-6 sm:p-8">
-          <span className="section-kicker mb-3">Story Radar</span>
-          <h2 className="headline-lg text-balance">{title}</h2>
-          <p className="mt-3 max-w-3xl text-sm text-muted-foreground sm:text-base">{subtitle}</p>
-          <div className="editorial-rule mt-5" />
-          <div className="mt-4 overflow-hidden border-y-2 border-foreground bg-secondary py-2">
-            <div className="maxi-ticker-track text-[0.66rem] font-black uppercase tracking-[0.12em] text-secondary-foreground">
-              <span className="px-6">DailyDach Feed</span>
-              <span className="px-6">New Story Drops</span>
-              <span className="px-6">Culture Signals</span>
-              <span className="px-6">DailyDach Feed</span>
-              <span className="px-6">New Story Drops</span>
-              <span className="px-6">Culture Signals</span>
+      {showHeader && (
+        <header className="mb-10">
+          <div className="maxi-panel p-6 sm:p-8">
+            <span className="section-kicker mb-3">{eyebrow}</span>
+            <h2 className="headline-lg text-balance">{title}</h2>
+            <p className="mt-3 max-w-3xl text-sm text-muted-foreground sm:text-base">{subtitle}</p>
+            <div className="editorial-rule mt-5" />
+            <div className="mt-4 border-y-2 border-foreground bg-secondary px-3 py-3 sm:px-4">
+              <div className="flex flex-wrap items-center gap-2">
+                {tickerItems.map((item, index) => {
+                  const badgeLabel = typeof item === "string" ? item : item.label
+                  const badgeHref = typeof item === "string" ? undefined : item.href
+
+                  if (badgeHref) {
+                    return (
+                      <Link
+                        key={`${badgeLabel}-${index}`}
+                        href={badgeHref}
+                        className={cn(
+                          badgeVariants({ variant: "outline" }),
+                          "bg-card text-foreground hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-card/90"
+                        )}
+                      >
+                        {badgeLabel}
+                      </Link>
+                    )
+                  }
+
+                  return (
+                    <Badge key={`${badgeLabel}-${index}`} variant="outline" className="bg-card text-foreground">
+                      {badgeLabel}
+                    </Badge>
+                  )
+                })}
+              </div>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       <div className="grid grid-cols-1 gap-6 md:auto-rows-fr md:grid-cols-12">
         {posts.map((post, index) => {

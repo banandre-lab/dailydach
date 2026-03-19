@@ -15,8 +15,8 @@ export function Footer() {
           <section className="py-2 lg:col-span-5">
             <Logo size="lg" className="mb-4" />
             <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
-              DailyDach publishes high-energy cultural stories with a playful daily-duck spirit. Read fast,
-              think deeper, and drop your own voice.
+              DailyDach covers Austria, Germany, and Switzerland with a raw, skeptical, kuschelig
+              editorial voice.
             </p>
             <div className="mt-6 flex items-center gap-3">
               <Link
@@ -41,8 +41,8 @@ export function Footer() {
 
           <section className="py-2 lg:col-span-4">
             <Badge className="mb-4">Newsletter</Badge>
-            <h3 className="font-display text-3xl leading-[0.9]">Weekly Story Drop</h3>
-            <p className="mb-5 mt-2 text-sm text-muted-foreground">Sharp voices. Visual culture. Zero filler.</p>
+            <h3 className="font-display text-3xl leading-[0.9]">Weekly from the DACH Region</h3>
+            <p className="mb-5 mt-2 text-sm text-muted-foreground">Raw stories, cultural signals, zero filler.</p>
             <FooterNewsletter />
           </section>
         </div>

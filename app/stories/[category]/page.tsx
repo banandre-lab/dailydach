@@ -105,7 +105,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
             <div className="flex flex-col items-center gap-4 p-2 text-center sm:p-4">
               <Image
                 src={mascotSrc}
-                alt={`${category.name} mascot`}
+                alt={`${category.name} illustration`}
                 width={750}
                 height={1000}
                 priority
