@@ -95,7 +95,7 @@ export default async function Home() {
       <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
         <ScrollReveal>
           <div className="mb-8">
-            <h2 className="headline-lg text-balance">Choose your drink</h2>
+            <h2 className="headline-lg text-balance">Choose your drink. Prost!</h2>
           </div>
         </ScrollReveal>
 
