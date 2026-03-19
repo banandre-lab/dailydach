@@ -426,6 +426,15 @@
   @apply my-0 block w-full;
 }
 
+.blog-post-content figure:has(img.img-embed.standalone) {
+  text-align: center;
+}
+
+.blog-post-content figure img.img-embed.standalone {
+  width: auto;
+  max-width: 100%;
+}
+
 .blog-post-content figcaption,
 .blog-post-content .wp-caption-text,
 .blog-post-content .blocks-gallery-caption {
@@ -474,6 +483,16 @@
   @apply my-0 block w-full object-cover;
   position: relative;
   z-index: 0;
+}
+
+.blog-post-content .inline-ink-frame:has(> img.img-embed.standalone) {
+  display: inline-block;
+  max-width: 100%;
+}
+
+.blog-post-content .inline-ink-frame > img.img-embed.standalone {
+  width: auto;
+  max-width: 100%;
 }
 
 .blog-post-content .inline-ink-frame-svg {
