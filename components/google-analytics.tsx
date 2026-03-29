@@ -27,10 +27,10 @@ export default function GoogleAnalytics() {
       // Also set the global disable flag for GA if rejected
       if (consent === "rejected") {
         // @ts-expect-error - Global GA disable flag
-        window["ga-disable-G-0C34L33RCK"] = true;
+        window["ga-disable-G-DS2JRBMSRB"] = true;
       } else {
         // @ts-expect-error - Global GA disable flag
-        window["ga-disable-G-0C34L33RCK"] = false;
+        window["ga-disable-G-DS2JRBMSRB"] = false;
       }
     };
 
@@ -54,7 +54,7 @@ export default function GoogleAnalytics() {
     <>
       {/* Google tag (gtag.js) */}
       <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-0C34L33RCK"
+        src="https://www.googletagmanager.com/gtag/js?id=G-DS2JRBMSRB"
         strategy="afterInteractive"
       />
       <Script
@@ -66,7 +66,7 @@ export default function GoogleAnalytics() {
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
 
-            gtag('config', 'G-0C34L33RCK');
+            gtag('config', 'G-DS2JRBMSRB');
           `,
         }}
       />
